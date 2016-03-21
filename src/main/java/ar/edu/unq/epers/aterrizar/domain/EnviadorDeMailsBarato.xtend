@@ -1,4 +1,4 @@
-package main.java.ar.edu.unq.epers.aterrizar.domain
+package ar.edu.unq.epers.aterrizar.domain
 
 class EnviadorDeMailsBarato implements EnviadorDeMails{
 	
