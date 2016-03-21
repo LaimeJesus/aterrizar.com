@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.aterrizar.persistence
 
 import ar.edu.unq.epers.aterrizar.domain.Usuario
+import ar.edu.unq.epers.aterrizar.domain.exceptions.usuarioNoEstaEnElServicioException
 
 class RepositorioUsuario implements Repositorio<Usuario>{
 	
@@ -21,5 +22,9 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	}
 	
 	override def void actualizar(Usuario usr){}
+	
+	override objectNotFoundError(Usuario usr) throws Exception {
+		new usuarioNoEstaEnElServicioException(usr)
+	}
 	
 }

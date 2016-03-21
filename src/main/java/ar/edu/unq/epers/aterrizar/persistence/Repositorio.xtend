@@ -10,4 +10,6 @@ interface Repositorio<T> {
 	def boolean contiene(T obj, String field)
 	
 	def void actualizar(T obj)
+	
+	def void objectNotFoundError(T obj) throws Exception
 }

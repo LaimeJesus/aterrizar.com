@@ -7,6 +7,7 @@ import ar.edu.unq.epers.aterrizar.domain.exceptions.RegistrationException
 import ar.edu.unq.epers.aterrizar.domain.exceptions.MyLoginException
 import ar.edu.unq.epers.aterrizar.domain.exceptions.ChangingPasswordException
 import java.util.List
+import ar.edu.unq.epers.aterrizar.domain.exceptions.MyValidateException
 
 @Accessors
 class RecorderService {
@@ -62,7 +63,21 @@ class RecorderService {
 		usuarios.add(usuario)
 	}
 	//no se que hace aun
-	def validar(Usuario usr){
+	
+	def validar(Usuario usr, String codigo){
+		if(repositorio.contiene(usr, usr.nickname)){
+			val usrAValidar = repositorio.traer(usr)
+			if(usrAValidar.codigo.equals(codigo)){
+				usrAValidar.codigo = 'usado'
+				repositorio.actualizar(usrAValidar)
+			}
+			else{
+				new MyValidateException('codigo de validacion usado')
+			}
+		}
+		else{
+			repositorio.objectNotFoundError(usr)
+		}
 		
 	}
 	
@@ -73,15 +88,18 @@ class RecorderService {
 		
 		if(repositorio.contiene(usrToLogin, nickname)){
 			val usuarioFromRepo = repositorio.traer(usrToLogin)
+			
 			if(usuarioFromRepo.password.equals(password)){
-				new MyLoginException(usrToLogin.nickname + 'logged in')
+				//new MyLoginException(usrToLogin.nickname + 'logged in')
+				return usuarioFromRepo
 			}
-			else{
+			else
+			{
 				new MyLoginException("password doesn't match")
 			}
 		}
 		else{
-			new MyLoginException(nickname + "doesn't exist")
+			repositorio.objectNotFoundError(usrToLogin)
 		}
 	}
 	
@@ -93,12 +111,12 @@ class RecorderService {
 			else
 			{
 			usr.password = newpassword
+			repositorio.actualizar(usr)	
 			}
 		}
 		else
 		{
-			new ChangingPasswordException(usr.nickname + 'does not exist')	
+			repositorio.objectNotFoundError(usr)
 		}
-		repositorio.actualizar(usr)
 	}
 }

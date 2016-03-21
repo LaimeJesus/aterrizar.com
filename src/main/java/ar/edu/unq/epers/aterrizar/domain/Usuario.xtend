@@ -13,5 +13,6 @@ class Usuario {
 	String email
 	Date fechaDeNacimiento
 	List<Mail> emails
+	String codigo
 	
 }
