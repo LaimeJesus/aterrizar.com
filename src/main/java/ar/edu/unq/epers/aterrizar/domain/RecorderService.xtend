@@ -2,25 +2,19 @@ package ar.edu.unq.epers.aterrizar.domain
 
 import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.List
-import java.util.ArrayList
-import ar.edu.unq.epers.aterrizar.domain.RegistrationException
 import ar.edu.unq.epers.aterrizar.persistence.Repositorio
-import main.java.ar.edu.unq.epers.aterrizar.domain.Usuario
-import main.java.ar.edu.unq.epers.aterrizar.domain.CreadorDeCodigos
-import main.java.ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails
 import ar.edu.unq.epers.aterrizar.persistence.RepositorioUsuario
 import ar.edu.unq.epers.aterrizar.domain.exceptions.RegistrationException
 import ar.edu.unq.epers.aterrizar.domain.exceptions.MyLoginException
+import ar.edu.unq.epers.aterrizar.domain.exceptions.ChangingPasswordException
 
+@Accessors
 class RecorderService {
 	
-	@Accessors
 	Repositorio<Usuario> repositorio
-	@Accessors
+// esto no va a estar
 	List<Usuario> usuarios
-	@Accessors
 	CreadorDeCodigos creadorDeCodigos
-	@Accessors
 	EnviadorDeMails enviadorDeMails
 	
 	new(){
@@ -33,8 +27,8 @@ class RecorderService {
 	}
 	
 	def registrarUsuario(Usuario usr) throws Exception{
-		if(repositorio.contiene(usr)){
-			new RegistrationException 'Nickname is being used'
+		if(repositorio.contiene(usr, usr.nickname)){
+			new RegistrationException('Nickname is being used')
 		}
 		else{
 			this.nuevoUsuarioEnElSistema(usr)
@@ -45,6 +39,7 @@ class RecorderService {
 		repositorio.persistir(usuario)
 	}
 	
+	//esto no deberia estar
 	def agregarUsuario(Usuario usuario) {
 		usuarios.add(usuario)
 	}
@@ -53,12 +48,13 @@ class RecorderService {
 		
 	}
 	
-	def login(String nickname, String password){
+	def login(String nickname, String password) throws Exception{
+		
 		val usrToLogin = new Usuario()
 		usrToLogin.nickname = nickname
+		
 		if(repositorio.contiene(usrToLogin, nickname)){
 			val usuarioFromRepo = repositorio.traer(usrToLogin)
-			
 			if(usuarioFromRepo.password.equals(password)){
 				new MyLoginException(usrToLogin.nickname + 'logged in')
 			}
@@ -71,9 +67,20 @@ class RecorderService {
 		}
 	}
 	
-	def cambiarContrasenha(Usuario usr, String s){
-		
-		if()
-		usr.cambiarContrasenha()
+	def changePassword(Usuario usr, String newpassword){
+		if(repositorio.contiene(usr, usr.nickname)){
+			if(repositorio.traer(usr).nickname.equals(newpassword)){
+				new ChangingPasswordException('newpassword is the same that previous password')
+			}
+			else
+			{
+			usr.password = newpassword
+			}
+		}
+		else
+		{
+			new ChangingPasswordException(usr.nickname + 'does not exist')	
+		}
+		repositorio.actualizar(usr)
 	}
 }

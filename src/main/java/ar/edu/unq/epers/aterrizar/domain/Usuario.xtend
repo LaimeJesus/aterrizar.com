@@ -12,6 +12,6 @@ class Usuario {
 	String password
 	String email
 	Date fechaDeNacimiento
-	List<main.java.ar.edu.unq.epers.aterrizar.domain.Mail> emails
+	List<Mail> emails
 	
 }

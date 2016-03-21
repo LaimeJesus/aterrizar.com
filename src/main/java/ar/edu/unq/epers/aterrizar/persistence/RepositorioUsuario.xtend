@@ -20,4 +20,6 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
 	
+	override def void actualizar(Usuario usr){}
+	
 }

@@ -8,4 +8,6 @@ interface Repositorio<T> {
 	def T traer(T obj)
 	
 	def boolean contiene(T obj, String field)
+	
+	def void actualizar(T obj)
 }
