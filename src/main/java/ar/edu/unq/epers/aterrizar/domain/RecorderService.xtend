@@ -9,11 +9,13 @@ import main.java.ar.edu.unq.epers.aterrizar.domain.Usuario
 import main.java.ar.edu.unq.epers.aterrizar.domain.CreadorDeCodigos
 import main.java.ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails
 import ar.edu.unq.epers.aterrizar.persistence.RepositorioUsuario
+import ar.edu.unq.epers.aterrizar.domain.exceptions.RegistrationException
+import ar.edu.unq.epers.aterrizar.domain.exceptions.MyLoginException
 
 class RecorderService {
 	
 	@Accessors
-	Repositorio repositorio
+	Repositorio<Usuario> repositorio
 	@Accessors
 	List<Usuario> usuarios
 	@Accessors
@@ -52,20 +54,20 @@ class RecorderService {
 	}
 	
 	def login(String nickname, String password){
-		var usrToLogin = new Usuario()
+		val usrToLogin = new Usuario()
 		usrToLogin.nickname = nickname
-		if(repositorio.contiene(nickname)){
-			var usuario = repositorio.traer(usrToLogin)
+		if(repositorio.contiene(usrToLogin, nickname)){
+			val usuarioFromRepo = repositorio.traer(usrToLogin)
 			
-			if(usuario.password.equals(password)){
-				new Exception usrToLogin.nickname + 'logged in'
+			if(usuarioFromRepo.password.equals(password)){
+				new MyLoginException(usrToLogin.nickname + 'logged in')
 			}
 			else{
-				new Exception "password doesn't match"
+				new MyLoginException("password doesn't match")
 			}
 		}
 		else{
-			new Exception nickname + "doesn't exist"
+			new MyLoginException(nickname + "doesn't exist")
 		}
 	}
 	

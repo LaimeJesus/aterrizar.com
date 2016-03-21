@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.aterrizar.domain
+package ar.edu.unq.epers.aterrizar.domain.exceptions
 
 class RegistrationException extends Exception{
 }

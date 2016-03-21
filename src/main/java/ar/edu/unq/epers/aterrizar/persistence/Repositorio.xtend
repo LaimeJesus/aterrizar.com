@@ -1,11 +1,11 @@
 package ar.edu.unq.epers.aterrizar.persistence
 
-interface Repositorio {
-	def void persistir(Object obj)
+interface Repositorio<T> {
+	def void persistir(T obj)
 	
-	def void borrar(Object obj)
+	def void borrar(T obj)
 	
-	def Object traer(Object obj)
+	def T traer(T obj)
 	
-	def boolean contiene(Object obj)
+	def boolean contiene(T obj, String field)
 }

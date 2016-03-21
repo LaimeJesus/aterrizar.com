@@ -1,23 +1,17 @@
-package main.java.ar.edu.unq.epers.aterrizar.domain
+package ar.edu.unq.epers.aterrizar.domain
 
 import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.Date
 import java.util.List
 
+@Accessors
 class Usuario {
-	@Accessors
 	String nombre
-	@Accessors	
 	String apellido
-	@Accessors
 	String nickname
-	@Accessors
 	String password
-	@Accessors
 	String email
-	@Accessors
 	Date fechaDeNacimiento
-	@Accessors
-	List<Mail> emails
+	List<main.java.ar.edu.unq.epers.aterrizar.domain.Mail> emails
 	
 }
