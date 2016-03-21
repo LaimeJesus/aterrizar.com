@@ -1,12 +1,12 @@
 package ar.edu.unq.epers.aterrizar.domain
 
 import org.eclipse.xtend.lib.annotations.Accessors
-import java.util.List
 import ar.edu.unq.epers.aterrizar.persistence.Repositorio
 import ar.edu.unq.epers.aterrizar.persistence.RepositorioUsuario
 import ar.edu.unq.epers.aterrizar.domain.exceptions.RegistrationException
 import ar.edu.unq.epers.aterrizar.domain.exceptions.MyLoginException
 import ar.edu.unq.epers.aterrizar.domain.exceptions.ChangingPasswordException
+import java.util.List
 
 @Accessors
 class RecorderService {
