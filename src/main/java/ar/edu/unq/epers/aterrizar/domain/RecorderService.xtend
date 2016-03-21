@@ -37,6 +37,24 @@ class RecorderService {
 	
 	def nuevoUsuarioEnElSistema(Usuario usuario) {
 		repositorio.persistir(usuario)
+		this.avisarNuevoUsuarioRegistrado(usuario)
+	}
+	
+	def avisarNuevoUsuarioRegistrado(Usuario usuario) {
+
+		val codigo = creadorDeCodigos.crearCodigo()
+		val mailAEnviar = crearMailParaUsuario(usuario, codigo)
+		enviadorDeMails.enviarMail(mailAEnviar)
+	}
+	
+	//hacerlo mejor
+	def crearMailParaUsuario(Usuario usuario, String codigo) {
+		val mail = new Mail()
+		mail.from = 'servicioDeRegistroDeMails'
+		mail.to = usuario.email
+		mail.body = codigo
+		mail.subject = 'Codigo a validar'
+		return mail
 	}
 	
 	//esto no deberia estar

@@ -2,8 +2,8 @@ package ar.edu.unq.epers.aterrizar.domain
 
 class CreadorDeCodigosBarato implements CreadorDeCodigos{
 	
-	override int crearCodigo(){
-		return 0
+	override String crearCodigo(){
+		return '0'
 	}
 	
 }
