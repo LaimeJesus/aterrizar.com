@@ -1,8 +1,8 @@
 package ar.edu.unq.epers.aterrizar.domain
 
 import org.eclipse.xtend.lib.annotations.Accessors
-import java.util.Date
 import java.util.List
+import java.sql.Date
 
 @Accessors
 class Usuario {

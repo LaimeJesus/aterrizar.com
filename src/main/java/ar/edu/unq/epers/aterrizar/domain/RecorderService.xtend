@@ -28,7 +28,7 @@ class RecorderService {
 	}
 	
 	def registrarUsuario(Usuario usr) throws Exception{
-		if(repositorio.contiene(usr, usr.nickname)){
+		if(repositorio.contiene(usr, 'nickname', usr.nickname)){
 			new RegistrationException('Nickname is being used')
 		}
 		else{
@@ -48,7 +48,6 @@ class RecorderService {
 		enviadorDeMails.enviarMail(mailAEnviar)
 	}
 	
-	//hacerlo mejor
 	def crearMailParaUsuario(Usuario usuario, String codigo) {
 		val mail = new Mail()
 		mail.from = 'servicioDeRegistroDeMails'
@@ -58,65 +57,52 @@ class RecorderService {
 		return mail
 	}
 	
-	//esto no deberia estar
-	def agregarUsuario(Usuario usuario) {
-		usuarios.add(usuario)
-	}
-	//no se que hace aun
-	
-	def validar(Usuario usr, String codigo){
-		if(repositorio.contiene(usr, usr.nickname)){
-			val usrAValidar = repositorio.traer(usr)
-			if(usrAValidar.codigo.equals(codigo)){
-				usrAValidar.codigo = 'usado'
-				repositorio.actualizar(usrAValidar)
-			}
-			else{
-				new MyValidateException('codigo de validacion usado')
-			}
+	def validar(Usuario usr, String codigo) throws Exception{
+		val usuarioAValidar = this.traerUsuarioPorNickname(usr, usr.nickname)
+		if(usuarioAValidar.codigo.equals(codigo)){
+			usuarioAValidar.codigo = 'usado'
+			repositorio.actualizar(usuarioAValidar, 'codigo', codigo)
 		}
 		else{
-			repositorio.objectNotFoundError(usr)
-		}
-		
+			new MyValidateException('codigo de validacion usado')
+		}		
 	}
 	
 	def login(String nickname, String password) throws Exception{
-		
-		val usrToLogin = new Usuario()
-		usrToLogin.nickname = nickname
-		
-		if(repositorio.contiene(usrToLogin, nickname)){
-			val usuarioFromRepo = repositorio.traer(usrToLogin)
-			
+				
+		val usuarioFromRepo = this.traerUsuarioPorNickname(new Usuario, nickname)
 			if(usuarioFromRepo.password.equals(password)){
-				//new MyLoginException(usrToLogin.nickname + 'logged in')
 				return usuarioFromRepo
 			}
-			else
-			{
+			else{
 				new MyLoginException("password doesn't match")
 			}
+	}
+	
+	def traerUsuarioDelRepositorio(Usuario usr, String field, String value) throws Exception{
+		if(repositorio.contiene(usr, field, value)){
+			return repositorio.traer(usr, field, value)
 		}
 		else{
-			repositorio.objectNotFoundError(usrToLogin)
+			repositorio.objectNotFoundError(usr)
 		}
 	}
 	
-	def changePassword(Usuario usr, String newpassword){
-		if(repositorio.contiene(usr, usr.nickname)){
-			if(repositorio.traer(usr).nickname.equals(newpassword)){
-				new ChangingPasswordException('newpassword is the same that previous password')
-			}
-			else
-			{
-			usr.password = newpassword
-			repositorio.actualizar(usr)	
-			}
+	def traerUsuarioPorNickname(Usuario usr, String value) throws Exception{
+		return this.traerUsuarioDelRepositorio(usr, 'nickname', value)
+	}
+	
+	def changePassword(Usuario usr, String newpassword) throws Exception{
+		
+		val usuarioACambiarPassword = this.traerUsuarioPorNickname(usr, usr.nickname)
+		if(usuarioACambiarPassword.nickname.equals(newpassword))
+		{
+			new ChangingPasswordException('newpassword is the same that previous password')
 		}
 		else
 		{
-			repositorio.objectNotFoundError(usr)
+			usuarioACambiarPassword.password = newpassword
+			repositorio.actualizar(usuarioACambiarPassword, 'password', newpassword)	
 		}
 	}
 }
