@@ -1,26 +1,22 @@
 package ar.edu.unq.epers.aterrizar.domain
 
-import org.eclipse.xtend.lib.annotations.Accessors
+import ar.edu.unq.epers.aterrizar.domain.exceptions.ChangingPasswordException
+import ar.edu.unq.epers.aterrizar.domain.exceptions.MyLoginException
+import ar.edu.unq.epers.aterrizar.domain.exceptions.MyValidateException
+import ar.edu.unq.epers.aterrizar.domain.exceptions.RegistrationException
 import ar.edu.unq.epers.aterrizar.persistence.Repositorio
 import ar.edu.unq.epers.aterrizar.persistence.RepositorioUsuario
-import ar.edu.unq.epers.aterrizar.domain.exceptions.RegistrationException
-import ar.edu.unq.epers.aterrizar.domain.exceptions.MyLoginException
-import ar.edu.unq.epers.aterrizar.domain.exceptions.ChangingPasswordException
-import java.util.List
-import ar.edu.unq.epers.aterrizar.domain.exceptions.MyValidateException
+import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
 class RecorderService {
 	
 	Repositorio<Usuario> repositorio
-// esto no va a estar
-	List<Usuario> usuarios
 	CreadorDeCodigos creadorDeCodigos
 	EnviadorDeMails enviadorDeMails
 	
 	new(){
 		/* 
-		usuarios = new ArrayList<Usuario>()
 		creadorDeCodigos = new CreadorDeCodigosBarato()
 		enviadorDeMails = new EnviadorDeMailsBarato()
 		*/
