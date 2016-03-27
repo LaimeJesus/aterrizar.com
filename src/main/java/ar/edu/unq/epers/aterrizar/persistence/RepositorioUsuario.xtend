@@ -24,9 +24,9 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	
 	//delete * from tabla where condicion
 	//en este metodo estoy decidiendo ya que hay una unica manera de encontrar a un usuario en la bd
-	override def void borrar(Usuario usr) {
+	override def void borrar(Usuario usr, String campo, String valor) {
 		
-		var declaracion = armador.armarDeclaracionDelete('Usuario', 'NICKNAME', usr.nickname)
+		var declaracion = armador.armarDeclaracionDelete('Usuario', campo, valor)
 		var ps = connection.prepareStatement(declaracion)
 		ps.setString(1, usr.nickname)
 		ps.executeQuery()
@@ -45,7 +45,8 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 		
 		var declaracion = armador.armarDeclaracionUpdate('Usuario', this.camposDeUsuario(), this.valoresDeUsuario(usr), field, unique)
 		val ps = this.setearValores(usr, declaracion)
-		ps.setString(this.camposDeUsuario().length()+1, unique)
+		var indicedecampocondicion = this.camposDeUsuario().length()+1 
+		ps.setString(indicedecampocondicion, unique)
 		ps.execute()
 		ps.close()
 	}
@@ -66,6 +67,7 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	 */
 	def armarUsuario(ResultSet set) {
 		val usuario = new Usuario()
+		usuario.id = set.getInt("id")
 		usuario.nombre = set.getString("nombre")
 		usuario.apellido = set.getString("apellido")
 		usuario.nickname = set.getString("nickname")
@@ -92,6 +94,7 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	 */
 	def camposDeUsuario() {
 		var campos = new ArrayList<String>()
+		campos.add('ID')
 		campos.add('NOMBRE')
 		campos.add('APELLIDO')
 		campos.add('NICKNAME')
@@ -106,6 +109,7 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	 */
 	def valoresDeUsuario(Usuario usr){
 		var valores = new ArrayList<String>()
+		valores.add(usr.id.toString())
 		valores.add(usr.nombre)
 		valores.add(usr.apellido)
 		valores.add(usr.nickname)
@@ -122,13 +126,14 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	 */
 	def setearValores(Usuario usr, String declaracion) {
 		val ps = connection.prepareStatement(declaracion)
-		ps.setString(1, usr.nombre)
-		ps.setString(2, usr.apellido)
-		ps.setString(3, usr.nickname)
-		ps.setString(4, usr.password)
-		ps.setString(5, usr.email)
-		ps.setDate(6, usr.fechaDeNacimiento)
-		ps.setString(7, usr.codigo)
+		ps.setInt(1, usr.id)
+		ps.setString(2, usr.nombre)
+		ps.setString(3, usr.apellido)
+		ps.setString(4, usr.nickname)
+		ps.setString(5, usr.password)
+		ps.setString(6, usr.email)
+		ps.setDate(7, usr.fechaDeNacimiento)
+		ps.setString(8, usr.codigo)
 		return ps
 	}
 	

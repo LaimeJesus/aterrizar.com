@@ -6,6 +6,7 @@ import java.sql.Date
 
 @Accessors
 class Usuario {
+	int id = 0
 	String nombre
 	String apellido
 	String nickname
@@ -14,5 +15,9 @@ class Usuario {
 	Date fechaDeNacimiento
 	List<Mail> emails
 	String codigo
+	
+	def estaValidado(){
+		return codigo.equals('usado')
+	}
 	
 }
