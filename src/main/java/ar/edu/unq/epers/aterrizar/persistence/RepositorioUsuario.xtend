@@ -36,7 +36,9 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	//select campos from tabla where condiciones	
 	override def Usuario traer(Usuario usr, String field, String value) {
 
-		val rs = this.armarResultadoDeBusqueda(field, value)
+		val ps = this.armarResultadoDeBusqueda(field, value)
+		val rs = ps.executeQuery()
+		ps.close()
 		return this.armarUsuario(rs)
 	}
 
@@ -54,10 +56,13 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	override def boolean contiene(Usuario usr, String field, String value) {
 
 		var contiene = false
-		val rs = this.armarResultadoDeBusqueda(field, value)
+		val ps = this.armarResultadoDeBusqueda(field, value)
+		val rs = ps.executeQuery()
+
 		while(rs.next()){
 			contiene = rs.getString(field).equals(value)
 		}
+		ps.close()
 		return contiene
 	}	
 	
@@ -85,9 +90,7 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 		val declaracion = armador.armarDeclaracionSelect('Usuario', this.camposDeUsuario(),field, value)
 		val ps = connection.prepareStatement(declaracion)
 		ps.setString(1, value)
-		val rs = ps.executeQuery()
-		ps.close()
-		return rs
+		return ps
 	}
 	
 	/*son los campos que voy a persistir en la base de datos
@@ -147,6 +150,10 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 		var user = 'root'
 		var password = 'jstrike1234'
 		return DriverManager.getConnection(url, user, password)
+	}
+	
+	def cerrarConeccion(){
+		connection.close()
 	}
 	
 }

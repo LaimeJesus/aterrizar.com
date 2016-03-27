@@ -1,18 +1,18 @@
 package ar.edu.unq.epers.aterrizar.test
 
-import ar.edu.unq.epers.aterrizar.domain.Usuario
-import java.sql.Date
-import ar.edu.unq.epers.aterrizar.domain.RecorderService
-import ar.edu.unq.epers.aterrizar.persistence.RepositorioUsuario
-import org.mockito.Mockito
 import ar.edu.unq.epers.aterrizar.domain.CreadorDeCodigos
-import ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails
 import ar.edu.unq.epers.aterrizar.domain.CreadorDeMails
+import ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails
 import ar.edu.unq.epers.aterrizar.domain.Mail
+import ar.edu.unq.epers.aterrizar.domain.RecorderService
+import ar.edu.unq.epers.aterrizar.domain.Usuario
 import ar.edu.unq.epers.aterrizar.domain.exceptions.RegistrationException
+import ar.edu.unq.epers.aterrizar.persistence.RepositorioUsuario
+import java.sql.Date
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.Assert
+import org.mockito.Mockito
 
 class RecorderServiceTest{
 	
@@ -46,8 +46,7 @@ class RecorderServiceTest{
 
 	}
 	
-	@Test
-	def testRegistrarUsuarioQueNoExisteEnElSistema(){
+	@Test def testRegistrarUsuarioQueNoExisteEnElSistema(){
 
 		var codigoFromMock = 'nousado'
 		var mailFromMock = new Mail()

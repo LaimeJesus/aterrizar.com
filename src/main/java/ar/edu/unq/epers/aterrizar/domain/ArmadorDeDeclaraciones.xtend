@@ -15,18 +15,9 @@ class ArmadorDeDeclaraciones {
 		fields = this.separar(campos, '?,')
 		fields = '(' + fields + ')'
 		
-		return 'INSERT INTO ' + tabla + '(' + this.separar(campos, ',') + ') VALUES' + fields
+		return 'INSERT INTO ' + tabla + ' (' + this.separar(campos, ',') + ') VALUES' + fields
 	}
 	
-	def separar(List<String> campos, String separador) {
-		var res = ''
-		for(campo : campos){
-			res = campo + separador
-		}
-		res = res.substring(0, res.length()-1)
-		return res
-	}
-
 	/*
 	 * devuelve un string que utiliza la sintaxis de sql para una declaracion SELECT
 	 */
@@ -42,9 +33,21 @@ class ArmadorDeDeclaraciones {
 	def armarDeclaracionUpdate(String tabla, List<String> campos, List<String> valores, String field, String unique) {
 	return 'UPDATE ' + tabla + ' SET ' + this.separar(campos, '=?,') + 'WHERE ' + field + ' = ?'	
 	}
+	/*
+	 * devuelve un string que utiliza la sintaxis de sql para una declaracion DELETE
+	 */
 	
 	def armarDeclaracionDelete(String tabla, String campo, String valor) {
 		return 'DELETE FROM ' + tabla + 'WHERE ' + campo + ' = ?'
 	}
 	
+	def separar(List<String> campos, String separador) {
+		var res = ''
+		for(campo : campos){
+			res = campo + separador
+		}
+		res = res.substring(0, res.length()-1)
+		return res
+	}
+
 }
