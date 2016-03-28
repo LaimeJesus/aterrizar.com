@@ -23,30 +23,32 @@ class RecorderService {
 	}
 	
 	def registrarUsuario(Usuario usr) throws Exception{
-		if(this.preguntarUsuarioPorNickname(usr, usr.nickname)){
+		if(this.contieneUsuarioPorNickname(usr.nickname)){
 			new RegistrationException('Nickname is being used')
 		}
 		else{
 			usr.id = ids
 			ids = ids + 1
+			
 			this.nuevoUsuarioEnElSistema(usr)
 		}
 	}
 	
 	def validar(Usuario usr, String codigo) throws Exception{
-		val usuarioAValidar = this.traerUsuarioPorNickname(usr, usr.nickname)
+		val usuarioAValidar = this.traerUsuarioPorNickname(usr.nickname)
+		
+		//! codigo.equals('usado')
 		if(usuarioAValidar.codigo.equals(codigo)){
 			usuarioAValidar.codigo = 'usado'
-			repositorio.actualizar(usuarioAValidar, 'codigo', codigo)
+			this.actualizarUsuarioPorNickname(usuarioAValidar)
 		}
 		else{
-			new MyValidateException('codigo de validacion usado')
+			new MyValidateException('codigo de validacion erroneo')
 		}		
 	}
 	
 	def login(String nickname, String password) throws Exception{
-				
-		val usuarioFromRepo = this.traerUsuarioPorNickname(new Usuario, nickname)
+		val usuarioFromRepo = this.traerUsuarioPorNickname(nickname)
 			if(usuarioFromRepo.password.equals(password)){
 				return usuarioFromRepo
 			}
@@ -57,7 +59,7 @@ class RecorderService {
 	
 	def changePassword(Usuario usr, String newpassword) throws Exception{
 		
-		val usuarioACambiarPassword = this.traerUsuarioPorNickname(usr, usr.nickname)
+		val usuarioACambiarPassword = this.traerUsuarioPorNickname(usr.nickname)
 		if(usuarioACambiarPassword.password.equals(newpassword))
 		{
 			new ChangingPasswordException('newpassword is the same that previous password')
@@ -69,21 +71,21 @@ class RecorderService {
 		}
 	}
 	
-	def traerUsuarioDelRepositorio(Usuario usr, String field, String value) throws Exception{
-		if(repositorio.contiene(usr, field, value)){
-			return repositorio.traer(usr, field, value)
+	def traerUsuarioDelRepositorio(String field, String value) throws Exception{
+		if(repositorio.contiene(field, value)){
+			return repositorio.traer(field, value)
 		}
 		else{
-			repositorio.objectNotFoundError(usr)
+			repositorio.objectNotFoundError()
 		}
 	}
 	
-	def preguntarUsuarioPorNickname(Usuario usr, String value){
-		return repositorio.contiene(usr, 'nickname', value)
+	def contieneUsuarioPorNickname(String nickname){
+		return repositorio.contiene('nickname', nickname)
 	}
 	
-	def traerUsuarioPorNickname(Usuario usr, String value) throws Exception{
-		return this.traerUsuarioDelRepositorio(usr, 'nickname', value)
+	def traerUsuarioPorNickname(String nickname) throws Exception{
+		return this.traerUsuarioDelRepositorio('nickname', nickname)
 	}
 	
 	def nuevoUsuarioEnElSistema(Usuario usuario) {
@@ -96,6 +98,9 @@ class RecorderService {
 		val codigo = creadorDeCodigos.crearCodigo()
 		val mailAEnviar = creadorDeMails.crearMailParaUsuario('registrador', usuario, codigo)
 		enviadorDeMails.enviarMail(mailAEnviar)
+	}
+	def actualizarUsuarioPorNickname(Usuario usuario) {
+		repositorio.actualizar(usuario,'nickname', usuario.nickname)
 	}
 	
 }

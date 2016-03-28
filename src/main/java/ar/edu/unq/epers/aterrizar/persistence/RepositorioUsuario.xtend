@@ -2,16 +2,21 @@ package ar.edu.unq.epers.aterrizar.persistence
 
 import ar.edu.unq.epers.aterrizar.domain.ArmadorDeDeclaraciones
 import ar.edu.unq.epers.aterrizar.domain.Usuario
-import ar.edu.unq.epers.aterrizar.domain.exceptions.usuarioNoEstaEnElServicioException
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.util.ArrayList
+import ar.edu.unq.epers.aterrizar.domain.exceptions.UsuarioNoEstaEnElServicioException
 
 class RepositorioUsuario implements Repositorio<Usuario>{
 	
-	Connection connection = this.getConnection()
-	ArmadorDeDeclaraciones armador = new ArmadorDeDeclaraciones()
+	Connection connection 
+	ArmadorDeDeclaraciones armador
+	
+	new(){
+		armador = new ArmadorDeDeclaraciones()
+	}
+	
 	
 	//insert into tabla values (valores)
 	override def void persistir(Usuario usr) {
@@ -34,7 +39,7 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	}
 	
 	//select campos from tabla where condiciones	
-	override def Usuario traer(Usuario usr, String field, String value) {
+	override def Usuario traer(String field, String value) {
 
 		val ps = this.armarResultadoDeBusqueda(field, value)
 		val rs = ps.executeQuery()
@@ -53,7 +58,7 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 		ps.close()
 	}
 	//select campos from tabla where condiciones
-	override def boolean contiene(Usuario usr, String field, String value) {
+	override def boolean contiene(String field, String value) {
 
 		var contiene = false
 		val ps = this.armarResultadoDeBusqueda(field, value)
@@ -140,8 +145,8 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 		return ps
 	}
 	
-	override objectNotFoundError(Usuario usr) throws Exception {
-		new usuarioNoEstaEnElServicioException(usr)
+	override objectNotFoundError() throws Exception {
+		new UsuarioNoEstaEnElServicioException()
 	}
 	//jdbc:mysql://<host>:<port>/<database_name> 
 	def getConnection() {
@@ -154,6 +159,9 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	
 	def cerrarConeccion(){
 		connection.close()
+	}
+	def conectarABD(){
+		connection = this.getConnection()
 	}
 	
 }
