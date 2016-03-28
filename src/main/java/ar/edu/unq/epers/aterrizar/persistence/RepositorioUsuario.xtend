@@ -1,13 +1,15 @@
 package ar.edu.unq.epers.aterrizar.persistence
 
-import ar.edu.unq.epers.aterrizar.domain.ArmadorDeDeclaraciones
 import ar.edu.unq.epers.aterrizar.domain.Usuario
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.util.ArrayList
 import ar.edu.unq.epers.aterrizar.domain.exceptions.UsuarioNoEstaEnElServicioException
+import org.eclipse.xtend.lib.annotations.Accessors
+import ar.edu.unq.epers.aterrizar.domain.ArmadorDeDeclaraciones
 
+@Accessors
 class RepositorioUsuario implements Repositorio<Usuario>{
 	
 	Connection connection 
@@ -22,19 +24,19 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	override def void persistir(Usuario usr) {
 		
 		var declaracion = armador.armarDeclaracionInsert('Usuario', this.camposDeUsuario())
-		val ps = this.setearValores(usr, declaracion)
-		ps.execute()
+		var ps = this.setearValoresYPrepararDeclaracion(usr, declaracion)
+		ps.executeUpdate()
 		ps.close()
 	}
 	
 	//delete * from tabla where condicion
 	//en este metodo estoy decidiendo ya que hay una unica manera de encontrar a un usuario en la bd
-	override def void borrar(Usuario usr, String campo, String valor) {
+	override def void borrar(String campo, String valor) {
 		
-		var declaracion = armador.armarDeclaracionDelete('Usuario', campo, valor)
+		var declaracion = armador.armarDeclaracionDelete('Usuario', campo)
 		var ps = connection.prepareStatement(declaracion)
-		ps.setString(1, usr.nickname)
-		ps.executeQuery()
+		ps.setString(1, valor)
+		ps.executeUpdate()
 		ps.close()
 	}
 	
@@ -51,10 +53,10 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	override def void actualizar(Usuario usr, String field, String unique){
 		
 		var declaracion = armador.armarDeclaracionUpdate('Usuario', this.camposDeUsuario(), this.valoresDeUsuario(usr), field, unique)
-		val ps = this.setearValores(usr, declaracion)
+		val ps = this.setearValoresYPrepararDeclaracion(usr, declaracion)
 		var indicedecampocondicion = this.camposDeUsuario().length()+1 
 		ps.setString(indicedecampocondicion, unique)
-		ps.execute()
+		ps.executeUpdate()
 		ps.close()
 	}
 	//select campos from tabla where condiciones
@@ -77,7 +79,6 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	 */
 	def armarUsuario(ResultSet set) {
 		val usuario = new Usuario()
-		usuario.id = set.getInt("id")
 		usuario.nombre = set.getString("nombre")
 		usuario.apellido = set.getString("apellido")
 		usuario.nickname = set.getString("nickname")
@@ -85,6 +86,7 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 		usuario.email = set.getString("email")
 		usuario.fechaDeNacimiento = set.getDate("fechaDeNacimiento")
 		usuario.codigo = set.getString("codigo")
+		usuario.id = set.getInt("id")
 		return usuario
 	}
 	
@@ -92,8 +94,8 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	 * devuelve un ResultSet con las tablas que cumplan la condicion de field=value
 	 */
 	def armarResultadoDeBusqueda(String field, String value) {
-		val declaracion = armador.armarDeclaracionSelect('Usuario', this.camposDeUsuario(),field, value)
-		val ps = connection.prepareStatement(declaracion)
+		var declaracion = armador.armarDeclaracionSelect('Usuario', this.camposDeUsuario(),field, value)
+		var ps = connection.prepareStatement(declaracion)
 		ps.setString(1, value)
 		return ps
 	}
@@ -102,14 +104,14 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	 */
 	def camposDeUsuario() {
 		var campos = new ArrayList<String>()
-		campos.add('ID')
-		campos.add('NOMBRE')
-		campos.add('APELLIDO')
-		campos.add('NICKNAME')
-		campos.add('PASSWORD')
-		campos.add('EMAIL')
-		campos.add('FECHADENACIMIENTO')
-		campos.add('CODIGO')
+		campos.add('nombre')
+		campos.add('apellido')
+		campos.add('nickname')
+		campos.add('password')
+		campos.add('email')
+		campos.add('fechaDeNacimiento')
+		campos.add('codigo')
+		campos.add('id')
 		return campos
 	}
 	/*
@@ -117,7 +119,6 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	 */
 	def valoresDeUsuario(Usuario usr){
 		var valores = new ArrayList<String>()
-		valores.add(usr.id.toString())
 		valores.add(usr.nombre)
 		valores.add(usr.apellido)
 		valores.add(usr.nickname)
@@ -125,6 +126,7 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 		valores.add(usr.email)
 		valores.add(usr.fechaDeNacimiento.toString())
 		valores.add(usr.codigo)
+		valores.add(usr.id.toString())
 		return valores
 	}
 	
@@ -132,36 +134,39 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	/*
 	 * setea los valores de un usuario para preparar la declaracion
 	 */
-	def setearValores(Usuario usr, String declaracion) {
-		val ps = connection.prepareStatement(declaracion)
-		ps.setInt(1, usr.id)
-		ps.setString(2, usr.nombre)
-		ps.setString(3, usr.apellido)
-		ps.setString(4, usr.nickname)
-		ps.setString(5, usr.password)
-		ps.setString(6, usr.email)
-		ps.setDate(7, usr.fechaDeNacimiento)
-		ps.setString(8, usr.codigo)
+	def setearValoresYPrepararDeclaracion(Usuario usr, String declaracion) {
+		var ps = connection.prepareStatement(declaracion)
+		ps.setString(1, usr.nombre)
+		ps.setString(2, usr.apellido)
+		ps.setString(3, usr.nickname)
+		ps.setString(4, usr.password)
+		ps.setString(5, usr.email)
+		ps.setDate(6, usr.fechaDeNacimiento)
+		ps.setString(7, usr.codigo)
+		ps.setInt(8, usr.id)
 		return ps
 	}
 	
 	override objectNotFoundError() throws Exception {
-		new UsuarioNoEstaEnElServicioException()
+		throw new UsuarioNoEstaEnElServicioException()
 	}
 	//jdbc:mysql://<host>:<port>/<database_name> 
-	def getConnection() {
+	def getConnection(String url, String user, String password) {
 		Class.forName("com.mysql.jdbc.Driver");
-		var url = "jdbc:mysql://localhost:3306/aterrizar"
-		var user = 'root'
-		var password = 'jstrike1234'
 		return DriverManager.getConnection(url, user, password)
 	}
 	
 	def cerrarConeccion(){
 		connection.close()
 	}
-	def conectarABD(){
-		connection = this.getConnection()
+	def conectarABDConMySql(String url, String user, String password){
+		connection = this.getConnection(url, user, password)
+	}
+	def conectarAMiDB(){
+		var url = "jdbc:mysql://localhost:3306/aterrizar"
+		var user = 'root'
+		var password = 'jstrike1234'
+		connection = this.getConnection(url, user, password)		
 	}
 	
 }

@@ -1,7 +1,6 @@
 package ar.edu.unq.epers.aterrizar.test
 
 import ar.edu.unq.epers.aterrizar.domain.Mail
-import ar.edu.unq.epers.aterrizar.domain.exceptions.RegistrationException
 import org.junit.Test
 
 import static org.junit.Assert.*
@@ -9,79 +8,70 @@ import org.mockito.Mockito
 import org.junit.Before
 import ar.edu.unq.epers.aterrizar.domain.Usuario
 import java.sql.Date
-import ar.edu.unq.epers.aterrizar.domain.RecorderService
-import ar.edu.unq.epers.aterrizar.persistence.RepositorioUsuario
 import ar.edu.unq.epers.aterrizar.domain.CreadorDeCodigos
 import ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails
 import ar.edu.unq.epers.aterrizar.domain.CreadorDeMails
-import ar.edu.unq.epers.aterrizar.domain.exceptions.MyValidateException
-import ar.edu.unq.epers.aterrizar.domain.exceptions.UsuarioNoEstaEnElServicioException
-import ar.edu.unq.epers.aterrizar.domain.exceptions.MyLoginException
-import ar.edu.unq.epers.aterrizar.domain.exceptions.ChangingPasswordException
+import servicio.RecorderService
+import org.junit.After
 
 class RecorderServiceTest{
 	
-	RepositorioUsuario repoUserMock
-	
 	CreadorDeCodigos creadorDeCodigosMock
-	
 	EnviadorDeMails enviadorDeMailsMock
-	
 	CreadorDeMails creadorDeMailsMock
-	
 	Usuario usuario
-	
 	RecorderService sudo
 	
 	@Before
 	def void setUp(){
-		val usuario = new Usuario()
-		usuario.nombre = 'pepe'
-		usuario.apellido = 'garcia'
-		usuario.nickname = 'pepillo'
-		usuario.password = '1234'
-		usuario.email = 'mi@gmail.com'
-		usuario.fechaDeNacimiento = Date.valueOf('1994-12-21')
-		usuario.codigo = '1234'
+		usuario = new Usuario=>[
+			nombre = 'pepe'
+			apellido = 'garcia'
+			nickname = 'pepillo'
+			password = '1234'
+			email = 'mi@gmail.com'
+			fechaDeNacimiento = Date.valueOf('1994-12-21')
+			codigo = '1234'
+		]
 		
-		val sudo = new RecorderService()
-		repoUserMock = Mockito.mock(RepositorioUsuario)
+		
+		sudo = new RecorderService()
+		//repoUserMock = Mockito.mock(RepositorioUsuario)
 		creadorDeCodigosMock = Mockito.mock(CreadorDeCodigos)
 		enviadorDeMailsMock = Mockito.mock(EnviadorDeMails)
 		creadorDeMailsMock = Mockito.mock(CreadorDeMails)
 		
-		sudo.repositorio = repoUserMock 
 		sudo.creadorDeCodigos = creadorDeCodigosMock
 		sudo.enviadorDeMails = enviadorDeMailsMock
 		sudo.creadorDeMails = creadorDeMailsMock
-
-		Mockito.when(repoUserMock.contiene('nickname', usuario.nickname)).thenReturn(true)
-		Mockito.when(repoUserMock.traer('nickname', usuario.nickname)).thenReturn(usuario)
+		
+		sudo.repositorio.conectarAMiDB()
+		
+		
 	}
 	
 	@Test 
 	def void testRegistrarUsuarioQueNoExisteEnElSistema(){
 
-
+		var nickname = usuario.nickname
 		var codigoFromMock = 'nousado'
 		var mailFromMock = new Mail()
 
 		Mockito.when(creadorDeCodigosMock.crearCodigo()).thenReturn(codigoFromMock)
 		Mockito.when(creadorDeMailsMock.crearMailParaUsuario('registrador', usuario, codigoFromMock)).thenReturn(mailFromMock)
-		Mockito.when(repoUserMock.contiene('nickname', usuario.nickname)).thenReturn(false)
 		
 		var ultimoId = sudo.ids		
 		sudo.registrarUsuario(usuario)
+		
 		var userId = usuario.id
 		
 		assertEquals(ultimoId, userId)
+		assertTrue(sudo.repositorio.contiene('nickname', nickname))
 		
-		Mockito.verify(repoUserMock).persistir(usuario)
-		Mockito.verify(repoUserMock).contiene('nickname', usuario.nickname)
 		Mockito.verify(creadorDeCodigosMock).crearCodigo()
 		Mockito.verify(enviadorDeMailsMock).enviarMail(mailFromMock)
 	}
-	
+	/*
 	@Test
 	def void testRegistrarUsuarioQueYaExisteEnElSistema() throws Exception{
 		try{
@@ -131,6 +121,7 @@ class RecorderServiceTest{
 	@Test
 	def void testLogearUnUsuarioQueNoExisteEnElSistemaArrojaUnaExcepcion(){
 		
+		sudo.repositorio.persistir(usuario)
 		var pw = 'doesnt care'
 		var nickname = 'pichu'
 		
@@ -164,13 +155,14 @@ class RecorderServiceTest{
 	
 	@Test
 	def void testCambiarContrasenhaPorLaMismaContrasenhaArrojaUnaExcepcion(){
+		var actualPw = usuario.password
 		var expectedPw = '1234'
 		try{
 			sudo.changePassword(usuario, expectedPw)
 			fail("cambiar contrasenha no funciona")
 		}
 		catch(ChangingPasswordException expected){
-			assertEquals(usuario.password, expectedPw)
+			assertEquals(actualPw, expectedPw)
 			Mockito.verify(repoUserMock).contiene('nickname', usuario.nickname)
 			Mockito.verify(repoUserMock).traer('nickname', usuario.nickname)
 		}
@@ -186,6 +178,13 @@ class RecorderServiceTest{
 			Mockito.verify(repoUserMock).objectNotFoundError()
 			Mockito.verify(repoUserMock).contiene('nickname', usuario.nickname)
 		}
+	}
+	
+	*/
+	@After
+	def void testBorrarUsuarioQueFueCreadoEnSetUp(){
+		var nicknameUser1 = usuario.nickname
+		sudo.repositorio.borrar('nickname', nicknameUser1)
 	}
 	
 }

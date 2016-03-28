@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.aterrizar.domain
+package servicio
 
 import ar.edu.unq.epers.aterrizar.domain.exceptions.ChangingPasswordException
 import ar.edu.unq.epers.aterrizar.domain.exceptions.MyLoginException
@@ -11,10 +11,10 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class RecorderService {
 	
 	RepositorioUsuario repositorio
-	CreadorDeCodigos creadorDeCodigos
-	EnviadorDeMails enviadorDeMails
+	ar.edu.unq.epers.aterrizar.domain.CreadorDeCodigos creadorDeCodigos
+	ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails enviadorDeMails
 	int ids
-	CreadorDeMails creadorDeMails
+	ar.edu.unq.epers.aterrizar.domain.CreadorDeMails creadorDeMails
 	
 	new(){
 		//id este es un numero de unico por usuario. Es solo para una prueba
@@ -22,9 +22,9 @@ class RecorderService {
 		repositorio = new RepositorioUsuario()
 	}
 	
-	def registrarUsuario(Usuario usr) throws Exception{
+	def registrarUsuario(ar.edu.unq.epers.aterrizar.domain.Usuario usr) throws Exception{
 		if(this.contieneUsuarioPorNickname(usr.nickname)){
-			new RegistrationException('Nickname is being used')
+			throw new RegistrationException('Nickname is being used')
 		}
 		else{
 			usr.id = ids
@@ -34,7 +34,7 @@ class RecorderService {
 		}
 	}
 	
-	def validar(Usuario usr, String codigo) throws Exception{
+	def validar(ar.edu.unq.epers.aterrizar.domain.Usuario usr, String codigo) throws Exception{
 		val usuarioAValidar = this.traerUsuarioPorNickname(usr.nickname)
 		
 		//! codigo.equals('usado')
@@ -43,7 +43,7 @@ class RecorderService {
 			this.actualizarUsuarioPorNickname(usuarioAValidar)
 		}
 		else{
-			new MyValidateException('codigo de validacion erroneo')
+			throw new MyValidateException('codigo de validacion erroneo')
 		}		
 	}
 	
@@ -53,16 +53,16 @@ class RecorderService {
 				return usuarioFromRepo
 			}
 			else{
-				new MyLoginException("password doesn't match")
+				throw new MyLoginException("password doesn't match")
 			}
 	}
 	
-	def changePassword(Usuario usr, String newpassword) throws Exception{
+	def changePassword(ar.edu.unq.epers.aterrizar.domain.Usuario usr, String newpassword) throws Exception{
 		
 		val usuarioACambiarPassword = this.traerUsuarioPorNickname(usr.nickname)
 		if(usuarioACambiarPassword.password.equals(newpassword))
 		{
-			new ChangingPasswordException('newpassword is the same that previous password')
+			throw new ChangingPasswordException('newpassword is the same that previous password')
 		}
 		else
 		{
@@ -88,18 +88,18 @@ class RecorderService {
 		return this.traerUsuarioDelRepositorio('nickname', nickname)
 	}
 	
-	def nuevoUsuarioEnElSistema(Usuario usuario) {
+	def nuevoUsuarioEnElSistema(ar.edu.unq.epers.aterrizar.domain.Usuario usuario) {
 		repositorio.persistir(usuario)
 		this.avisarNuevoUsuarioRegistrado(usuario)
 	}
 	
-	def avisarNuevoUsuarioRegistrado(Usuario usuario) {
+	def avisarNuevoUsuarioRegistrado(ar.edu.unq.epers.aterrizar.domain.Usuario usuario) {
 
 		val codigo = creadorDeCodigos.crearCodigo()
 		val mailAEnviar = creadorDeMails.crearMailParaUsuario('registrador', usuario, codigo)
 		enviadorDeMails.enviarMail(mailAEnviar)
 	}
-	def actualizarUsuarioPorNickname(Usuario usuario) {
+	def actualizarUsuarioPorNickname(ar.edu.unq.epers.aterrizar.domain.Usuario usuario) {
 		repositorio.actualizar(usuario,'nickname', usuario.nickname)
 	}
 	
