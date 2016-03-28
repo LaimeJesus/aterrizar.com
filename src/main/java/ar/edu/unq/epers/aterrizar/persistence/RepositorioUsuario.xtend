@@ -43,16 +43,18 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	//select campos from tabla where condiciones	
 	override def Usuario traer(String field, String value) {
 
-		val ps = this.armarResultadoDeBusqueda(field, value)
-		val rs = ps.executeQuery()
+		var ps = this.armarResultadoDeBusqueda(field, value)
+		var rs = ps.executeQuery()
+		rs.next()
+		var usuario = this.armarUsuario(rs)
 		ps.close()
-		return this.armarUsuario(rs)
+		return usuario
 	}
 
 	//update tabla set campo=valor where condicion
 	override def void actualizar(Usuario usr, String field, String unique){
 		
-		var declaracion = armador.armarDeclaracionUpdate('Usuario', this.camposDeUsuario(), this.valoresDeUsuario(usr), field, unique)
+		var declaracion = armador.armarDeclaracionUpdate('Usuario', this.camposDeUsuario(), this.valoresDeUsuario(usr), field)
 		val ps = this.setearValoresYPrepararDeclaracion(usr, declaracion)
 		var indicedecampocondicion = this.camposDeUsuario().length()+1 
 		ps.setString(indicedecampocondicion, unique)
@@ -78,7 +80,7 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	 * devuelve un usuario con los atributos cargados del resultset. Ya que nickname es unico este solo tiene un usuario
 	 */
 	def armarUsuario(ResultSet set) {
-		val usuario = new Usuario()
+		var usuario = new Usuario()
 		usuario.nombre = set.getString("nombre")
 		usuario.apellido = set.getString("apellido")
 		usuario.nickname = set.getString("nickname")
@@ -94,7 +96,7 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	 * devuelve un ResultSet con las tablas que cumplan la condicion de field=value
 	 */
 	def armarResultadoDeBusqueda(String field, String value) {
-		var declaracion = armador.armarDeclaracionSelect('Usuario', this.camposDeUsuario(),field, value)
+		var declaracion = armador.armarDeclaracionSelect('Usuario', this.camposDeUsuario(),field)
 		var ps = connection.prepareStatement(declaracion)
 		ps.setString(1, value)
 		return ps

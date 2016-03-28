@@ -6,15 +6,19 @@ import ar.edu.unq.epers.aterrizar.domain.exceptions.MyValidateException
 import ar.edu.unq.epers.aterrizar.domain.exceptions.RegistrationException
 import ar.edu.unq.epers.aterrizar.persistence.RepositorioUsuario
 import org.eclipse.xtend.lib.annotations.Accessors
+import ar.edu.unq.epers.aterrizar.domain.Usuario
+import ar.edu.unq.epers.aterrizar.domain.CreadorDeCodigos
+import ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails
+import ar.edu.unq.epers.aterrizar.domain.CreadorDeMails
 
 @Accessors
 class RecorderService {
 	
 	RepositorioUsuario repositorio
-	ar.edu.unq.epers.aterrizar.domain.CreadorDeCodigos creadorDeCodigos
-	ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails enviadorDeMails
+	CreadorDeCodigos creadorDeCodigos
+	EnviadorDeMails enviadorDeMails
 	int ids
-	ar.edu.unq.epers.aterrizar.domain.CreadorDeMails creadorDeMails
+	CreadorDeMails creadorDeMails
 	
 	new(){
 		//id este es un numero de unico por usuario. Es solo para una prueba
@@ -22,7 +26,7 @@ class RecorderService {
 		repositorio = new RepositorioUsuario()
 	}
 	
-	def registrarUsuario(ar.edu.unq.epers.aterrizar.domain.Usuario usr) throws Exception{
+	def registrarUsuario(Usuario usr) throws Exception{
 		if(this.contieneUsuarioPorNickname(usr.nickname)){
 			throw new RegistrationException('Nickname is being used')
 		}
@@ -34,16 +38,20 @@ class RecorderService {
 		}
 	}
 	
-	def validar(ar.edu.unq.epers.aterrizar.domain.Usuario usr, String codigo) throws Exception{
+	def validar(Usuario usr, String codigo) throws Exception{
 		val usuarioAValidar = this.traerUsuarioPorNickname(usr.nickname)
 		
-		//! codigo.equals('usado')
-		if(usuarioAValidar.codigo.equals(codigo)){
-			usuarioAValidar.codigo = 'usado'
-			this.actualizarUsuarioPorNickname(usuarioAValidar)
+		if(! codigo.equals('usado')){
+			if(usuarioAValidar.codigo.equals(codigo)){
+				usuarioAValidar.codigo = 'usado'
+				this.actualizarUsuarioPorNickname(usuarioAValidar)
+			}
+			else{
+				throw new MyValidateException('codigo de validacion erroneo')
+			}
 		}
 		else{
-			throw new MyValidateException('codigo de validacion erroneo')
+			throw new MyValidateException('codigo de validacion usado')
 		}		
 	}
 	
@@ -57,7 +65,7 @@ class RecorderService {
 			}
 	}
 	
-	def changePassword(ar.edu.unq.epers.aterrizar.domain.Usuario usr, String newpassword) throws Exception{
+	def changePassword(Usuario usr, String newpassword) throws Exception{
 		
 		val usuarioACambiarPassword = this.traerUsuarioPorNickname(usr.nickname)
 		if(usuarioACambiarPassword.password.equals(newpassword))
@@ -88,18 +96,18 @@ class RecorderService {
 		return this.traerUsuarioDelRepositorio('nickname', nickname)
 	}
 	
-	def nuevoUsuarioEnElSistema(ar.edu.unq.epers.aterrizar.domain.Usuario usuario) {
+	def nuevoUsuarioEnElSistema(Usuario usuario) {
 		repositorio.persistir(usuario)
 		this.avisarNuevoUsuarioRegistrado(usuario)
 	}
 	
-	def avisarNuevoUsuarioRegistrado(ar.edu.unq.epers.aterrizar.domain.Usuario usuario) {
+	def avisarNuevoUsuarioRegistrado(Usuario usuario) {
 
 		val codigo = creadorDeCodigos.crearCodigo()
 		val mailAEnviar = creadorDeMails.crearMailParaUsuario('registrador', usuario, codigo)
 		enviadorDeMails.enviarMail(mailAEnviar)
 	}
-	def actualizarUsuarioPorNickname(ar.edu.unq.epers.aterrizar.domain.Usuario usuario) {
+	def actualizarUsuarioPorNickname(Usuario usuario) {
 		repositorio.actualizar(usuario,'nickname', usuario.nickname)
 	}
 	

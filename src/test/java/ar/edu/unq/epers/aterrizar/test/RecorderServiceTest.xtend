@@ -13,6 +13,9 @@ import ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails
 import ar.edu.unq.epers.aterrizar.domain.CreadorDeMails
 import servicio.RecorderService
 import org.junit.After
+import ar.edu.unq.epers.aterrizar.domain.exceptions.RegistrationException
+import ar.edu.unq.epers.aterrizar.domain.exceptions.MyValidateException
+import ar.edu.unq.epers.aterrizar.domain.exceptions.UsuarioNoEstaEnElServicioException
 
 class RecorderServiceTest{
 	
@@ -21,6 +24,8 @@ class RecorderServiceTest{
 	CreadorDeMails creadorDeMailsMock
 	Usuario usuario
 	RecorderService sudo
+	String codigoFromMock
+	Mail mailFromMock
 	
 	@Before
 	def void setUp(){
@@ -31,7 +36,7 @@ class RecorderServiceTest{
 			password = '1234'
 			email = 'mi@gmail.com'
 			fechaDeNacimiento = Date.valueOf('1994-12-21')
-			codigo = '1234'
+			codigo = 'nousado'
 		]
 		
 		
@@ -46,7 +51,14 @@ class RecorderServiceTest{
 		sudo.creadorDeMails = creadorDeMailsMock
 		
 		sudo.repositorio.conectarAMiDB()
-		
+				
+		codigoFromMock = 'nousado'
+		mailFromMock = new Mail()
+
+		sudo.registrarUsuario(usuario)
+
+		Mockito.when(creadorDeCodigosMock.crearCodigo()).thenReturn(codigoFromMock)
+		Mockito.when(creadorDeMailsMock.crearMailParaUsuario('registrador', usuario, codigoFromMock)).thenReturn(mailFromMock)
 		
 	}
 	
@@ -54,66 +66,50 @@ class RecorderServiceTest{
 	def void testRegistrarUsuarioQueNoExisteEnElSistema(){
 
 		var nickname = usuario.nickname
-		var codigoFromMock = 'nousado'
-		var mailFromMock = new Mail()
 
-		Mockito.when(creadorDeCodigosMock.crearCodigo()).thenReturn(codigoFromMock)
-		Mockito.when(creadorDeMailsMock.crearMailParaUsuario('registrador', usuario, codigoFromMock)).thenReturn(mailFromMock)
-		
-		var ultimoId = sudo.ids		
-		sudo.registrarUsuario(usuario)
-		
 		var userId = usuario.id
 		
-		assertEquals(ultimoId, userId)
+		assertEquals(1, userId)
 		assertTrue(sudo.repositorio.contiene('nickname', nickname))
-		
-		Mockito.verify(creadorDeCodigosMock).crearCodigo()
-		Mockito.verify(enviadorDeMailsMock).enviarMail(mailFromMock)
 	}
-	/*
+	
 	@Test
-	def void testRegistrarUsuarioQueYaExisteEnElSistema() throws Exception{
+	def void testRegistrarUsuarioQueYaExisteEnElSistemaArrojaUnaExcepcion() throws Exception{
 		try{
 			sudo.registrarUsuario(usuario)
 			fail("registrar no funciona correctamente")
 			}	
 		catch(RegistrationException expected){
 			
-		assertEquals(sudo.ids, 0)
-		Mockito.verify(repoUserMock).persistir(usuario)
-		Mockito.verify(repoUserMock).contiene('nickname', usuario.nickname)
+		assertTrue(sudo.repositorio.contiene('nickname', usuario.nickname))
 		}				
 	}
-	
+
 	@Test 
 	def void testValidarUsuarioQueAunNoValidoSuCodigoCambiaSuCodigoAUsado(){
 
-		usuario.codigo = 'nousado'
-		var codenousado = 'nousado'
+		var codenousado = usuario.codigo
 		
-		sudo.validar(usuario,codenousado)
+		sudo.validar(usuario, codenousado)
+		var user = sudo.repositorio.traer('nickname', usuario.nickname)
 		
-		
-		assertEquals(usuario.codigo, 'usado')
-		Mockito.verify(repoUserMock).actualizar(usuario, 'nickname', usuario.nickname)
-		Mockito.verify(repoUserMock).traer('nickname', usuario.nickname)
+		assertTrue(user.estaValidado())
 		
 	}
-	
+		
 	@Test
-	def void testValidarUsuarioQueIngresaMalSuCodigoArrojaUnaExepcion(){
+	def void testValidarUsuarioQueIngresaMalSuCodigoArrojaUnaExcepcion(){
 
+		var pwerroneo = 'pwerroneo'
 		try{
-			sudo.validar(usuario, '2345')
+			sudo.validar(usuario, pwerroneo)
 			fail("validar no funciona bien")
 			}
 		catch(MyValidateException expected){
 			
-			assertEquals(usuario.codigo, '1234')
-			Mockito.verify(repoUserMock).traer('nickname', usuario.nickname)
-			Mockito.verify(repoUserMock, Mockito.never()).actualizar(usuario, 'nickname', usuario.nickname)
+			var userCode = sudo.repositorio.traer('nickname', usuario.nickname).codigo
 			
+			assertFalse(userCode.equals(pwerroneo))			
 		}	
 	}
 	
@@ -121,38 +117,19 @@ class RecorderServiceTest{
 	@Test
 	def void testLogearUnUsuarioQueNoExisteEnElSistemaArrojaUnaExcepcion(){
 		
-		sudo.repositorio.persistir(usuario)
 		var pw = 'doesnt care'
 		var nickname = 'pichu'
-		
-		Mockito.when(repoUserMock.contiene('nickname', nickname)).thenReturn(false)
 		
 		try{
 			sudo.login(nickname, pw)
 			fail("traer no funciona")
 		}
 		catch(UsuarioNoEstaEnElServicioException expected){
-			Mockito.verify(repoUserMock).contiene('nickname', nickname)
-			Mockito.verify(repoUserMock).objectNotFoundError()
+			assertFalse(sudo.repositorio.contiene('nickname', nickname))
 		}
 	}
 	
-	@Test
-	def void testLogearUnUsuarioConContrasenhaIncorrectaArrojaUnaExcepcion(){
-		
-		var errorPw = 'erronea'
-		try{
-			sudo.login(usuario.nickname, errorPw)
-			fail("logear no funciona")
-		}
-		catch(MyLoginException expected){
-			Mockito.verify(repoUserMock).contiene('nickname', usuario.nickname)
-			Mockito.verify(repoUserMock).traer('nickname', usuario.nickname)
-			assertFalse(usuario.password.equals(errorPw))
-		}
-		
-	}
-	
+	/*
 	@Test
 	def void testCambiarContrasenhaPorLaMismaContrasenhaArrojaUnaExcepcion(){
 		var actualPw = usuario.password

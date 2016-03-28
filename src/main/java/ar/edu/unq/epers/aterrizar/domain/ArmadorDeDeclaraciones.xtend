@@ -26,7 +26,7 @@ class ArmadorDeDeclaraciones {
 	 * devuelve un string que utiliza la sintaxis de sql para una declaracion SELECT
 	 */
 	 
-	def armarDeclaracionSelect(String tabla, List<String> campos, String field, String value) {
+	def armarDeclaracionSelect(String tabla, List<String> campos, String field) {
 		return 'SELECT '+ this.separar(campos, ',') + ' FROM ' + tabla + ' WHERE ' + field + ' = ?'
 	}
 
@@ -34,8 +34,8 @@ class ArmadorDeDeclaraciones {
 	 * devuelve un string que utiliza la sintaxis de sql para una declaracion UPDATE
 	 */
 
-	def armarDeclaracionUpdate(String tabla, List<String> campos, List<String> valores, String field, String unique) {
-		return 'UPDATE ' + tabla + ' SET ' + this.separar(campos, '=?,') + 'WHERE ' + field + ' = ?'	
+	def armarDeclaracionUpdate(String tabla, List<String> campos, List<String> valores, String field) {
+		return 'UPDATE ' + tabla + ' SET ' + this.separar(campos, '=?,') + ' WHERE ' + field + ' = ?'	
 	}
 	/*
 	 * devuelve un string que utiliza la sintaxis de sql para una declaracion DELETE
