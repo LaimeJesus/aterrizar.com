@@ -11,11 +11,12 @@ import java.sql.Date
 import ar.edu.unq.epers.aterrizar.domain.CreadorDeCodigos
 import ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails
 import ar.edu.unq.epers.aterrizar.domain.CreadorDeMails
-import servicio.RecorderService
+import servicios.RecorderService
 import org.junit.After
 import ar.edu.unq.epers.aterrizar.domain.exceptions.RegistrationException
 import ar.edu.unq.epers.aterrizar.domain.exceptions.MyValidateException
 import ar.edu.unq.epers.aterrizar.domain.exceptions.UsuarioNoEstaEnElServicioException
+import ar.edu.unq.epers.aterrizar.domain.exceptions.ChangingPasswordException
 
 class RecorderServiceTest{
 	
@@ -41,7 +42,6 @@ class RecorderServiceTest{
 		
 		
 		sudo = new RecorderService()
-		//repoUserMock = Mockito.mock(RepositorioUsuario)
 		creadorDeCodigosMock = Mockito.mock(CreadorDeCodigos)
 		enviadorDeMailsMock = Mockito.mock(EnviadorDeMails)
 		creadorDeMailsMock = Mockito.mock(CreadorDeMails)
@@ -50,7 +50,10 @@ class RecorderServiceTest{
 		sudo.enviadorDeMails = enviadorDeMailsMock
 		sudo.creadorDeMails = creadorDeMailsMock
 		
-		sudo.repositorio.conectarAMiDB()
+		var url = "jdbc:mysql://localhost:3306/aterrizar"
+		var user = 'root'
+		var pass = 'jstrike1234'
+		sudo.repositorio.conectarABDConMySql(url, user, pass)
 				
 		codigoFromMock = 'nousado'
 		mailFromMock = new Mail()
@@ -94,7 +97,6 @@ class RecorderServiceTest{
 		var user = sudo.repositorio.traer('nickname', usuario.nickname)
 		
 		assertTrue(user.estaValidado())
-		
 	}
 		
 	@Test
@@ -129,7 +131,7 @@ class RecorderServiceTest{
 		}
 	}
 	
-	/*
+	
 	@Test
 	def void testCambiarContrasenhaPorLaMismaContrasenhaArrojaUnaExcepcion(){
 		var actualPw = usuario.password
@@ -140,11 +142,17 @@ class RecorderServiceTest{
 		}
 		catch(ChangingPasswordException expected){
 			assertEquals(actualPw, expectedPw)
-			Mockito.verify(repoUserMock).contiene('nickname', usuario.nickname)
-			Mockito.verify(repoUserMock).traer('nickname', usuario.nickname)
 		}
 	}
 	
+	@Test
+	def void testCambiarContrasenhaPorOtraActualizaLaBaseDeDatos(){
+		var nueva = 'dificil'
+		sudo.changePassword(usuario, nueva)
+		var newPassword = sudo.repositorio.traer('nickname', usuario.nickname).password 
+		assertEquals(nueva, newPassword)
+	}
+	/*
 	@Test
 	def void testTraerUnUsuarioQueNoExisteEnElRepositorioArrojaUnaExcepcion(){
 		Mockito.when(repoUserMock.contiene('nickname', usuario.nickname)).thenReturn(false)

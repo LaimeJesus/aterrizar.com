@@ -17,7 +17,9 @@ class ArmadorDeDeclaraciones {
 		}
 		fields = fields.substring(0, fields.length()-1)
 		fields = '(' + fields + ')'
+		
 		var strCampos = this.separar(campos, ',')
+		
 		var declaracion = 'INSERT INTO ' + tabla + ' (' + strCampos + ') VALUES' + fields 
 		return declaracion
 	}
@@ -44,11 +46,16 @@ class ArmadorDeDeclaraciones {
 	def armarDeclaracionDelete(String tabla, String campo){
 		return 'DELETE FROM ' + tabla + ' WHERE ' + campo + ' = ?'
 	}
-	
+	/*
+	 * devuelve un string que utiliza la sintaxis de sql para una declaracion DROP
+	 */
 	def armarDeclaracionDrop(String tabla, String campo, String valor){
 		return 'DROP' + tabla + 'WHERE' + campo + ' = ' + valor
 	}
 	
+	/*
+	 * es un split de lista de strings,
+	 */
 	def separar(List<String> campos, String separador) {
 		var res = ''
 		for(campo : campos){

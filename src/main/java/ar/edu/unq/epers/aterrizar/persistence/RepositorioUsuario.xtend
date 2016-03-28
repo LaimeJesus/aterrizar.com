@@ -2,7 +2,6 @@ package ar.edu.unq.epers.aterrizar.persistence
 
 import ar.edu.unq.epers.aterrizar.domain.Usuario
 import java.sql.Connection
-import java.sql.DriverManager
 import java.sql.ResultSet
 import java.util.ArrayList
 import ar.edu.unq.epers.aterrizar.domain.exceptions.UsuarioNoEstaEnElServicioException
@@ -10,7 +9,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.domain.ArmadorDeDeclaraciones
 
 @Accessors
-class RepositorioUsuario implements Repositorio<Usuario>{
+class RepositorioUsuario extends Repositorio<Usuario>{
 	
 	Connection connection 
 	ArmadorDeDeclaraciones armador
@@ -23,7 +22,7 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	//insert into tabla values (valores)
 	override def void persistir(Usuario usr) {
 		
-		var declaracion = armador.armarDeclaracionInsert('Usuario', this.camposDeUsuario())
+		var declaracion = armador.armarDeclaracionInsert('Usuario', this.campos())
 		var ps = this.setearValoresYPrepararDeclaracion(usr, declaracion)
 		ps.executeUpdate()
 		ps.close()
@@ -41,12 +40,12 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	}
 	
 	//select campos from tabla where condiciones	
-	override def Usuario traer(String field, String value) {
+	override def Usuario traer(String field, String value){
 
 		var ps = this.armarResultadoDeBusqueda(field, value)
 		var rs = ps.executeQuery()
 		rs.next()
-		var usuario = this.armarUsuario(rs)
+		var usuario = this.armarObjeto(rs)
 		ps.close()
 		return usuario
 	}
@@ -54,9 +53,9 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	//update tabla set campo=valor where condicion
 	override def void actualizar(Usuario usr, String field, String unique){
 		
-		var declaracion = armador.armarDeclaracionUpdate('Usuario', this.camposDeUsuario(), this.valoresDeUsuario(usr), field)
+		var declaracion = armador.armarDeclaracionUpdate('Usuario', this.campos(), this.valores(usr), field)
 		val ps = this.setearValoresYPrepararDeclaracion(usr, declaracion)
-		var indicedecampocondicion = this.camposDeUsuario().length()+1 
+		var indicedecampocondicion = this.campos().length()+1 
 		ps.setString(indicedecampocondicion, unique)
 		ps.executeUpdate()
 		ps.close()
@@ -75,11 +74,10 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 		return contiene
 	}	
 	
-	
 	/*
 	 * devuelve un usuario con los atributos cargados del resultset. Ya que nickname es unico este solo tiene un usuario
 	 */
-	def armarUsuario(ResultSet set) {
+	override def armarObjeto(ResultSet set) {
 		var usuario = new Usuario()
 		usuario.nombre = set.getString("nombre")
 		usuario.apellido = set.getString("apellido")
@@ -96,15 +94,16 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	 * devuelve un ResultSet con las tablas que cumplan la condicion de field=value
 	 */
 	def armarResultadoDeBusqueda(String field, String value) {
-		var declaracion = armador.armarDeclaracionSelect('Usuario', this.camposDeUsuario(),field)
+		var declaracion = armador.armarDeclaracionSelect('Usuario', this.campos(),field)
 		var ps = connection.prepareStatement(declaracion)
 		ps.setString(1, value)
 		return ps
 	}
 	
-	/*son los campos que voy a persistir en la base de datos
+	/*
+	 * son los campos que voy a persistir en la base de datos
 	 */
-	def camposDeUsuario() {
+	override def campos() {
 		var campos = new ArrayList<String>()
 		campos.add('nombre')
 		campos.add('apellido')
@@ -117,9 +116,9 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 		return campos
 	}
 	/*
-	 * 
+	 * son los valores de un usuario
 	 */
-	def valoresDeUsuario(Usuario usr){
+	override def valores(Usuario usr){
 		var valores = new ArrayList<String>()
 		valores.add(usr.nombre)
 		valores.add(usr.apellido)
@@ -152,18 +151,7 @@ class RepositorioUsuario implements Repositorio<Usuario>{
 	override objectNotFoundError() throws Exception {
 		throw new UsuarioNoEstaEnElServicioException()
 	}
-	//jdbc:mysql://<host>:<port>/<database_name> 
-	def getConnection(String url, String user, String password) {
-		Class.forName("com.mysql.jdbc.Driver");
-		return DriverManager.getConnection(url, user, password)
-	}
 	
-	def cerrarConeccion(){
-		connection.close()
-	}
-	def conectarABDConMySql(String url, String user, String password){
-		connection = this.getConnection(url, user, password)
-	}
 	def conectarAMiDB(){
 		var url = "jdbc:mysql://localhost:3306/aterrizar"
 		var user = 'root'

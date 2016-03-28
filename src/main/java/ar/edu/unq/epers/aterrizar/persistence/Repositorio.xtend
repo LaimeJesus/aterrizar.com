@@ -1,16 +1,41 @@
 package ar.edu.unq.epers.aterrizar.persistence
 
+import java.sql.DriverManager
+import java.sql.Connection
+import java.util.List
+import java.sql.ResultSet
 
-interface Repositorio<T> {
-	def void persistir(T obj)
+abstract class Repositorio<T> {
 	
-	def void borrar(String campo, String valor)
+	Connection connection
 	
-	def T traer(String field, String value)
+	def abstract void persistir(T obj)
 	
-	def boolean contiene(String field, String value)
+	def abstract void borrar(String campo, String valor)
 	
-	def void actualizar(T obj, String field, String unique_value)
+	def abstract T traer(String field, String value)
 	
-	def void objectNotFoundError() throws Exception
+	def abstract boolean contiene(String field, String value)
+	
+	def abstract void actualizar(T obj, String field, String unique_value)
+	
+	def abstract void objectNotFoundError() throws Exception
+	
+	def abstract List<String> campos()
+	
+	def abstract List<String> valores(T obj)
+	
+	def abstract T armarObjeto(ResultSet s)
+	
+	//jdbc:mysql://<host>:<port>/<database_name> 
+	def getConnection(String url, String user, String password) {
+		Class.forName("com.mysql.jdbc.Driver");
+		return DriverManager.getConnection(url, user, password)
+	}
+	def cerrarConeccion(){
+		connection.close()
+	}
+	def conectarABDConMySql(String url, String user, String password){
+		connection = this.getConnection(url, user, password)
+	}
 }

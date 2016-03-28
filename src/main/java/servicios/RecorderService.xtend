@@ -1,4 +1,4 @@
-package servicio
+package servicios
 
 import ar.edu.unq.epers.aterrizar.domain.exceptions.ChangingPasswordException
 import ar.edu.unq.epers.aterrizar.domain.exceptions.MyLoginException
@@ -41,7 +41,7 @@ class RecorderService {
 	def validar(Usuario usr, String codigo) throws Exception{
 		val usuarioAValidar = this.traerUsuarioPorNickname(usr.nickname)
 		
-		if(! codigo.equals('usado')){
+		if(!codigo.equals('usado')){
 			if(usuarioAValidar.codigo.equals(codigo)){
 				usuarioAValidar.codigo = 'usado'
 				this.actualizarUsuarioPorNickname(usuarioAValidar)
@@ -57,12 +57,17 @@ class RecorderService {
 	
 	def login(String nickname, String password) throws Exception{
 		val usuarioFromRepo = this.traerUsuarioPorNickname(nickname)
+		if(usuarioFromRepo.estaValidado){
 			if(usuarioFromRepo.password.equals(password)){
 				return usuarioFromRepo
 			}
 			else{
 				throw new MyLoginException("password doesn't match")
 			}
+		}
+		else{
+			throw new MyLoginException("usuario no esta validado")
+		}
 	}
 	
 	def changePassword(Usuario usr, String newpassword) throws Exception{
