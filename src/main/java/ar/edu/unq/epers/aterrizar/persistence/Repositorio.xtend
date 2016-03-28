@@ -4,10 +4,12 @@ import java.sql.DriverManager
 import java.sql.Connection
 import java.util.List
 import java.sql.ResultSet
+import org.eclipse.xtend.lib.annotations.Accessors
 
+@Accessors
 abstract class Repositorio<T> {
 	
-	Connection connection
+	protected Connection connection
 	
 	def abstract void persistir(T obj)
 	

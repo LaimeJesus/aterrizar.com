@@ -10,11 +10,12 @@ import ar.edu.unq.epers.aterrizar.domain.Usuario
 import ar.edu.unq.epers.aterrizar.domain.CreadorDeCodigos
 import ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails
 import ar.edu.unq.epers.aterrizar.domain.CreadorDeMails
+import ar.edu.unq.epers.aterrizar.persistence.Repositorio
 
 @Accessors
 class RecorderService {
 	
-	RepositorioUsuario repositorio
+	Repositorio<Usuario> repositorio
 	CreadorDeCodigos creadorDeCodigos
 	EnviadorDeMails enviadorDeMails
 	int ids

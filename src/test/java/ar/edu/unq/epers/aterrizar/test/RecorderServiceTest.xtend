@@ -54,7 +54,7 @@ class RecorderServiceTest{
 		var user = 'root'
 		var pass = 'jstrike1234'
 		sudo.repositorio.conectarABDConMySql(url, user, pass)
-				
+		
 		codigoFromMock = 'nousado'
 		mailFromMock = new Mail()
 
@@ -170,6 +170,7 @@ class RecorderServiceTest{
 	def void testBorrarUsuarioQueFueCreadoEnSetUp(){
 		var nicknameUser1 = usuario.nickname
 		sudo.repositorio.borrar('nickname', nicknameUser1)
+		
 	}
 	
 }

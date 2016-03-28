@@ -10,8 +10,7 @@ import ar.edu.unq.epers.aterrizar.domain.ArmadorDeDeclaraciones
 
 @Accessors
 class RepositorioUsuario extends Repositorio<Usuario>{
-	
-	Connection connection 
+	 
 	ArmadorDeDeclaraciones armador
 	
 	new(){
