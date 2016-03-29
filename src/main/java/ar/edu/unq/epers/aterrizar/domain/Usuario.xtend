@@ -18,4 +18,8 @@ class Usuario {
 		return codigo.equals('usado')
 	}
 	
+	def validarCodigo(){
+		codigo = 'usado'
+	}
+	
 }

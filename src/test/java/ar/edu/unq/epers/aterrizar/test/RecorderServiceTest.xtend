@@ -11,12 +11,13 @@ import java.sql.Date
 import ar.edu.unq.epers.aterrizar.domain.CreadorDeCodigos
 import ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails
 import ar.edu.unq.epers.aterrizar.domain.CreadorDeMails
-import servicios.RecorderService
 import org.junit.After
 import ar.edu.unq.epers.aterrizar.domain.exceptions.RegistrationException
 import ar.edu.unq.epers.aterrizar.domain.exceptions.MyValidateException
 import ar.edu.unq.epers.aterrizar.domain.exceptions.UsuarioNoEstaEnElServicioException
 import ar.edu.unq.epers.aterrizar.domain.exceptions.ChangingPasswordException
+import ar.edu.unq.epers.aterrizar.domain.exceptions.MyLoginException
+import ar.edu.unq.epers.aterrizar.servicios.RecorderService
 
 class RecorderServiceTest{
 	
@@ -27,6 +28,11 @@ class RecorderServiceTest{
 	RecorderService sudo
 	String codigoFromMock
 	Mail mailFromMock
+	
+	/*
+	 * Solo testeo los metodos que me parecieron mas importantes del servicio, los que no se testearon del servicio fueron
+	 * porque estos se usan de soporte en los importantes.
+	 */
 	
 	@Before
 	def void setUp(){
@@ -57,11 +63,10 @@ class RecorderServiceTest{
 		
 		codigoFromMock = 'nousado'
 		mailFromMock = new Mail()
-
-		sudo.registrarUsuario(usuario)
-
 		Mockito.when(creadorDeCodigosMock.crearCodigo()).thenReturn(codigoFromMock)
 		Mockito.when(creadorDeMailsMock.crearMailParaUsuario('registrador', usuario, codigoFromMock)).thenReturn(mailFromMock)
+		sudo.registrarUsuario(usuario)
+
 		
 	}
 	
@@ -74,10 +79,13 @@ class RecorderServiceTest{
 		
 		assertEquals(1, userId)
 		assertTrue(sudo.repositorio.contiene('nickname', nickname))
+		Mockito.verify(creadorDeCodigosMock).crearCodigo()
+		Mockito.verify(creadorDeMailsMock).crearMailParaUsuario('registrador', usuario, codigoFromMock)
+		Mockito.verify(enviadorDeMailsMock).enviarMail(mailFromMock)
 	}
 	
 	@Test
-	def void testRegistrarUsuarioQueYaExisteEnElSistemaArrojaUnaExcepcion() throws Exception{
+	def void testRegistrarUsuarioQueYaExisteEnElSistemaArrojaUnaExcepcionDeRegistracion() throws Exception{
 		try{
 			sudo.registrarUsuario(usuario)
 			fail("registrar no funciona correctamente")
@@ -85,6 +93,12 @@ class RecorderServiceTest{
 		catch(RegistrationException expected){
 			
 		assertTrue(sudo.repositorio.contiene('nickname', usuario.nickname))
+		
+		//Esto significa que los objetos creadorDeCodigos y creadorDemails y enviadorDeMails solo fueron llamados una vez en el
+		//setUp y no en este metodo
+		Mockito.verify(creadorDeCodigosMock, Mockito.times(1)).crearCodigo()
+		Mockito.verify(creadorDeMailsMock, Mockito.times(1)).crearMailParaUsuario('registrador', usuario, codigoFromMock)
+		Mockito.verify(enviadorDeMailsMock, Mockito.times(1)).enviarMail(mailFromMock)
 		}				
 	}
 
@@ -100,40 +114,58 @@ class RecorderServiceTest{
 	}
 		
 	@Test
-	def void testValidarUsuarioQueIngresaMalSuCodigoArrojaUnaExcepcion(){
+	def void testValidarUsuarioQueIngresaMalSuCodigoArrojaUnaExcepcionDeValidacion(){
 
-		var pwerroneo = 'pwerroneo'
+		var codigoerroneo = 'codigoerroneo'
 		try{
-			sudo.validar(usuario, pwerroneo)
+			sudo.validar(usuario, codigoerroneo)
 			fail("validar no funciona bien")
 			}
 		catch(MyValidateException expected){
 			
 			var userCode = sudo.repositorio.traer('nickname', usuario.nickname).codigo
 			
-			assertFalse(userCode.equals(pwerroneo))			
+			assertFalse(userCode.equals(codigoerroneo))			
 		}	
 	}
 	
-	//esto creo que en realidad deberia testear el metodo traerUsuario del recorderService
 	@Test
-	def void testLogearUnUsuarioQueNoExisteEnElSistemaArrojaUnaExcepcion(){
-		
-		var pw = 'doesnt care'
-		var nickname = 'pichu'
-		
+	def void testLogearUnUsuarioQueNoFueValidadoEnElSistemaArrojaUnaExcepcionDeLogeo(){
 		try{
-			sudo.login(nickname, pw)
-			fail("traer no funciona")
+			sudo.login(usuario.nickname, usuario.password)
+			fail('logear no funciona correctamente')
+		}		
+		catch(MyLoginException expected){
+			var usuario = sudo.repositorio.traer('nickname', usuario.nickname)
+			assertFalse(usuario.estaValidado)
 		}
-		catch(UsuarioNoEstaEnElServicioException expected){
-			assertFalse(sudo.repositorio.contiene('nickname', nickname))
+	}
+	
+	@Test
+	def void testLogearUnUsuarioConContrasenhaIncorrectaArrojaUnaExcepcionDeLogeo(){
+		var wrongPassword = 'wrong'
+		try{
+			sudo.login(usuario.nickname, wrongPassword)
+			fail('login no funciona')
 		}
+		catch(MyLoginException expected){
+			var actualPassword = sudo.repositorio.traer('nickname', usuario.nickname).password
+			assertFalse(wrongPassword.equals(actualPassword))
+		}
+	}
+	
+	@Test
+	def void testLogearUnUsuarioQueEstaValidadoEnElSistemaLoLogeaCorrectamente(){
+		var nick = usuario.nickname
+		sudo.validar(usuario, 'nousado')
+		var usuarioFromRepo = sudo.login(nick, usuario.password)
+		
+		assertEquals(nick, usuarioFromRepo.nickname)
 	}
 	
 	
 	@Test
-	def void testCambiarContrasenhaPorLaMismaContrasenhaArrojaUnaExcepcion(){
+	def void testCambiarContrasenhaPorLaMismaContrasenhaArrojaUnaExcepcionDeCambiarContrasenha(){
 		var actualPw = usuario.password
 		var expectedPw = '1234'
 		try{
@@ -152,25 +184,26 @@ class RecorderServiceTest{
 		var newPassword = sudo.repositorio.traer('nickname', usuario.nickname).password 
 		assertEquals(nueva, newPassword)
 	}
-	/*
+	
 	@Test
-	def void testTraerUnUsuarioQueNoExisteEnElRepositorioArrojaUnaExcepcion(){
-		Mockito.when(repoUserMock.contiene('nickname', usuario.nickname)).thenReturn(false)
+	def void testTraerUnUsuarioQueNoExisteEnElRepositorioArrojaUnaExcepcionDeUsuarioNoEncontrado(){
+		var pw = 'doesnt care'
+		var nickname = 'pichu'
+		
 		try{
-			sudo.traerUsuarioDelRepositorio('nickname', usuario.nickname)
+			sudo.login(nickname, pw)
+			fail("traer no funciona")
 		}
 		catch(UsuarioNoEstaEnElServicioException expected){
-			Mockito.verify(repoUserMock).objectNotFoundError()
-			Mockito.verify(repoUserMock).contiene('nickname', usuario.nickname)
+			assertFalse(sudo.repositorio.contiene('nickname', nickname))
 		}
 	}
 	
-	*/
 	@After
 	def void testBorrarUsuarioQueFueCreadoEnSetUp(){
 		var nicknameUser1 = usuario.nickname
 		sudo.repositorio.borrar('nickname', nicknameUser1)
-		
+		sudo.repositorio.cerrarConeccion()	
 	}
 	
 }

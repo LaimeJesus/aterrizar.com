@@ -2,7 +2,7 @@ package ar.edu.unq.epers.aterrizar.domain
 
 import java.util.List
 /*
- * este objecto fue creado para realizar armar los mensajes sql que se necesitan para comunicarse con la base de datos mysql, pero solo
+ * este objecto fue creado para armar los mensajes sql que se necesitan para comunicarse con la base de datos mysql, pero solo
  * sirve para declaraciones preparadas, es decir preparedStatements
  */
 class ArmadorDeDeclaraciones {
@@ -61,8 +61,8 @@ class ArmadorDeDeclaraciones {
 		for(campo : campos){
 			res = res + campo + separador
 		}
-		var size = res.length()-1
-		res = res.substring(0, size)
+		var sizeDelNuevoStringMenosUno = res.length()-1
+		res = res.substring(0, sizeDelNuevoStringMenosUno)
 		return res
 	}
 

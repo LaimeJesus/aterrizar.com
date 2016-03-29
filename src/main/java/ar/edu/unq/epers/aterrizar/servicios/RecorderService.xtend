@@ -1,4 +1,4 @@
-package servicios
+package ar.edu.unq.epers.aterrizar.servicios
 
 import ar.edu.unq.epers.aterrizar.domain.exceptions.ChangingPasswordException
 import ar.edu.unq.epers.aterrizar.domain.exceptions.MyLoginException
@@ -22,7 +22,7 @@ class RecorderService {
 	CreadorDeMails creadorDeMails
 	
 	new(){
-		//id este es un numero de unico por usuario. Es solo para una prueba
+		//id es un numero unico por usuario. Es solo para una prueba
 		ids = 1
 		repositorio = new RepositorioUsuario()
 	}
@@ -40,11 +40,12 @@ class RecorderService {
 	}
 	
 	def validar(Usuario usr, String codigo) throws Exception{
+		
 		val usuarioAValidar = this.traerUsuarioPorNickname(usr.nickname)
 		
 		if(!codigo.equals('usado')){
 			if(usuarioAValidar.codigo.equals(codigo)){
-				usuarioAValidar.codigo = 'usado'
+				usuarioAValidar.validarCodigo()
 				this.actualizarUsuarioPorNickname(usuarioAValidar)
 			}
 			else{
