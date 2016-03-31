@@ -107,6 +107,7 @@ class RecorderServiceTest{
 	
 	@Test
 	def void testRegistrarOtroUsuarioQueNoExisteEnElSistemaDebeTenerUnIdMayorAlPrimero(){
+		
 		val primerUsuarioCreadoId = sudo.traerUsuarioPorNickname(pepillo.nickname).id
 		val segundoUsuarioCreadoId = sudo.traerUsuarioPorNickname(cepillo.nickname).id
 
@@ -117,23 +118,19 @@ class RecorderServiceTest{
 
 	}
 	
-	@Test
+	@Test(expected=RegistrationException)
 	def void testRegistrarUsuarioQueYaExisteEnElSistemaArrojaUnaExcepcionDeRegistracion() throws Exception{
-		try{
-			sudo.registrarUsuario(pepillo)
-			fail("registrar no funciona correctamente")
-			}	
-		catch(RegistrationException expected){
+		
+		//arroja una excepcion
+		sudo.registrarUsuario(pepillo)
 			
 		assertTrue(sudo.contieneUsuarioPorNickname(pepillo.nickname))
 		
 		//Esto significa que los objetos creadorDeCodigos y enviadorDeMails fueron llamados  por la cantidad
-		//veces que usuarios creados en el sistema
-		//setUp y no en este metodo
+		//de veces como usuarios creados en el sistema, es decir creados en el setUp y no en este metodo
 		
 		Mockito.verify(creadorDeCodigosMock, Mockito.times(cantidadDeUsuariosCreados)).crearCodigo()
 		Mockito.verify(enviadorDeMailsMock, Mockito.times(cantidadDeUsuariosCreados)).enviarMail(mailFromMock)
-		}				
 	}
 
 	@Test 
@@ -147,49 +144,39 @@ class RecorderServiceTest{
 		assertTrue(user.estaValidado())
 	}
 		
-	@Test
+	@Test(expected=MyValidateException)
 	def void testValidarUsuarioQueIngresaMalSuCodigoArrojaUnaExcepcionDeValidacion(){
 
 		var codigoerroneo = 'codigoerroneo'
-		try{
-			sudo.validar(pepillo, codigoerroneo)
-			fail("validar no funciona bien")
-			}
-		catch(MyValidateException expected){
+		//arroja un error		
+		sudo.validar(pepillo, codigoerroneo)
 			
-			var userCode = sudo.traerUsuarioPorNickname(pepillo.nickname).codigo
+		var userCode = sudo.traerUsuarioPorNickname(pepillo.nickname).codigo
 			
-			assertFalse(userCode.equals(codigoerroneo))			
-		}	
+		assertFalse(userCode.equals(codigoerroneo))			
 	}
 	
-	@Test
+	@Test(expected=MyLoginException)
 	def void testLogearUnUsuarioQueNoFueValidadoEnElSistemaArrojaUnaExcepcionDeLogeo(){
-		try{
-			sudo.login(pepillo.nickname, pepillo.password)
-			fail('logear no funciona correctamente')
-		}		
-		catch(MyLoginException expected){
-			var usuario = sudo.traerUsuarioPorNickname(pepillo.nickname)
-			assertFalse(usuario.estaValidado)
-		}
+		//arroja una excepcion
+		sudo.login(pepillo.nickname, pepillo.password)
+		var usuario = sudo.traerUsuarioPorNickname(pepillo.nickname)
+		assertFalse(usuario.estaValidado)
 	}
 	
-	@Test
+	@Test(expected=MyLoginException)
 	def void testLogearUnUsuarioConContrasenhaIncorrectaArrojaUnaExcepcionDeLogeo(){
+
 		var wrongPassword = 'wrong'
-		try{
-			sudo.login(pepillo.nickname, wrongPassword)
-			fail('login no funciona')
-		}
-		catch(MyLoginException expected){
-			var actualPassword = sudo.traerUsuarioPorNickname(pepillo.nickname).password
-			assertFalse(wrongPassword.equals(actualPassword))
-		}
+		//arroja una excepcion
+		sudo.login(pepillo.nickname, wrongPassword)
+		var actualPassword = sudo.traerUsuarioPorNickname(pepillo.nickname).password
+		assertFalse(wrongPassword.equals(actualPassword))
 	}
 	
 	@Test
 	def void testLogearUnUsuarioQueEstaValidadoEnElSistemaLoLogeaCorrectamente(){
+		
 		var nick = pepillo.nickname
 		sudo.validar(pepillo, 'nousado')
 		var usuarioFromRepo = sudo.login(nick, pepillo.password)
@@ -200,6 +187,7 @@ class RecorderServiceTest{
 	
 	@Test(expected=ChangingPasswordException)
 	def void testCambiarContrasenhaPorLaMismaContrasenhaArrojaUnaExcepcionDeCambiarContrasenha(){
+		
 		var actualPw = pepillo.password
 		var expectedPw = '1234'
 		sudo.changePassword(pepillo, expectedPw)
@@ -208,10 +196,11 @@ class RecorderServiceTest{
 	
 	@Test
 	def void testCambiarContrasenhaPorOtraActualizaLaBaseDeDatos(){
-		var nueva = 'dificil'
-		sudo.changePassword(pepillo, nueva)
-		var newPassword = sudo.traerUsuarioPorNickname(pepillo.nickname).password 
-		assertEquals(nueva, newPassword)
+		
+		var nuevaPassword = 'dificil'
+		sudo.changePassword(pepillo, nuevaPassword)
+		var newPasswordFromRepo = sudo.traerUsuarioPorNickname(pepillo.nickname).password 
+		assertEquals(nuevaPassword, newPasswordFromRepo)
 	}
 	
 	@Test(expected=UsuarioNoEstaEnElServicioException)
@@ -223,7 +212,7 @@ class RecorderServiceTest{
 	}
 	
 	@After
-	def void testBorrarUsuarioQueFueCreadoEnSetUp(){
+	def void testBorrarUsuarioQueFueCreadoEnSetUpYCerrarConexion(){
 		sudo.repositorio.borrar('nickname', pepillo.nickname)
 		sudo.repositorio.borrar('nickname', cepillo.nickname)
 		sudo.repositorio.cerrarConeccion()	
