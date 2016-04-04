@@ -9,7 +9,7 @@ class Tramo {
 	int idTramo
 	String destino
 	String origen
-	List<Asiento> asiento
+	List<Asiento> asientos
 	String idVuelo 
 	float precioBase
 	

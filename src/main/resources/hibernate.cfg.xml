@@ -1,0 +1,36 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        
+        
+        <!-- dsp de localhost/ va a estar el nombre de sus bases de datos, pongan aca pero por default va a tener aterrizar -->
+        <!-- sergio base de datos:  -->
+        <!-- base de datos por default: jdbc:mysql://localhost:3306/aterrizar -->
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/aterrizar</property>
+		
+		<!-- comenten aca sus username y password para intercambiarlos para usarlo pero vamos a dejar root por default
+		jesus: user: root pw: jstrike1234 
+		username default: root
+		password default: root
+		-->
+		
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">jstrike1234</property>
+
+		<!-- no se toca -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.hbm2ddl.auto">validate</property>
+        <property name="show_sql">true</property>
+
+		<!--  aca van los objetos que vamos a persistir, es decir usarlso en la base de datos-->
+		<!--<mapping resource="src/main/mappings/Aerolinea.hbm.xml"></mapping>-->
+
+		
+    </session-factory>
+</hibernate-configuration>
