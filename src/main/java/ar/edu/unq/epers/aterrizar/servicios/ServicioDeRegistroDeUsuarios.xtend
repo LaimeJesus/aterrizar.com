@@ -13,7 +13,7 @@ import ar.edu.unq.epers.aterrizar.domain.CreadorDeMails
 import ar.edu.unq.epers.aterrizar.persistence.Repositorio
 
 @Accessors
-class RecorderService {
+class ServicioDeRegistroDeUsuarios {
 	
 	Repositorio<Usuario> repositorio
 	CreadorDeCodigos creadorDeCodigos

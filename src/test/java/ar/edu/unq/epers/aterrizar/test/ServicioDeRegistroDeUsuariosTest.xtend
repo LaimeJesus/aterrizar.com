@@ -17,7 +17,7 @@ import ar.edu.unq.epers.aterrizar.exceptions.MyValidateException
 import ar.edu.unq.epers.aterrizar.exceptions.UsuarioNoEstaEnElServicioException
 import ar.edu.unq.epers.aterrizar.exceptions.ChangingPasswordException
 import ar.edu.unq.epers.aterrizar.exceptions.MyLoginException
-import ar.edu.unq.epers.aterrizar.servicios.RecorderService
+import ar.edu.unq.epers.aterrizar.servicios.ServicioDeRegistroDeUsuarios
 
 class RecorderServiceTest{
 	
@@ -25,7 +25,7 @@ class RecorderServiceTest{
 	EnviadorDeMails enviadorDeMailsMock
 	CreadorDeMails creadorDeMailsMock
 	Usuario pepillo
-	RecorderService sudo
+	ServicioDeRegistroDeUsuarios sudo
 	String codigoFromMock
 	Mail mailFromMock
 	int cantidadDeUsuariosCreados
@@ -60,7 +60,7 @@ class RecorderServiceTest{
  		]
 		
 		
-		sudo = new RecorderService()
+		sudo = new ServicioDeRegistroDeUsuarios()
 		creadorDeCodigosMock = Mockito.mock(CreadorDeCodigos)
 		enviadorDeMailsMock = Mockito.mock(EnviadorDeMails)
 		creadorDeMailsMock = Mockito.mock(CreadorDeMails)
