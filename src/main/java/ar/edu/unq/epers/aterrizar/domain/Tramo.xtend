@@ -20,7 +20,7 @@ class Tramo {
 	
 	def calcularCostoTotal(){
 		var costo = 0.0
-		for(Asiento a:asientos){
+		for(Asiento a: asientos){
 			costo = costo + this.calcularPrecioDeUnAsiento(a)
 		}
 		return costo

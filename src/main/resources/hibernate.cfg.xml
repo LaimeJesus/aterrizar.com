@@ -23,7 +23,7 @@
 
 		<!-- no se toca -->
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-        <property name="hibernate.hbm2ddl.auto">validate</property>
+        <property name="hibernate.hbm2ddl.auto">create-drop</property>
         <property name="show_sql">true</property>
 
 		<!--  aca van los objetos que vamos a persistir, es decir usarlso en la base de datos-->
