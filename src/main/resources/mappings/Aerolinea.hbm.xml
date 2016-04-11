@@ -12,12 +12,12 @@
 		<property name="nombreAerolinea" type="string">
 			<column name="nombreAerolinea" length="30" not-null="true" unique="false" />
 		</property>
-      <!-- 
+       
       <list name="vuelos" cascade="all">
          <key column="idVuelo"/>
          <list-index column="idx"/>
-         <one-to-many class="Vuelo"/>
+         <one-to-many class="ar.edu.unq.epers.aterrizar.domain.Vuelo"/>
       </list>
-       -->
+       
 	</class>
 </hibernate-mapping>
