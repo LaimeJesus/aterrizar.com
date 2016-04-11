@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+	<class name="ar.edu.unq.epers.aterrizar.domain.Aerolinea" table="Aerolineas">
+		<id name="idAerolinea" type="java.lang.Integer">
+			<column name="idAerolinea"/>
+			<generator class="native"/>
+		</id>
+		<property name="nombreAerolinea" type="string">
+			<column name="nombreAerolinea" length="30" not-null="true" unique="false" />
+		</property>
+      <!-- 
+      <list name="vuelos" cascade="all">
+         <key column="idVuelo"/>
+         <list-index column="idx"/>
+         <one-to-many class="Vuelo"/>
+      </list>
+       -->
+	</class>
+</hibernate-mapping>

@@ -69,7 +69,7 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 		val rs = ps.executeQuery()
 
 		while(rs.next()){
-			contiene = rs.getString(field).equals(value)
+			contiene = contiene || rs.getString(field).equals(value)
 		}
 		ps.close()
 		return contiene
@@ -78,7 +78,7 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 	/*
 	 * devuelve un usuario con los atributos cargados del resultset. Ya que nickname es unico este solo tiene un usuario
 	 */
-	override def armarObjeto(ResultSet set) {
+	def armarObjeto(ResultSet set) {
 		var usuario = new Usuario()
 		usuario.id = set.getInt("id")
 		usuario.nombre = set.getString("nombre")

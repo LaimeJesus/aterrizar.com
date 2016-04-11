@@ -21,7 +21,6 @@ class ServicioDeRegistroDeUsuarios {
 	CreadorDeMails creadorDeMails
 	
 	new(){
-		//id es un numero unico por usuario. Es solo para una prueba
 		repositorio = new RepositorioUsuario()
 	}
 	

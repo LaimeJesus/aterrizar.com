@@ -7,5 +7,16 @@ import java.util.List
 class Vuelo {
 	int idVuelo
 	List<Tramo> tramos
-	 
+	
+	def isDirecto(){
+		return tramos.length.equals(1)
+	}
+	
+	def isDisponible(){
+		var disponible = false
+		for(Tramo t:tramos){
+			disponible = disponible || t.isDisponible()
+		}
+		return disponible
+	}
 }

@@ -1,10 +1,10 @@
-package ar.edu.unq.epers.aterrizar.domain
+package ar.edu.unq.epers.aterrizar.domain.categorias
 
 import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
 
-abstract class TipoDeCategoria {
+abstract class Categoria {
 	
 	float factorPrecio
 	
