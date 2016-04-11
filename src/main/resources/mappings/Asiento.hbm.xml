@@ -9,9 +9,13 @@
 			<column name="idAsiento"/>
 			<generator class="native"/>
 		</id>
-		<property name="categoria" type="ar.edu.unq.epers.aterrizar.domain.Categoria">
-			<column name="categoria" not-null="true" unique="false"/>
+		  
+		<property name="categoria" column="categoria" not-null="true">
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria</param>
+			</type>
 		</property>
+		
        <one-to-one name="reservadoPorUsuario" class="ar.edu.unq.epers.aterrizar.domain.Usuario"
        		cascade="save-update">
        </one-to-one>

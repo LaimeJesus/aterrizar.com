@@ -1,13 +1,13 @@
 package ar.edu.unq.epers.aterrizar.domain.buscador
 
 import ar.edu.unq.epers.aterrizar.domain.Aerolinea
-import ar.edu.unq.epers.aterrizar.domain.categorias.Categoria
+import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
 
 class CriterioPorCategoriaDeAsiento extends Criterio{
 	
-	Categoria categoria
+	TipoDeCategoria categoria
 	
-	new(Categoria cat){
+	new(TipoDeCategoria cat){
 		this.categoria = cat
 	}
 	

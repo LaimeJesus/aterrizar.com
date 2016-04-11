@@ -9,6 +9,7 @@ import ar.edu.unq.epers.aterrizar.domain.Aerolinea
 import org.junit.Assert
 import ar.edu.unq.epers.aterrizar.domain.Vuelo
 import java.util.ArrayList
+import ar.edu.unq.epers.aterrizar.domain.Tramo
 
 class ServicioDeRegistroDeVuelosTest {
 	
@@ -16,13 +17,23 @@ class ServicioDeRegistroDeVuelosTest {
 	
 	RepositorioAerolinea repoPrueba
 	
+	ArrayList<Vuelo> vuelos
+	
+	Vuelo vuelo
+	
 	@Before
 	def void setUp(){
 		unaAeroDePrueba = new Aerolinea
-		unaAeroDePrueba.vuelos = new ArrayList<Vuelo>()
+		vuelos = new ArrayList<Vuelo>()
+		vuelo = new Vuelo()
+		vuelo.nroVuelo = 1
+		vuelo.tramos = new ArrayList<Tramo>()
+		
+		vuelos.add(vuelo)
+		unaAeroDePrueba.vuelos = vuelos 
+		unaAeroDePrueba.nombreAerolinea = "prueba"
 		repoPrueba = new RepositorioAerolinea
 		
-		unaAeroDePrueba.nombreAerolinea = "prueba"
 			SessionManager.runInSession([
 			repoPrueba.persistir(unaAeroDePrueba)
 			unaAeroDePrueba
@@ -40,10 +51,13 @@ class ServicioDeRegistroDeVuelosTest {
 	
 	@After
 	def void testBorrarObjetosCreadosEnSetUp(){
+		/* 
 		SessionManager.runInSession([
 			new RepositorioAerolinea().borrar("nombreAerolinea", unaAeroDePrueba.nombreAerolinea)
 			unaAeroDePrueba
 		])
+		
+		*/
 	}
 	
 }

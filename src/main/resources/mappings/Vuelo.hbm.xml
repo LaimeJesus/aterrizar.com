@@ -12,12 +12,9 @@
 		<property name="nroVuelo" type="java.lang.Integer">
 			<column name="nroVuelo" not-null="true" unique="true" />
 		</property>
-       
-      <list name="tramos" cascade="all">
+      <bag name="tramos" cascade="all">
          <key column="idTramo"/>
-         <list-index column="idx"/>
          <one-to-many class="ar.edu.unq.epers.aterrizar.domain.Tramo"/>
-      </list>
-       
+      </bag>
 	</class>
 </hibernate-mapping>

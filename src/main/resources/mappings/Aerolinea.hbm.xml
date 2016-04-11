@@ -13,11 +13,10 @@
 			<column name="nombreAerolinea" length="30" not-null="true" unique="true" />
 		</property>
        
-      <list name="vuelos" cascade="all">
-         <key column="idVuelo"/>
-         <list-index column="idx"/>
+      <bag name="vuelos" cascade="all">
+         <key column="idAerolina"/>
          <one-to-many class="ar.edu.unq.epers.aterrizar.domain.Vuelo"/>
-      </list>
+      </bag>
        
 	</class>
 </hibernate-mapping>

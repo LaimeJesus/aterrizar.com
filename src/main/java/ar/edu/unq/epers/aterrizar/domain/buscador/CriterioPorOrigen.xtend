@@ -1,7 +1,6 @@
 package ar.edu.unq.epers.aterrizar.domain.buscador
 
 import ar.edu.unq.epers.aterrizar.domain.Aerolinea
-import org.hibernate.criterion.Restrictions
 
 class CriterioPorOrigen extends Criterio{
 	

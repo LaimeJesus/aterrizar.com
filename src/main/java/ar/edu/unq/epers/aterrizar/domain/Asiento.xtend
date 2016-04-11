@@ -1,12 +1,12 @@
 package ar.edu.unq.epers.aterrizar.domain
 
 import org.eclipse.xtend.lib.annotations.Accessors
-import ar.edu.unq.epers.aterrizar.domain.categorias.Categoria
+import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
 
 @Accessors
 
 class Asiento {
-	Categoria categoria
+	TipoDeCategoria categoria
 	int idAsiento
 	Usuario reservadoPorUsuario
 	
