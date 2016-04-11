@@ -14,12 +14,12 @@ class CriterioCompuestoPorDisjuncion extends Criterio{
 	override satisface(Aerolinea aerolinea) {
 		return criterios.exists[Criterio c | c.satisface(aerolinea)]
 	}
-	override getRestriccion() {
-		var restricciones = criterios.get(0).getRestriccion
+	override getCondicion() {
+		var condicion = ""
 		for(Criterio c: criterios){
-			restricciones = Restrictions.or(restricciones, c.getRestriccion)
+			condicion = condicion + "or" + c.getCondicion()
 		}
 		
-		return restricciones
+		return condicion
 	}
 }

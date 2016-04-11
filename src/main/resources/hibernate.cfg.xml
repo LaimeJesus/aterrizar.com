@@ -28,7 +28,8 @@
 
 		<!--  aca van los objetos que vamos a persistir, es decir usarlso en la base de datos-->
 		<mapping resource="mappings/Aerolinea.hbm.xml"></mapping>
-
-		
+		<mapping resource="mappings/Vuelo.hbm.xml"></mapping>
+		<mapping resource="mappings/Tramo.hbm.xml"></mapping>
+		<mapping resource="mappings/Asiento.hbm.xml"></mapping>
     </session-factory>
 </hibernate-configuration>

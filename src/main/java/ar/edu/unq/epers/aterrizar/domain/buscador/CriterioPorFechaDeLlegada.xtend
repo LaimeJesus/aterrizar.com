@@ -14,4 +14,9 @@ class CriterioPorFechaDeLlegada extends Criterio{
 	override satisface(Aerolinea a) {
 		return true
 	}
+	
+	override getCondicion() {
+		return ""
+	}
+	
 }

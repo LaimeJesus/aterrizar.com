@@ -15,4 +15,8 @@ class CriterioPorFechaDeSalida extends Criterio{
 		return true
 	}
 	
+	override getCondicion() {
+		return ""
+	}
+	
 }

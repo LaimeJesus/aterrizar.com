@@ -15,9 +15,7 @@ class BuscadorDeVuelosDisponibles {
 	}
 	
 	def buscarPorCriterio(Criterio unCriterio){
-		var criteria = SessionManager.getSession().createCriteria(RepositorioAerolinea)
-		
-		criteria.add(unCriterio.getRestriccion())
+//		var criteria = SessionManager.getSession().createCriteria
 		
 	}
 }

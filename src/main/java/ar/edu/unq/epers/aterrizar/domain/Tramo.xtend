@@ -11,7 +11,7 @@ class Tramo {
 	String destino
 	String origen
 	List<Asiento> asientos
-	String idVuelo 
+	int idVuelo 
 	float precioBase
 	
 	def calcularPrecioDeUnAsiento(Asiento unAsiento){

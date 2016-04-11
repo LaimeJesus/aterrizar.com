@@ -15,13 +15,13 @@ class CriterioCompuestoPorConjuncion extends Criterio{
 		return criterios.forall[Criterio c | c.satisface(aerolinea)]
 	}
 	
-	override getRestriccion() {
-		var restricciones = criterios.get(0).getRestriccion
+	override getCondicion() {
+		var condicion = ""
 		for(Criterio c: criterios){
-			restricciones = Restrictions.and(restricciones, c.getRestriccion)
+			condicion = condicion + "and" + c.getCondicion()
 		}
 		
-		return restricciones
+		return condicion
 	}
 	
 }

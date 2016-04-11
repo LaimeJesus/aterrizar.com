@@ -25,6 +25,6 @@ abstract class Criterio {
 	}
 	
 	//dame tus restricciones
-	def abstract Criterion getRestriccion()
+	def abstract String getCondicion()
 	
 }

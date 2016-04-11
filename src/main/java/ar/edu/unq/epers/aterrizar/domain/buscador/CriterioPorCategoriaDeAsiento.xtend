@@ -15,4 +15,8 @@ class CriterioPorCategoriaDeAsiento extends Criterio{
 		return true
 	}
 	
+	override getCondicion() {
+		
+	}
+	
 }

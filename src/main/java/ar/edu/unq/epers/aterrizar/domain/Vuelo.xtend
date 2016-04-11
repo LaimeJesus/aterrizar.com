@@ -6,7 +6,9 @@ import java.util.List
 @Accessors
 class Vuelo {
 	int idVuelo
+	int nroVuelo
 	List<Tramo> tramos
+
 	
 	def isDirecto(){
 		return tramos.length.equals(1)

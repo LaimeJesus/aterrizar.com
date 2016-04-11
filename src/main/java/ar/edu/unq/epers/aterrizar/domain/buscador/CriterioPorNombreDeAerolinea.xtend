@@ -14,4 +14,8 @@ class CriterioPorNombreDeAerolinea extends Criterio{
 		return nombre.equals(aerolinea.nombreAerolinea)
 	}
 	
+	override getCondicion() {
+		return "from Aerolinea as aerolinea where aerolinea.nombreAerolinea=" + nombre
+	}
+	
 }

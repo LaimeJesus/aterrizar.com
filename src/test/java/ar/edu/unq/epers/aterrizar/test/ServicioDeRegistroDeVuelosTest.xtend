@@ -7,6 +7,8 @@ import ar.edu.unq.epers.aterrizar.persistence.SessionManager
 import ar.edu.unq.epers.aterrizar.persistence.RepositorioAerolinea
 import ar.edu.unq.epers.aterrizar.domain.Aerolinea
 import org.junit.Assert
+import ar.edu.unq.epers.aterrizar.domain.Vuelo
+import java.util.ArrayList
 
 class ServicioDeRegistroDeVuelosTest {
 	
@@ -17,6 +19,7 @@ class ServicioDeRegistroDeVuelosTest {
 	@Before
 	def void setUp(){
 		unaAeroDePrueba = new Aerolinea
+		unaAeroDePrueba.vuelos = new ArrayList<Vuelo>()
 		repoPrueba = new RepositorioAerolinea
 		
 		unaAeroDePrueba.nombreAerolinea = "prueba"

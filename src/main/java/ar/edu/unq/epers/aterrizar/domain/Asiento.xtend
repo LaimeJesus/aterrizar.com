@@ -7,11 +7,11 @@ import ar.edu.unq.epers.aterrizar.domain.categorias.Categoria
 
 class Asiento {
 	Categoria categoria
-	int nroAsiento
-	Usuario reservo
+	int idAsiento
+	Usuario reservadoPorUsuario
 	
 	def isReservado(){
-		return reservo != null
+		return reservadoPorUsuario != null
 	}
 	
 	def precio() {

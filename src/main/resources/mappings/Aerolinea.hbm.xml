@@ -4,13 +4,13 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
-	<class name="ar.edu.unq.epers.aterrizar.domain.Aerolinea" table="Aerolineas">
+	<class name="ar.edu.unq.epers.aterrizar.domain.Aerolinea" table="Aerolinea">
 		<id name="idAerolinea" type="java.lang.Integer">
 			<column name="idAerolinea"/>
 			<generator class="native"/>
 		</id>
 		<property name="nombreAerolinea" type="string">
-			<column name="nombreAerolinea" length="30" not-null="true" unique="false" />
+			<column name="nombreAerolinea" length="30" not-null="true" unique="true" />
 		</property>
        
       <list name="vuelos" cascade="all">
