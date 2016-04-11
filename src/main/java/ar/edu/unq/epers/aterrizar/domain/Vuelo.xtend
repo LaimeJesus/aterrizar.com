@@ -13,9 +13,9 @@ class Vuelo {
 	}
 	
 	def isDisponible(){
-		var disponible = false
-		for(Tramo t:tramos){
-			disponible = disponible || t.isDisponible()
+		var disponible = true
+		for(Tramo t: tramos){
+			disponible = disponible && t.isDisponible()
 		}
 		return disponible
 	}
