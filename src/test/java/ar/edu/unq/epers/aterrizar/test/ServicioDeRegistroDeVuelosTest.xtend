@@ -10,6 +10,7 @@ import org.junit.Assert
 import ar.edu.unq.epers.aterrizar.domain.Vuelo
 import java.util.ArrayList
 import ar.edu.unq.epers.aterrizar.domain.Tramo
+import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorOrigen
 
 class ServicioDeRegistroDeVuelosTest {
 	
@@ -38,6 +39,7 @@ class ServicioDeRegistroDeVuelosTest {
 			repoPrueba.persistir(unaAeroDePrueba)
 			unaAeroDePrueba
 		])
+		
 	}
 	
 	@Test
@@ -47,6 +49,19 @@ class ServicioDeRegistroDeVuelosTest {
 		])
 		
 		Assert.assertEquals(true, existe)
+	}
+	
+	@Test
+	def void testCriterioPorOrigen(){
+	
+		var CriterioPorOrigen criterio = new CriterioPorOrigen("Budapest")
+		
+		var String query = criterio.getCondicion()
+		
+		SessionManager.runInSession([
+			| var sesion = SessionManager.getSession().createQuery(query)
+		])
+		
 	}
 	
 	@After

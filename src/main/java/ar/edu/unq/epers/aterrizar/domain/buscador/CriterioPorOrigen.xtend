@@ -1,7 +1,6 @@
 package ar.edu.unq.epers.aterrizar.domain.buscador
 
 import ar.edu.unq.epers.aterrizar.domain.Aerolinea
-import org.hibernate.engine.JoinSequence.Join
 
 class CriterioPorOrigen extends Criterio{
 	
@@ -12,13 +11,14 @@ class CriterioPorOrigen extends Criterio{
 	}
 	
 	override satisface(Aerolinea a) {
-		from a.vuelosDisponibles as vuelo 
-									Join vuelo.tramos as tramos
-									where tramos.origen = origen
+	
+		return true	
 	}
 		
 	override getCondicion() {
-		return ""
+		return "from a.vuelosDisponibles as vuelo 
+									join vuelo.tramos as tramos
+									where tramos.origen = origen"
 	}
 	
 	
