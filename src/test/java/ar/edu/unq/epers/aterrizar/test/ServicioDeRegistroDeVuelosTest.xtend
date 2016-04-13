@@ -10,6 +10,8 @@ import org.junit.Assert
 import ar.edu.unq.epers.aterrizar.domain.Vuelo
 import java.util.ArrayList
 import ar.edu.unq.epers.aterrizar.domain.Tramo
+import ar.edu.unq.epers.aterrizar.domain.Asiento
+import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
 
 class ServicioDeRegistroDeVuelosTest {
 	
@@ -21,14 +23,33 @@ class ServicioDeRegistroDeVuelosTest {
 	
 	Vuelo vuelo
 	
+	ArrayList<Tramo> tramos
+	
+	TipoDeCategoria business
+	
 	@Before
 	def void setUp(){
 		unaAeroDePrueba = new Aerolinea
 		vuelos = new ArrayList<Vuelo>()
 		vuelo = new Vuelo()
 		vuelo.nroVuelo = 1
-		vuelo.tramos = new ArrayList<Tramo>()
+		tramos = new ArrayList<Tramo>()
+		var tramo1 = new Tramo()
+		tramo1.origen = "Argentina"
+		tramo1.destino = "Brazil"
+		tramo1.precioBase = 0
 		
+		var asientos = new ArrayList<Asiento>()
+		business = TipoDeCategoria.BUSINESS
+		business.factorPrecio = 10
+		var asiento = new Asiento()
+		asiento.categoria = business
+		asientos.add(asiento)
+		
+		tramo1.asientos = asientos
+		tramos.add(tramo1)
+		
+		vuelo.tramos = tramos
 		vuelos.add(vuelo)
 		unaAeroDePrueba.vuelos = vuelos 
 		unaAeroDePrueba.nombreAerolinea = "prueba"
@@ -47,6 +68,8 @@ class ServicioDeRegistroDeVuelosTest {
 		])
 		
 		Assert.assertEquals(true, existe)
+
+		
 	}
 	
 	@After

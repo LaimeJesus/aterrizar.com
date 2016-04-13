@@ -19,7 +19,7 @@
        		<column name="precioBase" not-null="true" unique="false"/>
        </property>
       <bag name="asientos" cascade="all">
-         <key column="nroAsiento"/>
+         <key column="idTramo"/>
          <one-to-many class="ar.edu.unq.epers.aterrizar.domain.Asiento"/>
       </bag>     
        
