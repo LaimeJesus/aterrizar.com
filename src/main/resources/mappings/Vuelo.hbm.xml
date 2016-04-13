@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+	<class name="ar.edu.unq.epers.aterrizar.domain.Vuelo" table="Vuelo">
+		<id name="idVuelo" type="java.lang.Integer">
+			<column name="idVuelo"/>
+			<generator class="native"/>
+		</id>
+		<property name="nroVuelo" type="java.lang.Integer">
+			<column name="nroVuelo" not-null="true" unique="true" />
+		</property>
+      <bag name="tramos" cascade="all">
+         <key column="idTramo"/>
+         <one-to-many class="ar.edu.unq.epers.aterrizar.domain.Tramo"/>
+      </bag>
+	</class>
+</hibernate-mapping>

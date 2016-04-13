@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+	<class name="ar.edu.unq.epers.aterrizar.domain.Usuario" table="Usuario">
+		<id name="id" type="java.lang.Integer">
+			<column name="id"/>
+			<generator class="native"/>
+		</id>
+ 
+		<property name="nombre" type="string">
+			<column name="nombre" not-null="true" unique="false"/>
+		</property>
+		<property name="apellido" type="string">
+			<column name="apellido" not-null="true" unique="false"/>
+		</property>
+		<property name="nickname" type="string">
+			<column name="nickname" not-null="true" unique="true"/>
+		</property>
+		<property name="password" type="string">
+			<column name="password" not-null="true" unique="false"/>
+		</property>
+		<property name="email" type="string">
+			<column name="email" not-null="true" unique="false"/>
+		</property>
+		<property name="codigo" type="string">
+			<column name="codigo" not-null="true" unique="false"/>
+		</property>
+		<property name="fechaDeNacimiento" type="java.util.Date">
+			<column name="fechaDeNacimiento" not-null="true" unique="false"/>
+		</property>
+		
+	</class>
+</hibernate-mapping>

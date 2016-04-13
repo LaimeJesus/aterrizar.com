@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+	<class name="ar.edu.unq.epers.aterrizar.domain.Tramo" table="Tramo">
+		<id name="idTramo" type="java.lang.Integer">
+			<column name="idTramo"/>
+			<generator class="native"/>
+		</id>
+		<property name="destino" type="string">
+			<column name="destino" length="45" not-null="true" unique="false" />
+		</property>
+       	<property name="origen" type="string">
+       		<column name="origen" length="45" not-null="true" unique="false"/>
+       	</property>
+       <property name="precioBase" type="java.lang.Float">
+       		<column name="precioBase" not-null="true" unique="false"/>
+       </property>
+      <bag name="asientos" cascade="all">
+         <key column="nroAsiento"/>
+         <one-to-many class="ar.edu.unq.epers.aterrizar.domain.Asiento"/>
+      </bag>     
+       
+	</class>
+</hibernate-mapping>

@@ -27,8 +27,6 @@ abstract class Repositorio<T> {
 	
 	def abstract List<String> valores(T obj)
 	
-	def abstract T armarObjeto(ResultSet s)
-	
 	//jdbc:mysql://<host>:<port>/<database_name> 
 	def getConnection(String url, String user, String password) {
 		Class.forName("com.mysql.jdbc.Driver");

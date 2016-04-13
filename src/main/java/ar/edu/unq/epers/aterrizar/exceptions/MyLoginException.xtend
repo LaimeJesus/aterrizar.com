@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.aterrizar.domain.exceptions
+package ar.edu.unq.epers.aterrizar.exceptions
 
 class MyLoginException extends Exception{
 	

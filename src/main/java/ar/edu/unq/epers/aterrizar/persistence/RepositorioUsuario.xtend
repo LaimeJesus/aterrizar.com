@@ -1,12 +1,11 @@
 package ar.edu.unq.epers.aterrizar.persistence
 
 import ar.edu.unq.epers.aterrizar.domain.Usuario
-import java.sql.Connection
 import java.sql.ResultSet
 import java.util.ArrayList
-import ar.edu.unq.epers.aterrizar.domain.exceptions.UsuarioNoEstaEnElServicioException
+import ar.edu.unq.epers.aterrizar.exceptions.UsuarioNoEstaEnElServicioException
 import org.eclipse.xtend.lib.annotations.Accessors
-import ar.edu.unq.epers.aterrizar.domain.ArmadorDeDeclaraciones
+import ar.edu.unq.epers.aterrizar.utils.ArmadorDeDeclaraciones
 
 @Accessors
 class RepositorioUsuario extends Repositorio<Usuario>{
@@ -17,12 +16,14 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 		armador = new ArmadorDeDeclaraciones()
 	}
 	
-	
 	//insert into tabla values (valores)
 	override def void persistir(Usuario usr) {
+		//creo los campos y le saco el campo autoincrementable
+		var camposSinAutoIncrementable = this.campos()
+		camposSinAutoIncrementable.remove('id')
 		
-		var declaracion = armador.armarDeclaracionInsert('Usuario', this.campos())
-		var ps = this.setearValoresYPrepararDeclaracion(usr, declaracion)
+		var declaracion = armador.armarDeclaracionInsert('Usuario', camposSinAutoIncrementable)
+		var ps = this.setearValoresYPrepararDeclaracionSinCampoAutoIncrementable(usr, declaracion,1)
 		ps.executeUpdate()
 		ps.close()
 	}
@@ -53,8 +54,9 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 	override def void actualizar(Usuario usr, String field, String unique){
 		
 		var declaracion = armador.armarDeclaracionUpdate('Usuario', this.campos(), this.valores(usr), field)
-		val ps = this.setearValoresYPrepararDeclaracion(usr, declaracion)
-		var indicedecampocondicion = this.campos().length()+1 
+		val ps = this.setearValoresYPrepararDeclaracionSinCampoAutoIncrementable(usr, declaracion,2)
+		ps.setInt(1, usr.id)
+		var indicedecampocondicion = this.campos().length()+1
 		ps.setString(indicedecampocondicion, unique)
 		ps.executeUpdate()
 		ps.close()
@@ -67,7 +69,7 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 		val rs = ps.executeQuery()
 
 		while(rs.next()){
-			contiene = rs.getString(field).equals(value)
+			contiene = contiene || rs.getString(field).equals(value)
 		}
 		ps.close()
 		return contiene
@@ -76,8 +78,9 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 	/*
 	 * devuelve un usuario con los atributos cargados del resultset. Ya que nickname es unico este solo tiene un usuario
 	 */
-	override def armarObjeto(ResultSet set) {
+	def armarObjeto(ResultSet set) {
 		var usuario = new Usuario()
+		usuario.id = set.getInt("id")
 		usuario.nombre = set.getString("nombre")
 		usuario.apellido = set.getString("apellido")
 		usuario.nickname = set.getString("nickname")
@@ -85,7 +88,6 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 		usuario.email = set.getString("email")
 		usuario.fechaDeNacimiento = set.getDate("fechaDeNacimiento")
 		usuario.codigo = set.getString("codigo")
-		usuario.id = set.getInt("id")
 		return usuario
 	}
 	
@@ -104,6 +106,7 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 	 */
 	override def campos() {
 		var campos = new ArrayList<String>()
+		campos.add('id')
 		campos.add('nombre')
 		campos.add('apellido')
 		campos.add('nickname')
@@ -111,7 +114,6 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 		campos.add('email')
 		campos.add('fechaDeNacimiento')
 		campos.add('codigo')
-		campos.add('id')
 		return campos
 	}
 	/*
@@ -119,6 +121,7 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 	 */
 	override def valores(Usuario usr){
 		var valores = new ArrayList<String>()
+		valores.add(usr.id.toString())
 		valores.add(usr.nombre)
 		valores.add(usr.apellido)
 		valores.add(usr.nickname)
@@ -126,24 +129,25 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 		valores.add(usr.email)
 		valores.add(usr.fechaDeNacimiento.toString())
 		valores.add(usr.codigo)
-		valores.add(usr.id.toString())
+		
 		return valores
 	}
 	
 
 	/*
 	 * setea los valores de un usuario para preparar la declaracion
+	 * esta solucion es horrible pero no se me ocurrio otra forma de manejar campos sin poder elegir uno como 
+	 * no usable sino q es la base de datos la que se encarga de setearlo
 	 */
-	def setearValoresYPrepararDeclaracion(Usuario usr, String declaracion) {
+	def setearValoresYPrepararDeclaracionSinCampoAutoIncrementable(Usuario usr, String declaracion, int startIndex) {
 		var ps = connection.prepareStatement(declaracion)
-		ps.setString(1, usr.nombre)
-		ps.setString(2, usr.apellido)
-		ps.setString(3, usr.nickname)
-		ps.setString(4, usr.password)
-		ps.setString(5, usr.email)
-		ps.setDate(6, usr.fechaDeNacimiento)
-		ps.setString(7, usr.codigo)
-		ps.setInt(8, usr.id)
+		ps.setString(startIndex, usr.nombre)
+		ps.setString(startIndex+1, usr.apellido)
+		ps.setString(startIndex+2, usr.nickname)
+		ps.setString(startIndex+3, usr.password)
+		ps.setString(startIndex+4, usr.email)
+		ps.setDate(startIndex+5, usr.fechaDeNacimiento)
+		ps.setString(startIndex+6, usr.codigo)
 		return ps
 	}
 	

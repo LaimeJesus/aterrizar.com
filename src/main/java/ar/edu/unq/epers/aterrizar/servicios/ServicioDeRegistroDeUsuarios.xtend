@@ -1,9 +1,9 @@
 package ar.edu.unq.epers.aterrizar.servicios
 
-import ar.edu.unq.epers.aterrizar.domain.exceptions.ChangingPasswordException
-import ar.edu.unq.epers.aterrizar.domain.exceptions.MyLoginException
-import ar.edu.unq.epers.aterrizar.domain.exceptions.MyValidateException
-import ar.edu.unq.epers.aterrizar.domain.exceptions.RegistrationException
+import ar.edu.unq.epers.aterrizar.exceptions.ChangingPasswordException
+import ar.edu.unq.epers.aterrizar.exceptions.MyLoginException
+import ar.edu.unq.epers.aterrizar.exceptions.MyValidateException
+import ar.edu.unq.epers.aterrizar.exceptions.RegistrationException
 import ar.edu.unq.epers.aterrizar.persistence.RepositorioUsuario
 import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.domain.Usuario
@@ -13,17 +13,14 @@ import ar.edu.unq.epers.aterrizar.domain.CreadorDeMails
 import ar.edu.unq.epers.aterrizar.persistence.Repositorio
 
 @Accessors
-class RecorderService {
+class ServicioDeRegistroDeUsuarios {
 	
 	Repositorio<Usuario> repositorio
 	CreadorDeCodigos creadorDeCodigos
 	EnviadorDeMails enviadorDeMails
-	int ids
 	CreadorDeMails creadorDeMails
 	
 	new(){
-		//id es un numero unico por usuario. Es solo para una prueba
-		ids = 1
 		repositorio = new RepositorioUsuario()
 	}
 	
@@ -32,9 +29,6 @@ class RecorderService {
 			throw new RegistrationException('Nickname is being used')
 		}
 		else{
-			usr.id = ids
-			ids = ids + 1
-			
 			this.nuevoUsuarioEnElSistema(usr)
 		}
 	}
@@ -43,7 +37,7 @@ class RecorderService {
 		
 		val usuarioAValidar = this.traerUsuarioPorNickname(usr.nickname)
 		
-		if(!codigo.equals('usado')){
+		if(!usuarioAValidar.estaValidado()){
 			if(usuarioAValidar.codigo.equals(codigo)){
 				usuarioAValidar.validarCodigo()
 				this.actualizarUsuarioPorNickname(usuarioAValidar)
@@ -59,7 +53,7 @@ class RecorderService {
 	
 	def login(String nickname, String password) throws Exception{
 		val usuarioFromRepo = this.traerUsuarioPorNickname(nickname)
-		if(usuarioFromRepo.estaValidado){
+		if(usuarioFromRepo.estaValidado()){
 			if(usuarioFromRepo.password.equals(password)){
 				return usuarioFromRepo
 			}
