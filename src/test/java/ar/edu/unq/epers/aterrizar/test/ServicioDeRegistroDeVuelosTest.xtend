@@ -27,6 +27,8 @@ class ServicioDeRegistroDeVuelosTest {
 	
 	TipoDeCategoria business
 	
+	ArrayList<Vuelo> resultados
+	
 	@Before
 	def void setUp(){
 		unaAeroDePrueba = new Aerolinea
@@ -59,6 +61,7 @@ class ServicioDeRegistroDeVuelosTest {
 			repoPrueba.persistir(unaAeroDePrueba)
 			unaAeroDePrueba
 		])
+		
 	}
 	
 	@Test
@@ -71,16 +74,30 @@ class ServicioDeRegistroDeVuelosTest {
 
 		
 	}
+	/*
+	@Test
+	def void testCriterioPorOrigen(){
 	
+		SessionManager.runInSession([
+			| var sesion = SessionManager.getSession()
+			var query = new CriterioPorOrigen("Budapest").getCondicion()
+			resultados = sesion.createQuery(query).list() as ArrayList<Vuelo>
+			null
+		])
+		Assert.assertEquals(resultados.length, 0)
+	}
+	 
 	@After
 	def void testBorrarObjetosCreadosEnSetUp(){
-		/* 
+		 
 		SessionManager.runInSession([
-			new RepositorioAerolinea().borrar("nombreAerolinea", unaAeroDePrueba.nombreAerolinea)
+			repoPrueba.borrar("nombreAerolinea", unaAeroDePrueba.nombreAerolinea)
 			unaAeroDePrueba
 		])
-		
-		*/
+		var existe = SessionManager.runInSession[|
+			repoPrueba.contiene("nombreAerolinea", unaAeroDePrueba.nombreAerolinea)
+		]
+		Assert.assertEquals(existe, false)
 	}
-	
+	*/
 }

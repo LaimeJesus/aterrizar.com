@@ -11,11 +11,12 @@ class CriterioPorOrigen extends Criterio{
 	}
 	
 	override satisface(Aerolinea a) {
-		return true
+	
+		return true	
 	}
 		
 	override getCondicion() {
-		return ""
+		return "from Vuelo as vuelo join vuelo.tramos as tramos where tramos.origen = "+ origen
 	}
 	
 	

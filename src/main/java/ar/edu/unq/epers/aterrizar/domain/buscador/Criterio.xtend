@@ -3,7 +3,6 @@ package ar.edu.unq.epers.aterrizar.domain.buscador
 import java.util.ArrayList
 import java.util.List
 import ar.edu.unq.epers.aterrizar.domain.Aerolinea
-import org.hibernate.criterion.Criterion
 
 abstract class Criterio {
 	
