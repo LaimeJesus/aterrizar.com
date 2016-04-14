@@ -16,7 +16,8 @@ class CriterioPorOrigen extends Criterio{
 	}
 		
 	override getCondicion() {
-		return "from Vuelo as vuelo join vuelo.tramos as tramos where tramos.origen = "+ origen
+		// agregar comillas simples al final como parte del parametro
+		return "from Vuelo as vuelos join vuelos.tramos as tramos where tramos.origen ='" + origen +"'"
 	}
 	
 	

@@ -12,6 +12,7 @@ import java.util.ArrayList
 import ar.edu.unq.epers.aterrizar.domain.Tramo
 import ar.edu.unq.epers.aterrizar.domain.Asiento
 import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
+import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorOrigen
 
 class ServicioDeRegistroDeVuelosTest {
 	
@@ -73,33 +74,32 @@ class ServicioDeRegistroDeVuelosTest {
 		Assert.assertEquals(true, existe)
 		
 	}
-	/*
+	
 	@Test
 	def void testCriterioPorOrigen(){
 
 		SessionManager.runInSession([
-			| var sesion = SessionManager.getSession()
-				var criterio = new CriterioPorOrigen("Budapest")
+			 var sesion = SessionManager.getSession()
+			  var criterio = new CriterioPorOrigen("Budapest")
 		
-				var String query = criterio.getCondicion()
+			  var String query = criterio.getCondicion()
 			  	resultados = sesion.createQuery(query).list() as ArrayList<Vuelo>
 			  
 			  null
 		])
 		
-		Assert.assertEquals("no hay vuelos desde ese destino",resultados.length == 0)
+		Assert.assertTrue("no hay vuelos desde ese origen",resultados.empty)
 		
 	}
-	*/
+	
 	@After
 	def void testBorrarObjetosCreadosEnSetUp(){
-		/* 
+		
 		SessionManager.runInSession([
 			new RepositorioAerolinea().borrar("nombreAerolinea", unaAeroDePrueba.nombreAerolinea)
 			unaAeroDePrueba
 		])
 		
-		*/
 	}
 	
 }

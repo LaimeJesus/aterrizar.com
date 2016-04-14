@@ -16,7 +16,7 @@ class CriterioPorFechaDeSalida extends Criterio{
 	}
 	
 	override getCondicion() {
-		return ""
+		//return "from Vuelo as vuelos join vuelos.tramos as tramos where tramos.fechaDeSalida ='" + salida.toString +"'"
 	}
 	
 }
