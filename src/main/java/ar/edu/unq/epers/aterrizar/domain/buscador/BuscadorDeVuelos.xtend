@@ -3,10 +3,13 @@ package ar.edu.unq.epers.aterrizar.domain.buscador
 import ar.edu.unq.epers.aterrizar.persistence.RepositorioAerolinea
 import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.persistence.SessionManager
+import ar.edu.unq.epers.aterrizar.domain.Vuelo
+import java.util.ArrayList
 
 @Accessors
-class BuscadorDeVuelosDisponibles {
+class BuscadorDeVuelos {
 	
+	ArrayList<Vuelo> vuelos
 	
 	RepositorioAerolinea aerolineas
 	
@@ -15,7 +18,14 @@ class BuscadorDeVuelosDisponibles {
 	}
 	
 	def buscarPorCriterio(Criterio unCriterio){
-//		var criteria = SessionManager.getSession().createCriteria
 		
+		SessionManager.runInSession[|
+		var sesion = aerolineas.getSession() 
+		var query = sesion.createQuery(unCriterio.getCondicion())
+		var resultados = query.list() as ArrayList<Vuelo>
+		vuelos = resultados
+		]
+		
+		return vuelos
 	}
 }

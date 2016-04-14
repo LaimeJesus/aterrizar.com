@@ -12,6 +12,8 @@ import java.util.ArrayList
 import ar.edu.unq.epers.aterrizar.domain.Tramo
 import ar.edu.unq.epers.aterrizar.domain.Asiento
 import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
+import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorOrigen
+import ar.edu.unq.epers.aterrizar.domain.buscador.BuscadorDeVuelos
 
 class ServicioDeRegistroDeVuelosTest {
 	
@@ -26,8 +28,6 @@ class ServicioDeRegistroDeVuelosTest {
 	ArrayList<Tramo> tramos
 	
 	TipoDeCategoria business
-	
-	ArrayList<Vuelo> resultados
 	
 	@Before
 	def void setUp(){
@@ -55,6 +55,7 @@ class ServicioDeRegistroDeVuelosTest {
 		vuelos.add(vuelo)
 		unaAeroDePrueba.vuelos = vuelos 
 		unaAeroDePrueba.nombreAerolinea = "prueba"
+		
 		repoPrueba = new RepositorioAerolinea
 		
 			SessionManager.runInSession([
@@ -63,7 +64,7 @@ class ServicioDeRegistroDeVuelosTest {
 		])
 				
 	}
-	
+	/* 
 	@Test
 	def void testCrearAerolineaParaProbarBaseDeDatos(){
 		var existe = SessionManager.runInSession([
@@ -73,24 +74,17 @@ class ServicioDeRegistroDeVuelosTest {
 		Assert.assertEquals(true, existe)
 		
 	}
-	/*
+	
 	@Test
 	def void testCriterioPorOrigen(){
 
-		SessionManager.runInSession([
-			| var sesion = SessionManager.getSession()
-				var criterio = new CriterioPorOrigen("Budapest")
-		
-				var String query = criterio.getCondicion()
-			  	resultados = sesion.createQuery(query).list() as ArrayList<Vuelo>
-			  
-			  null
-		])
-		
-		Assert.assertEquals("no hay vuelos desde ese destino",resultados.length == 0)
+		var buscador = new BuscadorDeVuelos(repoPrueba)
+		var criterio = new CriterioPorOrigen("Argentina")
+		var resultados = buscador.buscarPorCriterio(criterio)
+		Assert.assertEquals(resultados.length, 1)
 		
 	}
-	*/
+	
 	@After
 	def void testBorrarObjetosCreadosEnSetUp(){
 		/* 
@@ -99,7 +93,7 @@ class ServicioDeRegistroDeVuelosTest {
 			unaAeroDePrueba
 		])
 		
-		*/
-	}
 	
+	}
+		*/
 }

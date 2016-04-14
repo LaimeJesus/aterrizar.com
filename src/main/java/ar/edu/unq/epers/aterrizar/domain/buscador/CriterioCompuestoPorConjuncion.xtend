@@ -16,11 +16,22 @@ class CriterioCompuestoPorConjuncion extends Criterio{
 	
 	override getCondicion() {
 		var condicion = ""
-		for(Criterio c: criterios){
-			condicion = condicion + "and" + c.getCondicion()
-		}
+		
+		condicion = this.intercalar("and", criterios)
 		
 		return condicion
+	}	
+	
+	def intercalar(String operador,	List<Criterio> criterios) {
+		var res = ""
+		for(Criterio criterio : criterios){
+			res = res + criterio.getCondicion() + operador
+		}
+		
+		var sizeDelNuevoStringMenosUno = res.length()-1
+		res = res.substring(0, sizeDelNuevoStringMenosUno)
+		System.out.println(res)
+		return res
 	}
 	
 }

@@ -15,11 +15,18 @@ class CriterioCompuestoPorDisjuncion extends Criterio{
 		return criterios.exists[Criterio c | c.satisface(aerolinea)]
 	}
 	override getCondicion() {
-		var condicion = ""
-		for(Criterio c: criterios){
-			condicion = condicion + "or" + c.getCondicion()
+		return this.intercalar("or", criterios)
+	}
+	
+	def intercalar(String operador, List<Criterio> criterios) {
+		var res = ""
+		for(Criterio criterio : criterios){
+			res = res + criterio.getCondicion() + operador
 		}
 		
-		return condicion
+		var sizeDelNuevoStringMenosUno = res.length()-1
+		res = res.substring(0, sizeDelNuevoStringMenosUno)
+		System.out.println(res)
+		return res
 	}
 }

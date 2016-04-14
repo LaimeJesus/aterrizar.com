@@ -26,13 +26,16 @@ class RepositorioAerolinea extends Repositorio<Aerolinea>{
 	
 	override def Aerolinea traer(String field, String value) {
 
-		//var aerolineas = this.getSession().createCriteria(Aerolinea).add(Restrictions.like(field, value)).list()
 	 
 		var stmt = "from Aerolinea as a where a." + field + " = :" + field
 		var query = this.getSession().createQuery(stmt)
 		query.setParameter(field, value)
 		var aerolineas = query.list() //as ArrayList<Aerolinea>
+		if(aerolineas.isEmpty){
+			return null
+		}
 		var aerolinea = aerolineas.get(0) as Aerolinea
+		
 		return aerolinea
 	
 		//return this.getSession().get(typeof(Aerolinea), Integer.parseInt(value)) as Aerolinea 
@@ -51,7 +54,7 @@ class RepositorioAerolinea extends Repositorio<Aerolinea>{
 	}
 	
 	override objectNotFoundError() throws Exception {
-		new AerolineaNoExisteException("no existe esta aerolinea")
+		new AerolineaNoExisteException("no existe esa aerolinea")
 	}
 
 }
