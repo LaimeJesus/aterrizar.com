@@ -9,7 +9,9 @@
         
         <!-- dsp de localhost/ va a estar el nombre de sus bases de datos, pongan aca pero por default va a tener aterrizar -->
         <!-- sergio base de datos:  -->
-        <!-- base de datos por default: jdbc:mysql://localhost:3306/aterrizar -->
+        <!-- base de datos por default: jdbc:mysql://localhost:3306/aterrizar 
+        
+        -->
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/aterrizar</property>
 		
 		<!-- comenten aca sus username y password para intercambiarlos para usarlo pero vamos a dejar root por default
@@ -23,7 +25,8 @@
 
 		<!-- no se toca -->
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-        <property name="hibernate.hbm2ddl.auto">create-drop</property> <!-- create-drop -->
+        <property name="hibernate.hbm2ddl.auto">create-drop</property> 
+        <!-- create-drop para que se eliminen las tablas al desconectarse y se creen al conectarse a hb-->
         <property name="show_sql">true</property>
 
 		<!--  aca van los objetos que vamos a persistir, es decir usarlso en la base de datos-->

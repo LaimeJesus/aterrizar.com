@@ -13,7 +13,7 @@
 			<column name="nroVuelo" not-null="true" unique="true" />
 		</property>
       <bag name="tramos" cascade="all">
-         <key column="idTramo"/>
+         <key column="idVuelo"/>
          <one-to-many class="ar.edu.unq.epers.aterrizar.domain.Tramo"/>
       </bag>
 	</class>
