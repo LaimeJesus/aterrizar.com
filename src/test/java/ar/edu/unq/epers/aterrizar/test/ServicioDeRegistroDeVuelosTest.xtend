@@ -22,6 +22,8 @@ class ServicioDeRegistroDeVuelosTest {
 	
 	Vuelo vuelo
 	
+	ArrayList<Vuelo> resultados
+	
 	@Before
 	def void setUp(){
 		unaAeroDePrueba = new Aerolinea
@@ -40,6 +42,8 @@ class ServicioDeRegistroDeVuelosTest {
 			unaAeroDePrueba
 		])
 		
+		//resultados = new ArrayList<Vuelo>()
+		
 	}
 	
 	@Test
@@ -54,13 +58,22 @@ class ServicioDeRegistroDeVuelosTest {
 	@Test
 	def void testCriterioPorOrigen(){
 	
-		var CriterioPorOrigen criterio = new CriterioPorOrigen("Budapest")
+		//var criterio = new CriterioPorOrigen("Budapest")
 		
-		var String query = criterio.getCondicion()
+		//var String query = criterio.getCondicion()
+		//= new ArrayList<Vuelo>()
 		
 		SessionManager.runInSession([
-			| var sesion = SessionManager.getSession().createQuery(query)
+			| var sesion = SessionManager.getSession()
+				var criterio = new CriterioPorOrigen("Budapest")
+		
+				var String query = criterio.getCondicion()
+			  	resultados = sesion.createQuery(query).list() as ArrayList<Vuelo>
+			  
+			  null
 		])
+		
+		Assert.assertEquals("no hay vuelos desde ese destino",resultados.length == 0)
 		
 	}
 	
