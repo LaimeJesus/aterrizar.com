@@ -15,9 +15,9 @@
 				<param name="enumClass">ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria</param>
 			</type>
 		</property>
-		
-       <one-to-one name="reservadoPorUsuario" class="ar.edu.unq.epers.aterrizar.domain.Usuario"
-       		cascade="save-update">
-       </one-to-one>
+    	<many-to-one name="reservadoPorUsuario" 
+        column="idUsuario"
+        unique="true"/>
+
 	</class>
 </hibernate-mapping>

@@ -16,6 +16,8 @@ import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorOrigen
 import ar.edu.unq.epers.aterrizar.domain.buscador.BuscadorDeVuelos
 import java.sql.Date
 import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorNombreDeAerolinea
+import ar.edu.unq.epers.aterrizar.domain.buscador.Criterio
+import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorVueloDisponible
 
 class ServicioDeRegistroDeVuelosTest {
 	
@@ -36,6 +38,8 @@ class ServicioDeRegistroDeVuelosTest {
 	CriterioPorNombreDeAerolinea criterioNombre
 	
 	CriterioPorOrigen criterioOrigen
+	
+	Criterio criterioVueloDisponible
 	
 	@Before
 	def void setUp(){
@@ -76,6 +80,7 @@ class ServicioDeRegistroDeVuelosTest {
 		buscador = new BuscadorDeVuelos(repoPrueba)
 		criterioNombre = new CriterioPorNombreDeAerolinea("prueba")
 		criterioOrigen = new CriterioPorOrigen("Argentina")
+		criterioVueloDisponible = new CriterioPorVueloDisponible()
 	}
 	 
 	@Test
@@ -102,6 +107,13 @@ class ServicioDeRegistroDeVuelosTest {
 		var resultados = buscador.buscarPorCriterio(criterioNombre)
 		Assert.assertEquals(resultados.length, 1)
 	}
+	
+	@Test
+	def void testCriterioPorVueloDisponible(){
+		var resultados = buscador.buscarPorCriterio(criterioVueloDisponible)
+		Assert.assertEquals(resultados.length, 1)
+	}
+	
 	/* 
 	@Test
 	def void testCriterioPorConjuncion(){

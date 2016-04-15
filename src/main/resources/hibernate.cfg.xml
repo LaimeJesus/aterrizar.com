@@ -25,8 +25,9 @@
 
 		<!-- no se toca -->
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-        <property name="hibernate.hbm2ddl.auto">validate</property> 
+        <property name="hibernate.hbm2ddl.auto">create-drop</property> 
         <!-- create-drop para que se eliminen las tablas al desconectarse y se creen al conectarse a hb-->
+        <!-- validate manejas a mano las tablas y schemas -->
         <property name="show_sql">true</property>
 
 		<!--  aca van los objetos que vamos a persistir, es decir usarlso en la base de datos-->

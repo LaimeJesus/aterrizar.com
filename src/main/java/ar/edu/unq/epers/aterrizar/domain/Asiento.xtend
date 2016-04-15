@@ -10,6 +10,9 @@ class Asiento {
 	int idAsiento
 	Usuario reservadoPorUsuario
 	
+	new(){
+		reservadoPorUsuario = null
+	}
 	def isReservado(){
 		return reservadoPorUsuario != null
 	}

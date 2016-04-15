@@ -62,7 +62,7 @@ class ServicioDeRegistroDeVuelos {
 	def List<Busqueda> ordenarPorMenorCosto(){}
 	def List<Busqueda> ordenarPorMenorEscala(){}
 	def List<Busqueda> ordenarPorMenorDuracion(){}
- */
+*/
  
  	def Aerolinea traerAerolineaPorNombre(Aerolinea unaAerolinea){
  		return repositorioDeAerolineas.traer("nombreAerolinea", unaAerolinea.nombreAerolinea)
