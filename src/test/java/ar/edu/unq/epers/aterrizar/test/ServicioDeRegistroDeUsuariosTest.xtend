@@ -92,7 +92,7 @@ class RecorderServiceTest{
 	def void testRegistrarUsuarioQueNoExisteEnElSistema(){
 
 
-		var primerUsuarioCreadoId = sudo.traerUsuarioPorNickname(pepillo.nickname).id
+		var primerUsuarioCreadoId = sudo.traerUsuarioPorNickname(pepillo.nickname).idUsuario
 		
 		//primer usuario id >= 1
 		assertTrue(1 <= primerUsuarioCreadoId)
@@ -108,8 +108,8 @@ class RecorderServiceTest{
 	@Test
 	def void testRegistrarOtroUsuarioQueNoExisteEnElSistemaDebeTenerUnIdMayorAlPrimero(){
 		
-		val primerUsuarioCreadoId = sudo.traerUsuarioPorNickname(pepillo.nickname).id
-		val segundoUsuarioCreadoId = sudo.traerUsuarioPorNickname(cepillo.nickname).id
+		val primerUsuarioCreadoId = sudo.traerUsuarioPorNickname(pepillo.nickname).idUsuario
+		val segundoUsuarioCreadoId = sudo.traerUsuarioPorNickname(cepillo.nickname).idUsuario
 
 		assertTrue(primerUsuarioCreadoId < segundoUsuarioCreadoId )
 		assertTrue(sudo.contieneUsuarioPorNickname(cepillo.nickname))

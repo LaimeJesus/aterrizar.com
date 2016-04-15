@@ -5,7 +5,7 @@ import java.sql.Date
 
 @Accessors
 class Usuario {
-	int id
+	int idUsuario
 	String nombre
 	String apellido
 	String nickname

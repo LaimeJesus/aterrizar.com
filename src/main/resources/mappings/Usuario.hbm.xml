@@ -5,8 +5,8 @@
  
 <hibernate-mapping>
 	<class name="ar.edu.unq.epers.aterrizar.domain.Usuario" table="Usuario">
-		<id name="id" type="java.lang.Integer">
-			<column name="id"/>
+		<id name="idUsuario" type="java.lang.Integer">
+			<column name="idUsuario"/>
 			<generator class="native"/>
 		</id>
  
@@ -31,6 +31,6 @@
 		<property name="fechaDeNacimiento" type="java.util.Date">
 			<column name="fechaDeNacimiento" not-null="true" unique="false"/>
 		</property>
-		
+
 	</class>
 </hibernate-mapping>

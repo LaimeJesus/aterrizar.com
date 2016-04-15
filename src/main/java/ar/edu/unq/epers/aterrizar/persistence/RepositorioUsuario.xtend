@@ -20,7 +20,7 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 	override def void persistir(Usuario usr) {
 		//creo los campos y le saco el campo autoincrementable
 		var camposSinAutoIncrementable = this.campos()
-		camposSinAutoIncrementable.remove('id')
+		camposSinAutoIncrementable.remove('idUsuario')
 		
 		var declaracion = armador.armarDeclaracionInsert('Usuario', camposSinAutoIncrementable)
 		var ps = this.setearValoresYPrepararDeclaracionSinCampoAutoIncrementable(usr, declaracion,1)
@@ -55,7 +55,7 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 		
 		var declaracion = armador.armarDeclaracionUpdate('Usuario', this.campos(), this.valores(usr), field)
 		val ps = this.setearValoresYPrepararDeclaracionSinCampoAutoIncrementable(usr, declaracion,2)
-		ps.setInt(1, usr.id)
+		ps.setInt(1, usr.idUsuario)
 		var indicedecampocondicion = this.campos().length()+1
 		ps.setString(indicedecampocondicion, unique)
 		ps.executeUpdate()
@@ -80,7 +80,7 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 	 */
 	def armarObjeto(ResultSet set) {
 		var usuario = new Usuario()
-		usuario.id = set.getInt("id")
+		usuario.idUsuario = set.getInt("idUsuario")
 		usuario.nombre = set.getString("nombre")
 		usuario.apellido = set.getString("apellido")
 		usuario.nickname = set.getString("nickname")
@@ -106,7 +106,7 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 	 */
 	override def campos() {
 		var campos = new ArrayList<String>()
-		campos.add('id')
+		campos.add('idUsuario')
 		campos.add('nombre')
 		campos.add('apellido')
 		campos.add('nickname')
@@ -121,7 +121,7 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 	 */
 	override def valores(Usuario usr){
 		var valores = new ArrayList<String>()
-		valores.add(usr.id.toString())
+		valores.add(usr.idUsuario.toString())
 		valores.add(usr.nombre)
 		valores.add(usr.apellido)
 		valores.add(usr.nickname)
