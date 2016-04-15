@@ -25,7 +25,7 @@
 
 		<!-- no se toca -->
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-        <property name="hibernate.hbm2ddl.auto">create-drop</property> 
+        <property name="hibernate.hbm2ddl.auto">validate</property> 
         <!-- create-drop para que se eliminen las tablas al desconectarse y se creen al conectarse a hb-->
         <property name="show_sql">true</property>
 

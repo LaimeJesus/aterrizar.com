@@ -14,6 +14,8 @@ import ar.edu.unq.epers.aterrizar.domain.Asiento
 import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
 import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorOrigen
 import ar.edu.unq.epers.aterrizar.domain.buscador.BuscadorDeVuelos
+import java.sql.Date
+import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorNombreDeAerolinea
 
 class ServicioDeRegistroDeVuelosTest {
 	
@@ -28,6 +30,12 @@ class ServicioDeRegistroDeVuelosTest {
 	ArrayList<Tramo> tramos
 	
 	TipoDeCategoria business
+	
+	BuscadorDeVuelos buscador
+	
+	CriterioPorNombreDeAerolinea criterioNombre
+	
+	CriterioPorOrigen criterioOrigen
 	
 	@Before
 	def void setUp(){
@@ -49,6 +57,9 @@ class ServicioDeRegistroDeVuelosTest {
 		asientos.add(asiento)
 		
 		tramo1.asientos = asientos
+		tramo1.fechaDeLlegada = Date.valueOf('2016-05-12')
+		tramo1.fechaDeSalida = Date.valueOf('2016-05-12')
+		tramo1.precioBase = 100
 		tramos.add(tramo1)
 		
 		vuelo.tramos = tramos
@@ -62,9 +73,11 @@ class ServicioDeRegistroDeVuelosTest {
 			repoPrueba.persistir(unaAeroDePrueba)
 			unaAeroDePrueba
 		])
-				
+		buscador = new BuscadorDeVuelos(repoPrueba)
+		criterioNombre = new CriterioPorNombreDeAerolinea("prueba")
+		criterioOrigen = new CriterioPorOrigen("Argentina")
 	}
-	/* 
+	 
 	@Test
 	def void testCrearAerolineaParaProbarBaseDeDatos(){
 		var existe = SessionManager.runInSession([
@@ -75,19 +88,32 @@ class ServicioDeRegistroDeVuelosTest {
 		
 	}
 	
+	
 	@Test
 	def void testCriterioPorOrigen(){
 
-		var buscador = new BuscadorDeVuelos(repoPrueba)
-		var criterio = new CriterioPorOrigen("Argentina")
-		var resultados = buscador.buscarPorCriterio(criterio)
+		var resultados = buscador.buscarPorCriterio(criterioOrigen)
 		Assert.assertEquals(resultados.length, 1)
 		
 	}
-	
+	 
+	@Test
+	def void testCriterioPorNombreAerolinea(){
+		var resultados = buscador.buscarPorCriterio(criterioNombre)
+		Assert.assertEquals(resultados.length, 1)
+	}
+	/*
+	@Test
+	def void testCriterioPorConjuncion(){
+		var criterio = criterioOrigen.componerPorConjuncion(criterioNombre)
+		var resultados = buscador.buscarPorCriterio(criterio)
+		
+		Assert.assertEquals(resultados.length, 1)
+	}
+	*/
 	@After
 	def void testBorrarObjetosCreadosEnSetUp(){
-		/* 
+		
 		SessionManager.runInSession([
 			new RepositorioAerolinea().borrar("nombreAerolinea", unaAeroDePrueba.nombreAerolinea)
 			unaAeroDePrueba
@@ -95,5 +121,6 @@ class ServicioDeRegistroDeVuelosTest {
 		
 	
 	}
-		*/
+
+	
 }

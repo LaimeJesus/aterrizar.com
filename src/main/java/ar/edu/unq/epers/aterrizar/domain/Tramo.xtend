@@ -3,6 +3,7 @@ package ar.edu.unq.epers.aterrizar.domain
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.ArrayList
+import java.sql.Date
 
 @Accessors
 
@@ -12,6 +13,10 @@ class Tramo {
 	String origen
 	List<Asiento> asientos
 	float precioBase
+	
+	// Criterio
+	Date fechaDeSalida
+	Date fechaDeLlegada
 	
 	def calcularPrecioDeUnAsiento(Asiento unAsiento){
 		return precioBase + unAsiento.precio()
