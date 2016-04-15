@@ -102,7 +102,7 @@ class ServicioDeRegistroDeVuelosTest {
 		var resultados = buscador.buscarPorCriterio(criterioNombre)
 		Assert.assertEquals(resultados.length, 1)
 	}
-	/*
+	/* 
 	@Test
 	def void testCriterioPorConjuncion(){
 		var criterio = criterioOrigen.componerPorConjuncion(criterioNombre)

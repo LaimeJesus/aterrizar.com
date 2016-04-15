@@ -15,7 +15,7 @@ class CriterioPorDestino extends Criterio{
 	}
 	
 	override getCondicion() {
-		return "from Aerolinea as aerolinea join aerolinea.vuelos as vuelo join vuelo.tramos as tramo join where tramo.destino =" + destino
+		return "from Vuelo as vuelo join vuelo.tramos as tramo join where tramo.destino ='" + destino+"'"
 	}
 	
 
