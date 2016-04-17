@@ -21,11 +21,26 @@ class BuscadorDeVuelos {
 		
 		SessionManager.runInSession[|
 		var sesion = aerolineas.getSession() 
-		var query = sesion.createQuery(unCriterio.getCondicion())
+		var query = sesion.createQuery(unCriterio.getQuery())
 		var resultados = query.list() as ArrayList<Vuelo>
 		vuelos = resultados
 		]
-		
+		for(Vuelo vuelo: vuelos){
+			System.out.print(vuelo.nroVuelo)
+			System.out.print("\n")
+			System.out.print(vuelos.length)
+			System.out.print("\n")
+		}
 		return vuelos
 	}
+	
+	def ordenarPorMenorCosto(){
+		return "order by vuelos.tramos.precioBase asc"		
+	}
+	def ordenarPorMenorEscala(){
+
+	}
+	def ordenarPorMenorDuracion(){
+
+	}	
 }

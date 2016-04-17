@@ -23,6 +23,9 @@ abstract class Criterio {
 		return criterios
 	}
 	
+	def String getQuery(){
+		return "select aerolinea.vuelos from Aerolinea as aerolinea join aerolinea.vuelos as vuelos join vuelos.tramos as tramos join tramos.asientos as asientos"
+	}
 	//dame tus restricciones
 	def abstract String getCondicion()
 	

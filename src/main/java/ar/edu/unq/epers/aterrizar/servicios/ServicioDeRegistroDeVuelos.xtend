@@ -57,11 +57,25 @@ class ServicioDeRegistroDeVuelos {
 	
 /*
 	def List<Asiento> consultarAsientos(Tramo t){}
-	def List<Busqueda> buscar(CriterioDeBusqueda c){}
+	def List<Busqueda> buscar(CriterioDeBusqueda c){
+		resultado =	buscador.buscar(c)
+		ordenador.ordenar(resultado)
+		
+		buscador(c.getCriterio() + ' ' + ordenador.getOrden())
+	}
 	def void guardar(){}
-	def List<Busqueda> ordenarPorMenorCosto(){}
-	def List<Busqueda> ordenarPorMenorEscala(){}
-	def List<Busqueda> ordenarPorMenorDuracion(){}
+	def void ordenarPorMenorCosto(){
+		ordenador.ordenarPorMenorCosto()
+		
+		return order by tramo.precioBase asc  
+		
+	}
+	def void ordenarPorMenorEscala(){
+		ordenador.ordenarPorMenorEscala()
+	}
+	def void ordenarPorMenorDuracion(){
+		ordenador.ordenarPorMenorDuracion()
+	}
 */
  
  	def Aerolinea traerAerolineaPorNombre(Aerolinea unaAerolinea){

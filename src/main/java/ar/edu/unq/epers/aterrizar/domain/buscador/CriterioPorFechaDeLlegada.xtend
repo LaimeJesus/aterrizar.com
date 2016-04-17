@@ -19,4 +19,8 @@ class CriterioPorFechaDeLlegada extends Criterio{
 		return ""
 	}
 	
+	override getQuery() {
+		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+	}
+	
 }

@@ -29,4 +29,9 @@ class CriterioCompuestoPorDisjuncion extends Criterio{
 		System.out.println(res)
 		return res
 	}
+	
+	override getQuery() {
+		return ""
+	}
+	
 }

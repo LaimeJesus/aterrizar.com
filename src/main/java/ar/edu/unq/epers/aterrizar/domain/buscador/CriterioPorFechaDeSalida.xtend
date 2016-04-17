@@ -19,4 +19,8 @@ class CriterioPorFechaDeSalida extends Criterio{
 		return ""
 	}
 	
+	override getQuery() {
+		return ""
+	}
+	
 }

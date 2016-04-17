@@ -9,9 +9,17 @@ class CriterioPorVueloDisponible extends Criterio{
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
 	
-	override getCondicion() {
-		var res = "from Vuelo as vuelos join vuelos.tramos as tramos join tramos.asientos as asientos where asientos.reservadoPorUsuario = null" 
+	override getQuery(){
+		var res = super.getQuery() + " where " + getCondicion()
+//		return "from Vuelo as vuelos join vuelos.tramos as tramos join tramos.asientos as asientos where " + this.getCondicion()
 		System.out.println(res)
+		return res
+	}
+	
+	override getCondicion() {
+		//hay que agregar where en todas las condiciones
+		
+		var res = "asientos.reservadoPorUsuario = null"
 		return res 
 	}
 	

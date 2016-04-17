@@ -33,4 +33,10 @@ class CriterioCompuestoPorConjuncion extends Criterio{
 		return res
 	}
 	
+	override getQuery() {
+		var res = super.getQuery() + " where " + getCondicion() 
+		System.out.println(res)
+		return res
+	}
+	
 }

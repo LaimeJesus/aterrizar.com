@@ -19,4 +19,8 @@ class CriterioPorCategoriaDeAsiento extends Criterio{
 		
 	}
 	
+	override getQuery() {
+		return ""
+	}
+	
 }

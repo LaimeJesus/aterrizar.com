@@ -15,7 +15,14 @@ class CriterioPorNombreDeAerolinea extends Criterio{
 	}
 	
 	override getCondicion() {
-		return "select aerolinea.vuelos from Aerolinea as aerolinea where aerolinea.nombreAerolinea='" + nombre + "'"
+		//return "select aerolinea.vuelos from Aerolinea as aerolinea where aerolinea.nombreAerolinea='" + nombre + "'"
+	
+		return "aerolinea.nombreAerolinea='" + nombre +"'"
+	}
+	
+	override getQuery() {
+		var res = super.getQuery() + " where " + getCondicion()
+		return res
 	}
 	
 }

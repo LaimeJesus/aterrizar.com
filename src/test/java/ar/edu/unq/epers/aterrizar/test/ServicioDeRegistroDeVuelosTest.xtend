@@ -114,7 +114,7 @@ class ServicioDeRegistroDeVuelosTest {
 		Assert.assertEquals(resultados.length, 1)
 	}
 	
-	/* 
+	
 	@Test
 	def void testCriterioPorConjuncion(){
 		var criterio = criterioOrigen.componerPorConjuncion(criterioNombre)
@@ -122,7 +122,7 @@ class ServicioDeRegistroDeVuelosTest {
 		
 		Assert.assertEquals(resultados.length, 1)
 	}
-	*/
+	
 	@After
 	def void testBorrarObjetosCreadosEnSetUp(){
 		

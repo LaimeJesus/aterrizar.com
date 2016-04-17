@@ -18,6 +18,10 @@ class CriterioPorDestino extends Criterio{
 		return "from Vuelo as vuelo join vuelo.tramos as tramo join where tramo.destino ='" + destino+"'"
 	}
 	
+	override getQuery() {
+		return ""
+	}
+	
 
 	
 }
