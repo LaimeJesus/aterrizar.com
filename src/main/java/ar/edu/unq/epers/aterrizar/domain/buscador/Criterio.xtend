@@ -24,9 +24,20 @@ abstract class Criterio {
 	}
 	
 	def String getQuery(){
-		return "select aerolinea.vuelos from Aerolinea as aerolinea join aerolinea.vuelos as vuelos join vuelos.tramos as tramos join tramos.asientos as asientos"
+		return "select distinct aerolinea.vuelos from Aerolinea as aerolinea join aerolinea.vuelos as vuelos join vuelos.tramos as tramos join tramos.asientos as asientos"
 	}
 	//dame tus restricciones
 	def abstract String getCondicion()
+	
+	def intercalarCondiciones(String operador, List<Criterio> criterios) {
+		var res = ""
+		for(Criterio criterio : criterios){
+			res = res + criterio.getCondicion() + ' ' + operador + ' '
+		}
+		
+		var sizeDeLaQuerySinElUltimoOperador = res.length() - (operador.length + 2)
+		res = res.substring(0, sizeDeLaQuerySinElUltimoOperador)
+		return res
+	}
 	
 }

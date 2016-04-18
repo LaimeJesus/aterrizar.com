@@ -11,6 +11,14 @@ class Aerolinea {
 	String nombreAerolinea
 	List<Vuelo> vuelos
 	
+	new(){
+		
+	}
+	new(String nombre){
+		nombreAerolinea = nombre
+		vuelos = new ArrayList<Vuelo>()
+	}
+	
 	def vuelosDisponibles(){
 		var disponibles = new ArrayList<Vuelo>()
 		for(Vuelo v: vuelos){

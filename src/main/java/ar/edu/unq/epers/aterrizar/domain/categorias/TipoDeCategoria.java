@@ -13,5 +13,7 @@ public enum TipoDeCategoria {
 	public int factorPrecio(){
 		return this.factorPrecio;
 	}
-	
+	public void setFactorPrecio(int factor){
+		this.factorPrecio = factor;
+	}
 }

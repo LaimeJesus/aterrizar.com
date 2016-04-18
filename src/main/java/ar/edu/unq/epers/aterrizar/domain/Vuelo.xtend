@@ -2,12 +2,22 @@ package ar.edu.unq.epers.aterrizar.domain
 
 import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.List
+import java.util.ArrayList
 
 @Accessors
 class Vuelo {
 	int idVuelo
 	int nroVuelo
 	List<Tramo> tramos
+	
+	new(){
+		
+	}
+	
+	new(int nroDeVuelo){
+		nroVuelo = nroDeVuelo
+		tramos = new ArrayList<Tramo>()
+	}
 
 	
 	def isDirecto(){
@@ -21,4 +31,9 @@ class Vuelo {
 		}
 		return disponible
 	}
+	
+	def equals(Vuelo v){
+		return nroVuelo.equals(v.nroVuelo)
+	}
+	
 }

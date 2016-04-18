@@ -1,7 +1,6 @@
 package ar.edu.unq.epers.aterrizar.domain.buscador
 import java.util.List
 import ar.edu.unq.epers.aterrizar.domain.Aerolinea
-import org.hibernate.criterion.Restrictions
 
 class CriterioCompuestoPorDisjuncion extends Criterio{
 		
@@ -15,23 +14,11 @@ class CriterioCompuestoPorDisjuncion extends Criterio{
 		return criterios.exists[Criterio c | c.satisface(aerolinea)]
 	}
 	override getCondicion() {
-		return this.intercalar("or", criterios)
-	}
-	
-	def intercalar(String operador, List<Criterio> criterios) {
-		var res = ""
-		for(Criterio criterio : criterios){
-			res = res + criterio.getCondicion() + operador
-		}
-		
-		var sizeDelNuevoStringMenosUno = res.length()-1
-		res = res.substring(0, sizeDelNuevoStringMenosUno)
-		System.out.println(res)
-		return res
+		return this.intercalarCondiciones("or", criterios)
 	}
 	
 	override getQuery() {
-		return ""
+		return super.getQuery() + " where " + getCondicion()
 	}
 	
 }

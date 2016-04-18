@@ -16,8 +16,7 @@ class CriterioPorOrigen extends Criterio{
 	}
 		
 	override getCondicion() {
-		//return "select aerolinea.vuelos from Aerolinea as aerolinea join aerolinea.vuelos as vuelos join vuelos.tramos as tramos where tramos.origen ='" + origen +"'"
-		return "tramos.origen ='" + origen +"'"
+		return "tramos.origen = '" + origen +"'"
 	}
 	
 	override getQuery() {

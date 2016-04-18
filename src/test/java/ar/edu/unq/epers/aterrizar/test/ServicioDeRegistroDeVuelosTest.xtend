@@ -8,30 +8,21 @@ import ar.edu.unq.epers.aterrizar.persistence.RepositorioAerolinea
 import ar.edu.unq.epers.aterrizar.domain.Aerolinea
 import org.junit.Assert
 import ar.edu.unq.epers.aterrizar.domain.Vuelo
-import java.util.ArrayList
 import ar.edu.unq.epers.aterrizar.domain.Tramo
-import ar.edu.unq.epers.aterrizar.domain.Asiento
-import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
 import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorOrigen
 import ar.edu.unq.epers.aterrizar.domain.buscador.BuscadorDeVuelos
-import java.sql.Date
 import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorNombreDeAerolinea
 import ar.edu.unq.epers.aterrizar.domain.buscador.Criterio
 import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorVueloDisponible
 
 class ServicioDeRegistroDeVuelosTest {
 	
-	Aerolinea unaAeroDePrueba
+	Aerolinea prueba
+	Aerolinea aerolineasArgentinas
 	
 	RepositorioAerolinea repoPrueba
 	
-	ArrayList<Vuelo> vuelos
-	
 	Vuelo vuelo
-	
-	ArrayList<Tramo> tramos
-	
-	TipoDeCategoria business
 	
 	BuscadorDeVuelos buscador
 	
@@ -41,42 +32,71 @@ class ServicioDeRegistroDeVuelosTest {
 	
 	Criterio criterioVueloDisponible
 	
+	
 	@Before
 	def void setUp(){
-		unaAeroDePrueba = new Aerolinea
-		vuelos = new ArrayList<Vuelo>()
-		vuelo = new Vuelo()
-		vuelo.nroVuelo = 1
-		tramos = new ArrayList<Tramo>()
-		var tramo1 = new Tramo()
-		tramo1.origen = "Argentina"
-		tramo1.destino = "Brazil"
-		tramo1.precioBase = 0
-		
-		var asientos = new ArrayList<Asiento>()
-		business = TipoDeCategoria.BUSINESS
-		business.factorPrecio = 10
-		var asiento = new Asiento()
-		asiento.categoria = business
-		asientos.add(asiento)
-		
-		tramo1.asientos = asientos
-		tramo1.fechaDeLlegada = Date.valueOf('2016-05-12')
-		tramo1.fechaDeSalida = Date.valueOf('2016-05-12')
-		tramo1.precioBase = 100
-		tramos.add(tramo1)
-		
-		vuelo.tramos = tramos
-		vuelos.add(vuelo)
-		unaAeroDePrueba.vuelos = vuelos 
-		unaAeroDePrueba.nombreAerolinea = "prueba"
 		
 		repoPrueba = new RepositorioAerolinea
 		
-			SessionManager.runInSession([
-			repoPrueba.persistir(unaAeroDePrueba)
-			unaAeroDePrueba
+		aerolineasArgentinas = new Aerolinea("Aerolineas Argentinas")
+		
+		var vueloNroUno = new Vuelo(1)
+		var vueloNroDos = new Vuelo(2)
+		var vueloNroTres = new Vuelo(3)
+		
+		aerolineasArgentinas.vuelos.add(vueloNroUno)
+		aerolineasArgentinas.vuelos.add(vueloNroDos)
+		aerolineasArgentinas.vuelos.add(vueloNroTres)
+		
+		var tramoArgentinaUruguay = new Tramo("Argentina", "Uruguay", 20, '2016-05-12', '2016-05-12')
+		tramoArgentinaUruguay.asientosStandard()
+		
+		var tramoUruguayBrasil = new Tramo("Uruguay", "Brasil", 50, '2016-05-13', '2016-05-12')
+		tramoUruguayBrasil.asientosStandard()
+		
+		vueloNroUno.tramos.add(tramoArgentinaUruguay)
+		vueloNroUno.tramos.add(tramoUruguayBrasil)
+
+		var tramoArgentinaUSA= new Tramo("Argentina", "USA", 20, '2016-05-12', '2016-06-12')
+		tramoArgentinaUSA.asientosStandard()
+		
+		vueloNroDos.tramos.add(tramoArgentinaUSA)
+		
+		var tramoArgentinaChile = new Tramo("Argentina", "Chile", 10, '2016-05-12', '2016-05-20')
+		tramoArgentinaChile.asientosStandard()
+		
+		var tramoChileAustralia = new Tramo("Chile", "Australia", 50, '2016-05-20', '2016-06-1')
+		tramoChileAustralia.asientosStandard()
+		
+		var tramoAustraliaJapon = new Tramo("Australia", "Japon", 30, '2016-06-1', '2016-06-12')
+		tramoAustraliaJapon.asientosStandard()
+
+		vueloNroTres.tramos.add(tramoArgentinaChile)
+		vueloNroTres.tramos.add(tramoChileAustralia)
+		vueloNroTres.tramos.add(tramoAustraliaJapon)
+		
+		SessionManager.runInSession([
+			repoPrueba.persistir(aerolineasArgentinas)
+			aerolineasArgentinas
 		])
+
+
+		
+		prueba = new Aerolinea("prueba")
+		vuelo = new Vuelo(4)
+		var tramo1 = new Tramo("Argentina", "Brazil", 100, '2016-05-01', '2016-05-02')
+		tramo1.asientosStandard()
+		
+		vuelo.tramos.add(tramo1)
+		prueba.vuelos.add(vuelo)
+				
+		SessionManager.runInSession([
+			repoPrueba.persistir(prueba)
+			void
+		])
+
+
+		
 		buscador = new BuscadorDeVuelos(repoPrueba)
 		criterioNombre = new CriterioPorNombreDeAerolinea("prueba")
 		criterioOrigen = new CriterioPorOrigen("Argentina")
@@ -86,7 +106,7 @@ class ServicioDeRegistroDeVuelosTest {
 	@Test
 	def void testCrearAerolineaParaProbarBaseDeDatos(){
 		var existe = SessionManager.runInSession([
-			repoPrueba.contiene("nombreAerolinea", unaAeroDePrueba.nombreAerolinea)
+			repoPrueba.contiene("nombreAerolinea", prueba.nombreAerolinea)
 		])
 		
 		Assert.assertEquals(true, existe)
@@ -98,7 +118,7 @@ class ServicioDeRegistroDeVuelosTest {
 	def void testCriterioPorOrigen(){
 
 		var resultados = buscador.buscarPorCriterio(criterioOrigen)
-		Assert.assertEquals(resultados.length, 1)
+		Assert.assertEquals(resultados.length, 4)
 		
 	}
 	 
@@ -111,7 +131,7 @@ class ServicioDeRegistroDeVuelosTest {
 	@Test
 	def void testCriterioPorVueloDisponible(){
 		var resultados = buscador.buscarPorCriterio(criterioVueloDisponible)
-		Assert.assertEquals(resultados.length, 1)
+		Assert.assertEquals(resultados.length, 4)
 	}
 	
 	
@@ -122,16 +142,21 @@ class ServicioDeRegistroDeVuelosTest {
 		
 		Assert.assertEquals(resultados.length, 1)
 	}
-	
+	/* 
+	@Test
+	def void testBuscarPorOrdenDeMenorCostoDebeDarmeLosVuelosPorMenorCostoPrimero(){
+		buscador.ordenarPorMenorCosto()
+		
+	}
+	*/
 	@After
 	def void testBorrarObjetosCreadosEnSetUp(){
 		
 		SessionManager.runInSession([
-			new RepositorioAerolinea().borrar("nombreAerolinea", unaAeroDePrueba.nombreAerolinea)
-			unaAeroDePrueba
+			repoPrueba.borrar("nombreAerolinea", prueba.nombreAerolinea)
+			repoPrueba.borrar("nombreAerolinea", aerolineasArgentinas.nombreAerolinea)
+			void
 		])
-		
-	
 	}
 
 	

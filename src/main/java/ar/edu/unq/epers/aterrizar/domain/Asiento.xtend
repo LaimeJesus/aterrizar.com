@@ -11,7 +11,13 @@ class Asiento {
 	Usuario reservadoPorUsuario
 	
 	new(){
+		
+	}
+	
+	new(TipoDeCategoria cat, int precioCat){
 		reservadoPorUsuario = null
+		cat.factorPrecio = precioCat
+		categoria = cat
 	}
 	def isReservado(){
 		return reservadoPorUsuario != null
