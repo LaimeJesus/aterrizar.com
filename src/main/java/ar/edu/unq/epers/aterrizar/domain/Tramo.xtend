@@ -18,8 +18,9 @@ class Tramo {
 	Date fechaDeSalida
 	Date fechaDeLlegada
 	
+	long duracionDeTramo
+	
 	new(){
-		
 	}
 	
 	new(String from, String to, int precio, String salida, String llegada){
@@ -29,6 +30,7 @@ class Tramo {
 		precioBase = precio
 		fechaDeSalida = Date.valueOf(salida)
 		fechaDeLlegada = Date.valueOf(llegada)
+		duracionDeTramo = fechaDeLlegada.time - fechaDeSalida.time
 	}
 	
 	def calcularPrecioDeUnAsiento(Asiento unAsiento){
@@ -59,29 +61,22 @@ class Tramo {
 	}
 	
 	def void asientosStandard(){
-		//creo los asientos business
-		var asientosBusiness = crearAsientos(TipoDeCategoria.BUSINESS, 20, 15)
 
+		//creo los asientos business
+		crearAsientos(TipoDeCategoria.BUSINESS, 20, 15)
 		//creo los asientos turista
-		var asientosTurista = crearAsientos(TipoDeCategoria.TURISTA, 50, 10)
-		
+		crearAsientos(TipoDeCategoria.TURISTA, 50, 10)
 		//creo los asientos primera
-		var asientosPrimera = crearAsientos(TipoDeCategoria.PRIMERA, 100, 5)
+		crearAsientos(TipoDeCategoria.PRIMERA, 100, 5)
 		
-		asientos.addAll(asientosBusiness)
-		asientos.addAll(asientosTurista)
-		asientos.addAll(asientosPrimera)
 		
 	}
 	
 	def crearAsientos(TipoDeCategoria categoria, int precio, int cantidadDeAsientos) {
-		var asientos = new ArrayList<Asiento>()
 		var cantidad = cantidadDeAsientos
 		while(cantidad != 0){
 			asientos.add(new Asiento(categoria, precio))
 			cantidad -= 1
 		}
-		return asientos
 	}
-	
 }

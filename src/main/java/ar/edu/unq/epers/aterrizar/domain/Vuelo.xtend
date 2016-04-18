@@ -10,6 +10,8 @@ class Vuelo {
 	int nroVuelo
 	List<Tramo> tramos
 	
+	long duracionDeVuelo
+	
 	new(){
 		
 	}
@@ -17,6 +19,7 @@ class Vuelo {
 	new(int nroDeVuelo){
 		nroVuelo = nroDeVuelo
 		tramos = new ArrayList<Tramo>()
+		duracionDeVuelo = 0L
 	}
 
 	
@@ -35,5 +38,15 @@ class Vuelo {
 	def equals(Vuelo v){
 		return nroVuelo.equals(v.nroVuelo)
 	}
-	
+	def agregarTramo(Tramo t){
+		tramos.add(t)
+		duracionDeVuelo = duracionDeVuelo + t.duracionDeTramo
+	}
+	def getDuracion(){
+		var dur = 0L
+		for(Tramo t: tramos){
+			dur = dur + t.duracionDeTramo
+		}
+		return dur
+	}
 }
