@@ -16,6 +16,7 @@ import ar.edu.unq.epers.aterrizar.domain.buscador.Criterio
 import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorVueloDisponible
 import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorDestino
 import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
+import ar.edu.unq.epers.aterrizar.domain.buscador.OrdenPorCostoDeVuelo
 
 class ServicioDeRegistroDeVuelosTest {
 	
@@ -167,14 +168,14 @@ class ServicioDeRegistroDeVuelosTest {
 
 	@Test
 	def void testBuscarPorOrdenDeMenorCostoDebeDarmeLosVuelosPorMenorCostoPrimero(){
-		buscador.ordenarPorMenorCosto()
+		var ordenCosto = new OrdenPorCostoDeVuelo()
+		buscador.ordenarDeMenorAMayor(ordenCosto)
 		var resultados = buscador.buscarPorCriterio(criterioOrigen)
 		
-		Assert.assertEquals(resultados.get(0).nroVuelo, 2)
+		Assert.assertEquals(2, resultados.get(0).nroVuelo)
 	}
 	@Test
 	def void testBuscarPorOrdenMenorTrayecto(){
-		buscador.ordenarPorMenorEscala()
 		var resultados = buscador.buscarPorCriterio(criterioOrigen)
 		var vuelo = resultados.head
 		
@@ -182,7 +183,6 @@ class ServicioDeRegistroDeVuelosTest {
 	}
 	@Test
 	def void testBuscarPorMenorDuracion(){
-		buscador.ordenarPorMenorDuracion()
 		var resultados = buscador.buscarPorCriterio(criterioOrigen)
 		
 		Assert.assertEquals(1, resultados.get(0).nroVuelo)

@@ -5,14 +5,12 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.persistence.SessionManager
 import ar.edu.unq.epers.aterrizar.domain.Vuelo
 import java.util.List
-import ar.edu.unq.epers.aterrizar.utils.OrdenadorDeQueries
 
 @Accessors
 class BuscadorDeVuelos {
 	
-	OrdenadorDeQueries ordenador
-	String orden
 	RepositorioAerolinea aerolineas
+	Orden orden
 	
 	new(RepositorioAerolinea repoAerolinea){
 		aerolineas = repoAerolinea
@@ -24,35 +22,52 @@ class BuscadorDeVuelos {
 		var res = SessionManager.runInSession
 		[|
 			var sesion = aerolineas.getSession()
-			var query = getQuery() + " where " + unCriterio.getCondicion()
-			System.out.println(query)
-			if(!ordenador.isOrden()){
-				query = query + ordenador.getQuery()
+			
+			var query = ""
+			
+			if(orden != null){
+				query = getQueryPorCriterioYOrden(unCriterio, orden)
 			}
+			else{
+				query = getQueryPorCriterio(unCriterio)
+			}
+			System.out.println(query)
 			var queryResultado = sesion.createQuery(query)
 			
 			queryResultado.list() as List<Vuelo>		
-		]
-		System.out.println(res.length)
-		
+		]		
 		return res
 	}
 	
-	def String getQuery(){
-		return "select distinct aerolinea.vuelos from Aerolinea as aerolinea join aerolinea.vuelos as vuelos join vuelos.tramos as tramos join tramos.asientos as asientos"
+	def String getQueryDeVuelos(){
+		var query = "select distinct aerolinea.vuelos from Aerolinea as aerolinea join aerolinea.vuelos as vuelos join vuelos.tramos as tramos join tramos.asientos as asientos" 
+		return query
 	}
 	
-	def ordenarPorMenorCosto() {
-		ordenador.ordenarPorMenorCosto
+	def String getQueryPorCriterio(Criterio c){
+		return queryDeVuelos + " where " + c.getCondicion
 	}
 	
-	def ordenarPorMenorEscala() {
-		ordenador.ordenarPorMenorEscala
+	def String getQueryPorCriterioYOrden(Criterio c, Orden o){
+		return getQueryPorCriterio(c) + " order by " + o.getOrdenadoPor()
 	}
 	
-	def ordenarPorMenorDuracion() {
-		ordenador.ordenarPorMenorDuracion
+	def ordenarPor(Orden o){
+		orden = o
 	}
-	
+	def ordenarDeMenorAMayor(Orden o){
+		orden = o
+		orden.porMenorOrden()
+	}
+	def ordenarDeMayorAMenor(Orden o){
+		orden = o
+		orden.porMayorOrden()
+	}
+	def cancelarOrden(){
+		orden = null
+	}
+	def String getQueryPorOrden(Orden o){
+		return getQueryDeVuelos + " order by " + o.getOrdenadoPor()
+	}
 
 }

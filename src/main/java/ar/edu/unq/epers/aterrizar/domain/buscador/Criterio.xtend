@@ -28,13 +28,10 @@ abstract class Criterio {
 	def abstract String getCondicion()
 	
 	def intercalarCondiciones(String operador, List<Criterio> criterios) {
-		var res = ""
-		for(Criterio criterio : criterios){
-			res = res + criterio.getCondicion() + ' ' + operador + ' '
-		}
 		
-		var sizeDeLaQuerySinElUltimoOperador = res.length() - (operador.length + 2)
-		res = res.substring(0, sizeDeLaQuerySinElUltimoOperador)
+		var res = String.join(operador, criterios.map[c| c.getCondicion()])
+		System.out.println('aca viene mi resultado con join')
+		System.out.println(res)
 		return res
 	}
 	
