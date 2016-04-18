@@ -161,7 +161,7 @@ class ServicioDeRegistroDeVuelosTest {
 	
 	@Test
 	def void testCriterioPorConjuncion(){
-		var criterio = criterioOrigen.componerPorConjuncion(criterioNombre)
+		var criterio = criterioOrigen.and(criterioNombre)
 		busqueda = new Busqueda(criterio)
 		var resultados = buscador.buscarVuelos(busqueda)
 		
@@ -169,7 +169,7 @@ class ServicioDeRegistroDeVuelosTest {
 	}
 	@Test
 	def void testCriterioPorDisjuncion(){
-		var criterio = criterioOrigen.componerPorDisjuncion(criterioDestino)
+		var criterio = criterioOrigen.or(criterioDestino)
 		busqueda = new Busqueda(criterio)
 		var resultados = buscador.buscarVuelos(busqueda)
 		
@@ -206,14 +206,14 @@ class ServicioDeRegistroDeVuelosTest {
 		
 	}
 	
-//	@After
-//	def void testBorrarObjetosCreadosEnSetUp(){
-//		
-//		SessionManager.runInSession([
-//			repoPrueba.borrar("nombreAerolinea", prueba.nombreAerolinea)
-//			repoPrueba.borrar("nombreAerolinea", aerolineasArgentinas.nombreAerolinea)
-//			void
-//		])
-//	}
+	@After
+	def void testBorrarObjetosCreadosEnSetUp(){
+		
+		SessionManager.runInSession([
+			repoPrueba.borrar("nombreAerolinea", prueba.nombreAerolinea)
+			repoPrueba.borrar("nombreAerolinea", aerolineasArgentinas.nombreAerolinea)
+			void
+		])
+	}
 
 }

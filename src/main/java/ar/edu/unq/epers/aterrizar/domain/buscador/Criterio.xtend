@@ -5,12 +5,12 @@ import java.util.List
 
 abstract class Criterio {
 	
-	def Criterio componerPorConjuncion(Criterio c){
+	def Criterio and(Criterio c){
 		return new CriterioCompuesto(this.crearGrupoDeCriterios(this, c)) => [
 			operador = " and "
 		]
 	}
-	def Criterio componerPorDisjuncion(Criterio c){
+	def Criterio or(Criterio c){
 		return new CriterioCompuesto(this.crearGrupoDeCriterios(this, c)) => [
 			operador = " or "
 		]

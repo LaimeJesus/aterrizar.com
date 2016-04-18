@@ -23,7 +23,7 @@ class BuscadorDeVuelos {
 			var queryResultado = sesion.createQuery(query)
 			
 			queryResultado.list() as List<Vuelo>
-				
+			
 		]
 		return res
 	}
