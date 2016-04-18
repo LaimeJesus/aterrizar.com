@@ -14,7 +14,7 @@ class BuscadorDeVuelos {
 	
 	new(RepositorioAerolinea repoAerolinea){
 		aerolineas = repoAerolinea
-		orden = ""
+		orden = " order by "
 	}
 	
 	def buscarPorCriterio(Criterio unCriterio){
@@ -24,8 +24,8 @@ class BuscadorDeVuelos {
 			var sesion = aerolineas.getSession()
 			var query = unCriterio.getQuery()
 			System.out.println(query)
-			if(!orden.equals("")){
-				query = query + ' ' + orden
+			if(!orden.equals(" order by ")){
+				query = query + orden
 			}
 			var queryResultado = sesion.createQuery(query)
 			
@@ -37,13 +37,13 @@ class BuscadorDeVuelos {
 	}
 	
 	def ordenarPorMenorCosto(){
-		orden = "order by tramos.precioBase asc"		
+		orden = orden + "tramos.precioBase asc"		
 	}
 	def ordenarPorMenorEscala(){
-		orden = "order by tramos.length"
+		orden = orden + "tramos.size asc"
 	}
 	def ordenarPorMenorDuracion(){
 		// que es la duracion
-		orden = ""
+		orden = orden + "vuelos.duracionDeVuelo asc"
 	}	
 }

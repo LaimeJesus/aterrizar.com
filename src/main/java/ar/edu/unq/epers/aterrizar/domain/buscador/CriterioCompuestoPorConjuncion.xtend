@@ -14,11 +14,8 @@ class CriterioCompuestoPorConjuncion extends Criterio{
 		return criterios.forall[Criterio c | c.satisface(aerolinea)]
 	}
 	
-	override getCondicion() {
-		
-		var condicion = intercalarCondiciones("and", criterios)
-		
-		return condicion
+	override getCondicion() {		
+		return this.intercalarCondiciones("and", criterios)
 	}	
 	
 	override getQuery() {
