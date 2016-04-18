@@ -28,6 +28,8 @@
          <key column="idTramo"/>
          <one-to-many class="ar.edu.unq.epers.aterrizar.domain.Asiento"/>
       </bag>     
-       
+       <property name="duracionDeTramo" type="java.lang.Long">
+      	<column name="duracionDeTramo" not-null="true" unique="false"/>
+      </property>
 	</class>
 </hibernate-mapping>

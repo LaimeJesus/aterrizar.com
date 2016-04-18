@@ -16,5 +16,8 @@
          <key column="idVuelo"/>
          <one-to-many class="ar.edu.unq.epers.aterrizar.domain.Tramo"/>
       </bag>
+      <property name="duracionDeVuelo" type="java.lang.Long">
+      	<column name="duracionDeVuelo" not-null="true" unique="false"/>
+      </property>
 	</class>
 </hibernate-mapping>
