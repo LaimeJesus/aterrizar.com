@@ -13,7 +13,7 @@ class Tramo {
 	String destino
 	String origen
 	List<Asiento> asientos
-	float precioBase
+	int precioBase
 
 	Date fechaDeSalida
 	Date fechaDeLlegada

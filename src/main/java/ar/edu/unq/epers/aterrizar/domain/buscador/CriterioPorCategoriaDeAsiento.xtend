@@ -1,6 +1,5 @@
 package ar.edu.unq.epers.aterrizar.domain.buscador
 
-import ar.edu.unq.epers.aterrizar.domain.Aerolinea
 import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
 
 class CriterioPorCategoriaDeAsiento extends Criterio{
@@ -11,16 +10,8 @@ class CriterioPorCategoriaDeAsiento extends Criterio{
 		this.categoria = cat
 	}
 	
-	override satisface(Aerolinea a) {
-		return true
-	}
-	
 	override getCondicion() {
-		
-	}
-	
-	override getQuery() {
-		return ""
+		return "asientos.cat = '" + categoria + "'"
 	}
 	
 }

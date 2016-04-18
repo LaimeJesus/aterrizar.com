@@ -15,7 +15,7 @@
        	<property name="origen" type="string">
        		<column name="origen" length="45" not-null="true" unique="false"/>
        	</property>
-       <property name="precioBase" type="java.lang.Float">
+       <property name="precioBase" type="java.lang.Integer">
        		<column name="precioBase" not-null="true" unique="false"/>
        </property>
        <property name="fechaDeSalida" type="java.sql.Date">

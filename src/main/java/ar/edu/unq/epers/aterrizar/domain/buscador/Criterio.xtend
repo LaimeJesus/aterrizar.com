@@ -2,17 +2,18 @@ package ar.edu.unq.epers.aterrizar.domain.buscador
 
 import java.util.ArrayList
 import java.util.List
-import ar.edu.unq.epers.aterrizar.domain.Aerolinea
 
 abstract class Criterio {
 	
-	def abstract boolean satisface(Aerolinea a)
-	
 	def Criterio componerPorConjuncion(Criterio c){
-		return new CriterioCompuestoPorConjuncion(this.crearGrupoDeCriterios(this,c))
+		return new CriterioCompuesto(this.crearGrupoDeCriterios(this, c)) => [
+			operador = " and "
+		]
 	}
 	def Criterio componerPorDisjuncion(Criterio c){
-		return new CriterioCompuestoPorDisjuncion(this.crearGrupoDeCriterios(this,c))
+		return new CriterioCompuesto(this.crearGrupoDeCriterios(this, c)) => [
+			operador = " or "
+		]
 	}
 	
 	//metodo privado
@@ -22,10 +23,7 @@ abstract class Criterio {
 		criterios.add(criterio2)
 		return criterios
 	}
-	
-	def String getQuery(){
-		return "select distinct aerolinea.vuelos from Aerolinea as aerolinea join aerolinea.vuelos as vuelos join vuelos.tramos as tramos join tramos.asientos as asientos"
-	}
+
 	//dame tus restricciones
 	def abstract String getCondicion()
 	

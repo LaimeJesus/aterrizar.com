@@ -4,17 +4,19 @@ import ar.edu.unq.epers.aterrizar.persistence.RepositorioAerolinea
 import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.persistence.SessionManager
 import ar.edu.unq.epers.aterrizar.domain.Vuelo
-import java.util.ArrayList
+import java.util.List
+import ar.edu.unq.epers.aterrizar.utils.OrdenadorDeQueries
 
 @Accessors
 class BuscadorDeVuelos {
 	
+	OrdenadorDeQueries ordenador
 	String orden
 	RepositorioAerolinea aerolineas
 	
 	new(RepositorioAerolinea repoAerolinea){
 		aerolineas = repoAerolinea
-		orden = " order by "
+		orden = null
 	}
 	
 	def buscarPorCriterio(Criterio unCriterio){
@@ -22,28 +24,35 @@ class BuscadorDeVuelos {
 		var res = SessionManager.runInSession
 		[|
 			var sesion = aerolineas.getSession()
-			var query = unCriterio.getQuery()
+			var query = getQuery() + " where " + unCriterio.getCondicion()
 			System.out.println(query)
-			if(!orden.equals(" order by ")){
-				query = query + orden
+			if(!ordenador.isOrden()){
+				query = query + ordenador.getQuery()
 			}
 			var queryResultado = sesion.createQuery(query)
 			
-			queryResultado.list() as ArrayList<Vuelo>		
+			queryResultado.list() as List<Vuelo>		
 		]
 		System.out.println(res.length)
 		
 		return res
 	}
 	
-	def ordenarPorMenorCosto(){
-		orden = orden + "tramos.precioBase asc"		
+	def String getQuery(){
+		return "select distinct aerolinea.vuelos from Aerolinea as aerolinea join aerolinea.vuelos as vuelos join vuelos.tramos as tramos join tramos.asientos as asientos"
 	}
-	def ordenarPorMenorEscala(){
-		orden = orden + "tramos.size asc"
+	
+	def ordenarPorMenorCosto() {
+		ordenador.ordenarPorMenorCosto
 	}
-	def ordenarPorMenorDuracion(){
-		// que es la duracion
-		orden = orden + "vuelos.duracionDeVuelo asc"
-	}	
+	
+	def ordenarPorMenorEscala() {
+		ordenador.ordenarPorMenorEscala
+	}
+	
+	def ordenarPorMenorDuracion() {
+		ordenador.ordenarPorMenorDuracion
+	}
+	
+
 }

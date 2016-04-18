@@ -12,6 +12,8 @@ class Vuelo {
 	
 	long duracionDeVuelo
 	
+	int costoDeVuelo
+	
 	new(){
 		
 	}
@@ -20,6 +22,7 @@ class Vuelo {
 		nroVuelo = nroDeVuelo
 		tramos = new ArrayList<Tramo>()
 		duracionDeVuelo = 0L
+		costoDeVuelo = 0
 	}
 
 	
@@ -41,6 +44,7 @@ class Vuelo {
 	def agregarTramo(Tramo t){
 		tramos.add(t)
 		duracionDeVuelo = duracionDeVuelo + t.duracionDeTramo
+		costoDeVuelo = costoDeVuelo + t.precioBase
 	}
 	def getDuracion(){
 		var dur = 0L

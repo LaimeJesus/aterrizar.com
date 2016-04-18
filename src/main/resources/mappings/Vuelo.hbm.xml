@@ -19,5 +19,8 @@
       <property name="duracionDeVuelo" type="java.lang.Long">
       	<column name="duracionDeVuelo" not-null="true" unique="false"/>
       </property>
+       <property name="costoDeVuelo" type="java.lang.Integer">
+       		<column name="costoDeVuelo" not-null="true" unique="false"/>
+       </property>      
 	</class>
 </hibernate-mapping>

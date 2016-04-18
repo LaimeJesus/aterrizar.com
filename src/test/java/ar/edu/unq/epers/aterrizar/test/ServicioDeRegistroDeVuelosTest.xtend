@@ -57,7 +57,7 @@ class ServicioDeRegistroDeVuelosTest {
 		var tramoArgentinaUruguay = new Tramo("Argentina", "Uruguay", 20, '2016-05-12', '2016-05-12')
 		tramoArgentinaUruguay.asientosStandard()
 		
-		var tramoUruguayBrasil = new Tramo("Uruguay", "Brasil", 50, '2016-05-13', '2016-05-12')
+		var tramoUruguayBrasil = new Tramo("Uruguay", "Brasil", 50, '2016-05-10', '2016-05-12')
 		tramoUruguayBrasil.asientosStandard()
 		
 		vueloNroUno.agregarTramo(tramoArgentinaUruguay)
@@ -72,13 +72,13 @@ class ServicioDeRegistroDeVuelosTest {
 		
 		//////////////////////////////////////
 		
-		var tramoArgentinaChile = new Tramo("Argentina", "Chile", 10, '2016-05-12', '2016-05-20')
+		var tramoArgentinaChile = new Tramo("Argentina", "Chile", 10, '2016-5-12', '2016-5-20')
 		tramoArgentinaChile.asientosStandard()
 		
-		var tramoChileAustralia = new Tramo("Chile", "Australia", 50, '2016-05-20', '2016-06-1')
+		var tramoChileAustralia = new Tramo("Chile", "Australia", 50, '2016-5-20', '2016-6-1')
 		tramoChileAustralia.asientosStandard()
 		
-		var tramoAustraliaJapon = new Tramo("Australia", "Japon", 30, '2016-06-1', '2016-06-12')
+		var tramoAustraliaJapon = new Tramo("Australia", "Japon", 30, '2016-6-1', '2016-6-12')
 		tramoAustraliaJapon.crearAsientos(TipoDeCategoria.BUSINESS, 5, 5)
 
 		vueloNroTres.agregarTramo(tramoArgentinaChile)
@@ -96,10 +96,12 @@ class ServicioDeRegistroDeVuelosTest {
 		
 		prueba = new Aerolinea("prueba")
 		vuelo = new Vuelo(4)
-		var tramo1 = new Tramo("Argentina", "Brazil", 100, '2016-05-01', '2016-05-02')
+		var tramo1 = new Tramo("Argentina", "Brazil", 100, '2016-1-5', '2016-2-5')
+		var tramo2 = new Tramo("Brazil", "Mexico", 200, '2016-2-5', '2016-3-5')
 		tramo1.asientosStandard()
 		
 		vuelo.agregarTramo(tramo1)
+		vuelo.agregarTramo(tramo2)
 		prueba.vuelos.add(vuelo)
 				
 		SessionManager.runInSession([
@@ -174,26 +176,26 @@ class ServicioDeRegistroDeVuelosTest {
 	def void testBuscarPorOrdenMenorTrayecto(){
 		buscador.ordenarPorMenorEscala()
 		var resultados = buscador.buscarPorCriterio(criterioOrigen)
+		var vuelo = resultados.head
 		
-		// el 4 o el 2 ya que tienen un solo tramo
-		Assert.assertEquals(resultados.get(0).nroVuelo, 4)
+		Assert.assertEquals(2, vuelo.nroVuelo)
 	}
 	@Test
 	def void testBuscarPorMenorDuracion(){
 		buscador.ordenarPorMenorDuracion()
 		var resultados = buscador.buscarPorCriterio(criterioOrigen)
 		
-		Assert.assertEquals(resultados.get(0).nroVuelo, 2)
+		Assert.assertEquals(1, resultados.get(0).nroVuelo)
 	}
+	
 	@After
 	def void testBorrarObjetosCreadosEnSetUp(){
-		
-		SessionManager.runInSession([
-			repoPrueba.borrar("nombreAerolinea", prueba.nombreAerolinea)
-			repoPrueba.borrar("nombreAerolinea", aerolineasArgentinas.nombreAerolinea)
-			void
-		])
+//		
+//		SessionManager.runInSession([
+//			repoPrueba.borrar("nombreAerolinea", prueba.nombreAerolinea)
+//			repoPrueba.borrar("nombreAerolinea", aerolineasArgentinas.nombreAerolinea)
+//			void
+//		])
 	}
 
-	
 }
