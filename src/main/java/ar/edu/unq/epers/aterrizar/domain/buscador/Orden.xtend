@@ -15,7 +15,7 @@ abstract class Orden {
 		grupo.add(orden2)
 		return grupo
 	}
-	
+	//  me agrega mas problemas de los que arregla
 	def porMenorOrden() {
 		return ordenadoPor + " asc"
 	}

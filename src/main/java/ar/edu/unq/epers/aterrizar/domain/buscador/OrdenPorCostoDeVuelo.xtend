@@ -9,11 +9,11 @@ class OrdenPorCostoDeVuelo extends Orden{
 	}
 	
 	override porMenorOrden() {
-		return query + " asc"
+		query = query + " asc"
 	}
 	
 	override porMayorOrden() {
-		return query + " desc"
+		query = query + " desc"
 	}
 	
 }

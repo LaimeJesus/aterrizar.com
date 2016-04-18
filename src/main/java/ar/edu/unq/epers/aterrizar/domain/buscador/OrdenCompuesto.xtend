@@ -7,21 +7,24 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class OrdenCompuesto extends Orden{
 	
 	List<Orden> grupoDeOrdenes
+	String query
 	
 	new(List<Orden> ordenes) {
 		this.grupoDeOrdenes = ordenes
 	}
 	
 	override getOrdenadoPor() {
-		return intercalarOrdenes(",", grupoDeOrdenes)
+		
+		query = intercalarOrdenes(",", grupoDeOrdenes)
+		return query
 	}
 	
 	override porMenorOrden() {
-		return intercalarOrdenes("asc,", grupoDeOrdenes)
+		query = intercalarOrdenes(" asc,", grupoDeOrdenes)
 	}
 	
 	override porMayorOrden() {
-		return intercalarOrdenes("desc,", grupoDeOrdenes)	
+		query = intercalarOrdenes(" desc,", grupoDeOrdenes)	
 	}
 	
 }

@@ -19,6 +19,7 @@ import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
 import ar.edu.unq.epers.aterrizar.domain.buscador.OrdenPorCostoDeVuelo
 import ar.edu.unq.epers.aterrizar.domain.buscador.OrdenPorTrayecto
 import ar.edu.unq.epers.aterrizar.domain.buscador.OrdenPorDuracion
+import ar.edu.unq.epers.aterrizar.domain.buscador.Busqueda
 
 class ServicioDeRegistroDeVuelosTest {
 	
@@ -38,6 +39,8 @@ class ServicioDeRegistroDeVuelosTest {
 	Criterio criterioVueloDisponible
 	
 	CriterioPorDestino criterioDestino
+	
+	Busqueda busqueda
 	
 	
 	@Before
@@ -134,21 +137,24 @@ class ServicioDeRegistroDeVuelosTest {
 	
 	@Test
 	def void testCriterioPorOrigen(){
+		busqueda = new Busqueda(criterioOrigen)
 
-		var resultados = buscador.buscarPorCriterio(criterioOrigen)
+		var resultados = buscador.buscarVuelos(busqueda)
 		Assert.assertEquals(resultados.length, 4)
 		
 	}
 	 
 	@Test
 	def void testCriterioPorNombreAerolinea(){
-		var resultados = buscador.buscarPorCriterio(criterioNombre)
+		busqueda = new Busqueda(criterioNombre)
+		var resultados = buscador.buscarVuelos(busqueda)
 		Assert.assertEquals(resultados.length, 1)
 	}
 	
 	@Test
 	def void testCriterioPorVueloDisponible(){
-		var resultados = buscador.buscarPorCriterio(criterioVueloDisponible)
+		busqueda = new Busqueda(criterioVueloDisponible)
+		var resultados = buscador.buscarVuelos(busqueda)
 		Assert.assertEquals(resultados.length, 4)
 	}
 	
@@ -156,14 +162,16 @@ class ServicioDeRegistroDeVuelosTest {
 	@Test
 	def void testCriterioPorConjuncion(){
 		var criterio = criterioOrigen.componerPorConjuncion(criterioNombre)
-		var resultados = buscador.buscarPorCriterio(criterio)
+		busqueda = new Busqueda(criterio)
+		var resultados = buscador.buscarVuelos(busqueda)
 		
 		Assert.assertEquals(resultados.length, 1)
 	}
 	@Test
 	def void testCriterioPorDisjuncion(){
 		var criterio = criterioOrigen.componerPorDisjuncion(criterioDestino)
-		var resultados = buscador.buscarPorCriterio(criterio)
+		busqueda = new Busqueda(criterio)
+		var resultados = buscador.buscarVuelos(busqueda)
 		
 		Assert.assertEquals(resultados.length, 4)
 	}
@@ -171,16 +179,18 @@ class ServicioDeRegistroDeVuelosTest {
 	@Test
 	def void testBuscarPorOrdenDeMenorCosto(){
 		var ordenCosto = new OrdenPorCostoDeVuelo()
-		buscador.ordenarDeMenorAMayor(ordenCosto)
-		var resultados = buscador.buscarPorCriterio(criterioOrigen)
+		ordenCosto.porMenorOrden
+		busqueda = new Busqueda(criterioOrigen, ordenCosto)
+		var resultados = buscador.buscarVuelos(busqueda)
 		
 		Assert.assertEquals(2, resultados.head.nroVuelo)
 	}
 	@Test
 	def void testBuscarPorOrdenMenorTrayecto(){
 		var ordenTrayecto = new OrdenPorTrayecto()
-		buscador.ordenarDeMenorAMayor(ordenTrayecto)
-		var resultados = buscador.buscarPorCriterio(criterioOrigen)
+		ordenTrayecto.porMenorOrden
+		busqueda = new Busqueda(criterioOrigen, ordenTrayecto)		
+		var resultados = buscador.buscarVuelos(busqueda)
 		var vuelo = resultados.head
 		
 		Assert.assertEquals(2, vuelo.nroVuelo)
@@ -188,21 +198,22 @@ class ServicioDeRegistroDeVuelosTest {
 	@Test
 	def void testBuscarPorMenorDuracion(){
 		var ordenDuracion = new OrdenPorDuracion()
-		buscador.ordenarDeMenorAMayor(ordenDuracion)
-		var resultados = buscador.buscarPorCriterio(criterioOrigen)
+		ordenDuracion.porMenorOrden
+		busqueda = new Busqueda(criterioOrigen, ordenDuracion)
+		var resultados = buscador.buscarVuelos(busqueda)
 		
 		Assert.assertEquals(1, resultados.get(0).nroVuelo)
 		
 	}
 	
-	@After
-	def void testBorrarObjetosCreadosEnSetUp(){
-		
-		SessionManager.runInSession([
-			repoPrueba.borrar("nombreAerolinea", prueba.nombreAerolinea)
-			repoPrueba.borrar("nombreAerolinea", aerolineasArgentinas.nombreAerolinea)
-			void
-		])
-	}
+//	@After
+//	def void testBorrarObjetosCreadosEnSetUp(){
+//		
+//		SessionManager.runInSession([
+//			repoPrueba.borrar("nombreAerolinea", prueba.nombreAerolinea)
+//			repoPrueba.borrar("nombreAerolinea", aerolineasArgentinas.nombreAerolinea)
+//			void
+//		])
+//	}
 
 }
