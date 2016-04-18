@@ -40,7 +40,7 @@ class BuscadorDeVuelos {
 	}
 	
 	def String getQueryDeVuelos(){
-		var query = "select distinct aerolinea.vuelos from Aerolinea as aerolinea join aerolinea.vuelos as vuelos join vuelos.tramos as tramos join tramos.asientos as asientos" 
+		var query = "select distinct vuelos from Aerolinea as aerolinea join aerolinea.vuelos as vuelos join vuelos.tramos as tramos join tramos.asientos as asientos" 
 		return query
 	}
 	

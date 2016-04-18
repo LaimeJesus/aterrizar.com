@@ -15,9 +15,14 @@ abstract class Orden {
 		grupo.add(orden2)
 		return grupo
 	}
-	def abstract String porMenorOrden()
 	
-	def abstract String porMayorOrden()
+	def porMenorOrden() {
+		return ordenadoPor + " asc"
+	}
+	
+	def porMayorOrden() {
+		return ordenadoPor + " desc"
+	}
 	
 	def abstract String getOrdenadoPor()
 	

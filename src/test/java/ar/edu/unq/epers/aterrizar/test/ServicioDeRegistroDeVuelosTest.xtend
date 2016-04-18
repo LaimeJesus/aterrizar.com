@@ -17,6 +17,8 @@ import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorVueloDisponible
 import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorDestino
 import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
 import ar.edu.unq.epers.aterrizar.domain.buscador.OrdenPorCostoDeVuelo
+import ar.edu.unq.epers.aterrizar.domain.buscador.OrdenPorTrayecto
+import ar.edu.unq.epers.aterrizar.domain.buscador.OrdenPorDuracion
 
 class ServicioDeRegistroDeVuelosTest {
 	
@@ -167,15 +169,17 @@ class ServicioDeRegistroDeVuelosTest {
 	}
 
 	@Test
-	def void testBuscarPorOrdenDeMenorCostoDebeDarmeLosVuelosPorMenorCostoPrimero(){
+	def void testBuscarPorOrdenDeMenorCosto(){
 		var ordenCosto = new OrdenPorCostoDeVuelo()
 		buscador.ordenarDeMenorAMayor(ordenCosto)
 		var resultados = buscador.buscarPorCriterio(criterioOrigen)
 		
-		Assert.assertEquals(2, resultados.get(0).nroVuelo)
+		Assert.assertEquals(2, resultados.head.nroVuelo)
 	}
 	@Test
 	def void testBuscarPorOrdenMenorTrayecto(){
+		var ordenTrayecto = new OrdenPorTrayecto()
+		buscador.ordenarDeMenorAMayor(ordenTrayecto)
 		var resultados = buscador.buscarPorCriterio(criterioOrigen)
 		var vuelo = resultados.head
 		
@@ -183,19 +187,22 @@ class ServicioDeRegistroDeVuelosTest {
 	}
 	@Test
 	def void testBuscarPorMenorDuracion(){
+		var ordenDuracion = new OrdenPorDuracion()
+		buscador.ordenarDeMenorAMayor(ordenDuracion)
 		var resultados = buscador.buscarPorCriterio(criterioOrigen)
 		
 		Assert.assertEquals(1, resultados.get(0).nroVuelo)
+		
 	}
 	
 	@After
 	def void testBorrarObjetosCreadosEnSetUp(){
-//		
-//		SessionManager.runInSession([
-//			repoPrueba.borrar("nombreAerolinea", prueba.nombreAerolinea)
-//			repoPrueba.borrar("nombreAerolinea", aerolineasArgentinas.nombreAerolinea)
-//			void
-//		])
+		
+		SessionManager.runInSession([
+			repoPrueba.borrar("nombreAerolinea", prueba.nombreAerolinea)
+			repoPrueba.borrar("nombreAerolinea", aerolineasArgentinas.nombreAerolinea)
+			void
+		])
 	}
 
 }
