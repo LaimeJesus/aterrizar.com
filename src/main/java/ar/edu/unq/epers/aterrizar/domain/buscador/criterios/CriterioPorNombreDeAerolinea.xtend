@@ -1,5 +1,8 @@
-package ar.edu.unq.epers.aterrizar.domain.buscador
+package ar.edu.unq.epers.aterrizar.domain.buscador.criterios
 
+import org.eclipse.xtend.lib.annotations.Accessors
+
+@Accessors
 class CriterioPorNombreDeAerolinea extends Criterio{
 	
 	String nombre

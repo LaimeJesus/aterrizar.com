@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.aterrizar.domain.buscador
+package ar.edu.unq.epers.aterrizar.domain.buscador.criterios
 
 
 class CriterioPorDestino extends Criterio{

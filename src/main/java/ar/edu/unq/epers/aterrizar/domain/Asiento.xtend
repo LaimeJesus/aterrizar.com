@@ -27,4 +27,8 @@ class Asiento {
 		return categoria.factorPrecio
 	}
 	
+	def reservarPor(Usuario usuario) {
+		reservadoPorUsuario = usuario
+	}
+	
 }

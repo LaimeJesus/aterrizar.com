@@ -1,9 +1,13 @@
-package ar.edu.unq.epers.aterrizar.domain.buscador
+package ar.edu.unq.epers.aterrizar.domain.buscador.ordenes
 
 import java.util.ArrayList
 import java.util.List
+import org.eclipse.xtend.lib.annotations.Accessors
 
+@Accessors
 abstract class Orden {
+	
+	Integer idOrden
 	
 	def componer(Orden ord){
 		return new OrdenCompuesto(crearGrupoDeOrdenes(this, ord))
@@ -15,15 +19,7 @@ abstract class Orden {
 		grupo.add(orden2)
 		return grupo
 	}
-	//  me agrega mas problemas de los que arregla
-	def porMenorOrden() {
-		return ordenadoPor + " asc"
-	}
-	
-	def porMayorOrden() {
-		return ordenadoPor + " desc"
-	}
-	
+
 	def abstract String getOrdenadoPor()
 	
 	def intercalarOrdenes(String operador, List<Orden> ordenes) {

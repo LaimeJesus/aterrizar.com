@@ -1,5 +1,8 @@
-package ar.edu.unq.epers.aterrizar.domain.buscador
+package ar.edu.unq.epers.aterrizar.domain.buscador.ordenes
 
+import org.eclipse.xtend.lib.annotations.Accessors
+
+@Accessors
 class OrdenPorTrayecto extends Orden{
 	
 	String query = "vuelos.tramos.size"
@@ -9,11 +12,11 @@ class OrdenPorTrayecto extends Orden{
 		return query
 	}
 
-	override porMenorOrden() {
+	def porMenorOrden() {
 		query = query + " asc"
 	}
 	
-	override porMayorOrden() {
+	def porMayorOrden() {
 		query = query + " desc"
 	}
 	

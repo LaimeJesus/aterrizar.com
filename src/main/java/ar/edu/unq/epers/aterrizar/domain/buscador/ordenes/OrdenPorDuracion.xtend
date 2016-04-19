@@ -1,14 +1,17 @@
-package ar.edu.unq.epers.aterrizar.domain.buscador
+package ar.edu.unq.epers.aterrizar.domain.buscador.ordenes
 
+import org.eclipse.xtend.lib.annotations.Accessors
+
+@Accessors
 class OrdenPorDuracion extends Orden{
 	
 	String query = "vuelos.duracionDeVuelo asc"
 	
-	override porMenorOrden() {
+	def porMenorOrden() {
 		query = query + " asc"
 	}
 	
-	override porMayorOrden() {
+	def porMayorOrden() {
 		query = query + " desc"
 	}
 	

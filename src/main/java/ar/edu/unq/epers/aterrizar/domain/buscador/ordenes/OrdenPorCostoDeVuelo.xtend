@@ -1,5 +1,8 @@
-package ar.edu.unq.epers.aterrizar.domain.buscador
+package ar.edu.unq.epers.aterrizar.domain.buscador.ordenes
 
+import org.eclipse.xtend.lib.annotations.Accessors
+
+@Accessors
 class OrdenPorCostoDeVuelo extends Orden{
 
 	String query = "vuelos.costoDeVuelo"
@@ -8,11 +11,11 @@ class OrdenPorCostoDeVuelo extends Orden{
 		return query
 	}
 	
-	override porMenorOrden() {
+	def porMenorOrden() {
 		query = query + " asc"
 	}
 	
-	override porMayorOrden() {
+	def porMayorOrden() {
 		query = query + " desc"
 	}
 	

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+	<class name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden" table="Orden" discriminator-value="Orden">
+		<id name="idOrden" type="java.lang.Integer">
+			<column name="idOrden"/>
+			<generator class="native"/>
+		</id>
+		  
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenCompuesto" discriminator-value="OrdenCompuesto">
+	    	<many-to-one name="ordenadoPor"	column="idOrden" unique="false"/>
+	      	<property name="query" type="string">
+	      		<column name="Query" length="45" not-null="true" unique="false"/>
+	      	</property>
+		</subclass>
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorCostoDeVuelo" discriminator-value="PorCostoDeVuelo">
+	      	<property name="query" type="string">
+	      		<column name="Query" length="45" not-null="true" unique="false"/>
+	      	</property>
+		</subclass>
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion" discriminator-value="PorDuracion">
+	      	<property name="query" type="string">
+	      		<column name="Query" length="45" not-null="true" unique="false"/>
+	      	</property>
+		</subclass>
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorTrayecto" discriminator-value="PorTrayecto">
+	      	<property name="query" type="string">
+	      		<column name="Query" length="45" not-null="true" unique="false"/>
+	      	</property>
+		</subclass>
+
+	</class>
+</hibernate-mapping>

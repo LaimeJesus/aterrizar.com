@@ -9,17 +9,17 @@ import ar.edu.unq.epers.aterrizar.domain.Aerolinea
 import org.junit.Assert
 import ar.edu.unq.epers.aterrizar.domain.Vuelo
 import ar.edu.unq.epers.aterrizar.domain.Tramo
-import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorOrigen
 import ar.edu.unq.epers.aterrizar.domain.buscador.BuscadorDeVuelos
-import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorNombreDeAerolinea
-import ar.edu.unq.epers.aterrizar.domain.buscador.Criterio
-import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorVueloDisponible
-import ar.edu.unq.epers.aterrizar.domain.buscador.CriterioPorDestino
 import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
-import ar.edu.unq.epers.aterrizar.domain.buscador.OrdenPorCostoDeVuelo
-import ar.edu.unq.epers.aterrizar.domain.buscador.OrdenPorTrayecto
-import ar.edu.unq.epers.aterrizar.domain.buscador.OrdenPorDuracion
 import ar.edu.unq.epers.aterrizar.domain.buscador.Busqueda
+import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorNombreDeAerolinea
+import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorOrigen
+import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.Criterio
+import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorDestino
+import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorVueloDisponible
+import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorTrayecto
+import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorCostoDeVuelo
+import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion
 
 class ServicioDeRegistroDeVuelosTest {
 	

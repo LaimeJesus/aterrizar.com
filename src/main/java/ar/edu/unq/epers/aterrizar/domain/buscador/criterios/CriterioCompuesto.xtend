@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.aterrizar.domain.buscador
+package ar.edu.unq.epers.aterrizar.domain.buscador.criterios
 
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors

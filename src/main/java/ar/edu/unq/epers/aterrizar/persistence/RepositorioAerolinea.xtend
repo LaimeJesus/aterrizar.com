@@ -38,7 +38,6 @@ class RepositorioAerolinea extends Repositorio<Aerolinea>{
 		
 		return aerolinea
 	
-		//return this.getSession().get(typeof(Aerolinea), Integer.parseInt(value)) as Aerolinea 
 	}
 
 	override def boolean contiene(String field, String value) {

@@ -14,6 +14,7 @@ class BuscadorDeVuelos {
 	new(RepositorioAerolinea repoAerolinea){
 		aerolineas = repoAerolinea
 	}
+
 	
 	def buscarVuelos(Busqueda b){
 		var res = SessionManager.runInSession

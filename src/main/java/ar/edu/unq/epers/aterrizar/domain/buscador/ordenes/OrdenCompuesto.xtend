@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.aterrizar.domain.buscador
+package ar.edu.unq.epers.aterrizar.domain.buscador.ordenes
 
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -19,11 +19,11 @@ class OrdenCompuesto extends Orden{
 		return query
 	}
 	
-	override porMenorOrden() {
+	def porMenorOrden() {
 		query = intercalarOrdenes(" asc,", grupoDeOrdenes)
 	}
 	
-	override porMayorOrden() {
+	def porMayorOrden() {
 		query = intercalarOrdenes(" desc,", grupoDeOrdenes)	
 	}
 	

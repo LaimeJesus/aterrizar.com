@@ -1,7 +1,11 @@
 package ar.edu.unq.epers.aterrizar.domain.buscador
 
+import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.Criterio
+import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden
+
 class Busqueda {
 	
+	Integer idBusqueda
 	Criterio filtro
 	Orden orden
 	
@@ -52,6 +56,13 @@ class Busqueda {
 		else{
 			return ""
 		}
+	}
+	
+	def ordenarPor(Orden o) {
+		orden = o
+	}
+	def filtrarPor(Criterio c){
+		filtro = c
 	}
 		
 }

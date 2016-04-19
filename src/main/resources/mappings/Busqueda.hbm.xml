@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+	<class name="ar.edu.unq.epers.aterrizar.domain.buscador.Busqueda" table="Busqueda">
+		<id name="idBusqueda" type="java.lang.Integer">
+			<column name="idBusqueda"/>
+			<generator class="native"/>
+		</id>
+        <many-to-one name="filtradoPor" 
+        column="idCriterio"
+        unique="false"
+        not-null="false"/>
+       	<many-to-one name="ordenadoPor" 
+        column="idOrden"
+        unique="false"
+        not-null="false"/>
+
+	</class>
+</hibernate-mapping>

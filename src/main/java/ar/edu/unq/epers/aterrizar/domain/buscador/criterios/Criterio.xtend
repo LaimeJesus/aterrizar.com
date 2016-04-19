@@ -1,9 +1,11 @@
-package ar.edu.unq.epers.aterrizar.domain.buscador
+package ar.edu.unq.epers.aterrizar.domain.buscador.criterios
 
 import java.util.ArrayList
 import java.util.List
 
 abstract class Criterio {
+	
+	Integer idCriterio
 	
 	def Criterio and(Criterio c){
 		return new CriterioCompuesto(this.crearGrupoDeCriterios(this, c)) => [
