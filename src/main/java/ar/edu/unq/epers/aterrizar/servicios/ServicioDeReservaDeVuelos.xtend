@@ -15,7 +15,9 @@ import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorTrayecto
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion
 import ar.edu.unq.epers.aterrizar.exceptions.ReservarException
 import ar.edu.unq.epers.aterrizar.persistence.SessionManager
+import org.eclipse.xtend.lib.annotations.Accessors
 
+@Accessors
 class ServicioDeReservaDeVuelos {
 	
 	//Nuestro sistema de reserva de asientos
@@ -34,6 +36,7 @@ class ServicioDeReservaDeVuelos {
 		if(vuelos.contains(unVuelo)){
 			var tramos = unVuelo.tramos
 			if(tramos.contains(unTramo)){
+				//consultarAsientos(unTramo) podria usar este metodo
 				var asientos = unTramo.asientos
 				if(asientos.contains(unAsiento)){
 					if(!unAsiento.isReservado){
@@ -88,7 +91,7 @@ class ServicioDeReservaDeVuelos {
 
 	def Busqueda ordenarPorMenorCosto(Busqueda b){
 		var menorCosto = new OrdenPorCostoDeVuelo
-		menorCosto.porMenorOrden 
+		menorCosto.porMenorOrden
 		b.ordenarPor(menorCosto)
 		return b
 		}
