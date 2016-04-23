@@ -9,14 +9,13 @@
 			<column name="idBusqueda"/>
 			<generator class="native"/>
 		</id>
-        <many-to-one name="filtradoPor" 
-        column="idCriterio"
-        unique="false"
-        not-null="false"/>
-       	<many-to-one name="ordenadoPor" 
+
+
+       	<many-to-one name="orden" 
         column="idOrden"
         unique="false"
-        not-null="false"/>
+        not-null="false"
+        cascade="all"/>
 
 	</class>
 </hibernate-mapping>

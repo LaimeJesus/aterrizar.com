@@ -9,6 +9,9 @@ class OrdenCompuesto extends Orden{
 	List<Orden> grupoDeOrdenes
 	String query
 	
+	new(){
+		
+	}
 	new(List<Orden> ordenes) {
 		this.grupoDeOrdenes = ordenes
 	}

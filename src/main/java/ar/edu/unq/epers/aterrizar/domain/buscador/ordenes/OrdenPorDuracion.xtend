@@ -5,8 +5,11 @@ import org.eclipse.xtend.lib.annotations.Accessors
 @Accessors
 class OrdenPorDuracion extends Orden{
 	
-	String query = "vuelos.duracionDeVuelo asc"
+	String query = "vuelos.duracionDeVuelo"
 	
+	new(){
+		
+	}
 	def porMenorOrden() {
 		query = query + " asc"
 	}

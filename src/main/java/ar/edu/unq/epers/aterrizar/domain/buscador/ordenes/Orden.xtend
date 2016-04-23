@@ -8,7 +8,9 @@ import org.eclipse.xtend.lib.annotations.Accessors
 abstract class Orden {
 	
 	Integer idOrden
-	
+	new(){
+		
+	}
 	def componer(Orden ord){
 		return new OrdenCompuesto(crearGrupoDeOrdenes(this, ord))
 	}

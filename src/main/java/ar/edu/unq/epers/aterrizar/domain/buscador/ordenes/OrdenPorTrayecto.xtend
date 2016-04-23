@@ -6,7 +6,9 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class OrdenPorTrayecto extends Orden{
 	
 	String query = "vuelos.tramos.size"
-
+	new(){
+		
+	}
 	
 	override getOrdenadoPor() {
 		return query

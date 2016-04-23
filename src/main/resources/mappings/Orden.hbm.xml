@@ -4,31 +4,40 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
-	<class name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden" table="Orden" discriminator-value="Orden">
+	<class name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden" table="Orden" discriminator-value="Orden" abstract="true">
 		<id name="idOrden" type="java.lang.Integer">
 			<column name="idOrden"/>
 			<generator class="native"/>
 		</id>
+	    <discriminator column="Order_Type" type="string"/>
 		  
-		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenCompuesto" discriminator-value="OrdenCompuesto">
-	    	<many-to-one name="ordenadoPor"	column="idOrden" unique="false"/>
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenCompuesto" 
+		extends="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden" 
+		discriminator-value="OrdenCompuesto">
+	    	<many-to-one name="grupoDeOrdenes" column="idOrdenHijo" unique="false" class="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden"/>
 	      	<property name="query" type="string">
-	      		<column name="Query" length="45" not-null="true" unique="false"/>
+	      		<column name="Query" length="80" not-null="true" unique="false"/>
 	      	</property>
 		</subclass>
-		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorCostoDeVuelo" discriminator-value="PorCostoDeVuelo">
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorCostoDeVuelo"
+		extends="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden" 
+		discriminator-value="PorCostoDeVuelo">
 	      	<property name="query" type="string">
-	      		<column name="Query" length="45" not-null="true" unique="false"/>
+	      		<column name="Query" length="80" not-null="true" unique="false"/>
 	      	</property>
 		</subclass>
-		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion" discriminator-value="PorDuracion">
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion" 
+		extends="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden" 
+		discriminator-value="PorDuracion">
 	      	<property name="query" type="string">
-	      		<column name="Query" length="45" not-null="true" unique="false"/>
+	      		<column name="Query" length="80" not-null="true" unique="false"/>
 	      	</property>
 		</subclass>
-		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorTrayecto" discriminator-value="PorTrayecto">
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorTrayecto" 
+		extends="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden"
+		discriminator-value="PorTrayecto">
 	      	<property name="query" type="string">
-	      		<column name="Query" length="45" not-null="true" unique="false"/>
+	      		<column name="Query" length="80" not-null="true" unique="false"/>
 	      	</property>
 		</subclass>
 

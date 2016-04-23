@@ -6,7 +6,9 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class OrdenPorCostoDeVuelo extends Orden{
 
 	String query = "vuelos.costoDeVuelo"
-	
+	new(){
+		
+	}
 	override getOrdenadoPor() {
 		return query
 	}
