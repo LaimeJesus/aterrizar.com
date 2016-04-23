@@ -5,67 +5,30 @@
  
 <hibernate-mapping>
 	<class name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.Criterio" table="Criterio">
-		<id name="idCriterio" type="java.lang.Integer">
-			<column name="idCriterio"/>
+		
+		<id name="idCriterio" type="java.lang.Integer" column="idCriterio">
 			<generator class="native"/>
 		</id>
-		
-		<joined-subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioCompuesto" 
-		table="CriterioCompuesto">
+	    <discriminator column="discriminator" type="string"/>
+	
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioCompuesto" discriminator-value="Compuesto">
+			<join table="CriterioCompuesto">
 	   	        <key column="idCriterio"/>
 		    	<many-to-one name="filtradoPor"	column="idCriterio"	unique="false"/>
 		      	<property name="operador" type="string">
-		      		<column name="Operador" length="45" not-null="true" unique="false"/>
+		      		<column name="Operador" length="80" not-null="true" unique="false"/>
 		      	</property>
-		</joined-subclass>		  
+			</join>
+		</subclass>
 		
-		<joined-subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorOrigen" 
-		table="CriterioPorOrigen">
-			<key column="idCriterio"/>
-			<property name="destino" type="string">
-				<column name="destino" length="45" not-null="true" unique="false" />
-			</property>
-		
-		</joined-subclass>
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorOrigen" discriminator-value="Origen">
+			<join table="CriterioPorOrigen">
+				<key column="idCriterio"/>
+					<property name="destino" type="string">
+						<column name="destino" length="80" not-null="true" unique="false" />
+					</property>
+			</join>
+		</subclass>
 
-		<joined-subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorDestino" 
-		table="CriterioPorDestino">
-			<key column="idCriterioDestino"/>
-			<property name="destino" type="string">
-				<column name="destino" length="45" not-null="true" unique="false" />
-			</property>
-		</joined-subclass>
-		
-		<joined-subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorCategoriaDeAsiento" 
-		table="CriterioPorCategoriaDeAsiento">
-			<key column="idCriterioCategoriaDeAsiento"/>
-			<property name="categoria" column="categoria" not-null="true">
-				<type name="org.hibernate.type.EnumType">
-					<param name="enumClass">ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria</param>
-				</type>
-			</property>
-		</joined-subclass>
-		
-		<joined-subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorFechaDeSalida"
-		 table="CriterioPorFechaDeSalida">
-		   <key column="idCriterioFechaDeSalida"/>
-    	   <property name="fechaDeSalida" type="java.sql.Date">
-       	   		<column name="fechaDeSalida" not-null="true" unique="false"/>
-	       </property>
-		</joined-subclass>
-		
-		<joined-subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorFechaDeLlegada" 
-		table="CriterioPorFechaDeLlegada">
-		   <key column="idCriterioFechaDeLlegada"/>
-	       <property name="fechaDeLlegada" type="java.sql.Date">
-	       		<column name="fechaDeLlegada" not-null="true" unique="false"/>
-	       </property>
-		</joined-subclass>
-		
-		<joined-subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorVueloDisponible" 
-		table="CriterioPorVueloDisponible">
-		   <key column="idCriterioVueloDisponible"/>
-		</joined-subclass>
-				
 	</class>
 </hibernate-mapping>

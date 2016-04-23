@@ -37,7 +37,9 @@
 		<mapping resource="mappings/Asiento.hbm.xml"></mapping>
 		<mapping resource="mappings/Usuario.hbm.xml"></mapping>
 		<mapping resource="mappings/Orden.hbm.xml"></mapping>
+		<!--
 		<mapping resource="mappings/Criterio.hbm.xml"></mapping>
+		 -->
 		<mapping resource="mappings/Busqueda.hbm.xml"></mapping>
     </session-factory>
 </hibernate-configuration>

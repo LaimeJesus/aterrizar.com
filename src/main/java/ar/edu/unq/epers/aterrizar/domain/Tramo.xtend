@@ -72,6 +72,8 @@ class Tramo {
 		
 	}
 	
+	//solo usado en tests
+	
 	def crearAsientos(TipoDeCategoria categoria, int precio, int cantidadDeAsientos) {
 		var cantidad = cantidadDeAsientos
 		while(cantidad != 0){
@@ -79,4 +81,9 @@ class Tramo {
 			cantidad -= 1
 		}
 	}
+	
+	def agregarAsiento(Asiento asiento) {
+		asientos.add(asiento)
+	}
+	
 }

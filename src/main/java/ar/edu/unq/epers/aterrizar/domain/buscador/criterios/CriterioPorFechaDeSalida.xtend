@@ -7,7 +7,12 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class CriterioPorFechaDeSalida extends Criterio{
 	
 	Date salida
-	
+	new(){
+		
+	}
+	new(String fecha){
+		salida = Date.valueOf(fecha)
+	}
 	new(Date salida){
 		this.salida = salida
 	}

@@ -2,7 +2,9 @@ package ar.edu.unq.epers.aterrizar.domain.buscador
 
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.Criterio
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden
+import org.eclipse.xtend.lib.annotations.Accessors
 
+@Accessors
 class Busqueda {
 	
 	Integer idBusqueda
@@ -36,13 +38,13 @@ class Busqueda {
 		var query = queryBase
 		var condicion = armarCondicion()
 		var ordenado = armarOrden()
-		var queryAEjecutar = query + " " + condicion + " " + ordenado
+		var queryAEjecutar = query + condicion + ordenado
  		return queryAEjecutar
 	}
 	
 	def armarOrden() {
 		if(orden != null){
-			return "order by " + orden.ordenadoPor
+			return " order by " + orden.ordenadoPor
 		}
 		else{
 			return ""
@@ -51,7 +53,7 @@ class Busqueda {
 	
 	def armarCondicion() {
 		if(filtro != null){
-			return "where " + filtro.condicion
+			return " where " + filtro.condicion
 		}
 		else{
 			return ""

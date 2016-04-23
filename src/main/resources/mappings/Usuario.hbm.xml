@@ -11,25 +11,25 @@
 		</id>
  
 		<property name="nombre" type="string">
-			<column name="nombre" not-null="true" unique="false"/>
+			<column name="nombre" not-null="false" unique="false"/>
 		</property>
 		<property name="apellido" type="string">
-			<column name="apellido" not-null="true" unique="false"/>
+			<column name="apellido" not-null="false" unique="false"/>
 		</property>
 		<property name="nickname" type="string">
 			<column name="nickname" not-null="true" unique="true"/>
 		</property>
 		<property name="password" type="string">
-			<column name="password" not-null="true" unique="false"/>
+			<column name="password" not-null="false" unique="false"/>
 		</property>
 		<property name="email" type="string">
-			<column name="email" not-null="true" unique="false"/>
+			<column name="email" not-null="false" unique="false"/>
 		</property>
 		<property name="codigo" type="string">
-			<column name="codigo" not-null="true" unique="false"/>
+			<column name="codigo" not-null="false" unique="false"/>
 		</property>
 		<property name="fechaDeNacimiento" type="java.util.Date">
-			<column name="fechaDeNacimiento" not-null="true" unique="false"/>
+			<column name="fechaDeNacimiento" not-null="false" unique="false"/>
 		</property>
 
 	</class>

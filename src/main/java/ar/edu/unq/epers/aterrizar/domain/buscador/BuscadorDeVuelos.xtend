@@ -11,6 +11,10 @@ class BuscadorDeVuelos {
 	
 	RepositorioAerolinea aerolineas
 	
+	new(){
+		
+	}
+	
 	new(RepositorioAerolinea repoAerolinea){
 		aerolineas = repoAerolinea
 	}

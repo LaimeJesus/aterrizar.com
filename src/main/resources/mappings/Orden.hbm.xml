@@ -33,9 +33,9 @@
 	      		<column name="Query" length="80" not-null="true" unique="false"/>
 	      	</property>
 		</subclass>
-		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorTrayecto" 
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorEscalas" 
 		extends="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden"
-		discriminator-value="PorTrayecto">
+		discriminator-value="PorEscala">
 	      	<property name="query" type="string">
 	      		<column name="Query" length="80" not-null="true" unique="false"/>
 	      	</property>

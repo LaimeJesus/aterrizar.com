@@ -3,7 +3,7 @@ package ar.edu.unq.epers.aterrizar.domain.buscador.ordenes
 import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
-class OrdenPorTrayecto extends Orden{
+class OrdenPorEscalas extends Orden{
 	
 	String query = "vuelos.tramos.size"
 	new(){

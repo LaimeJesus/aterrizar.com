@@ -11,7 +11,7 @@ abstract class Orden {
 	new(){
 		
 	}
-	def componer(Orden ord){
+	def and(Orden ord){
 		return new OrdenCompuesto(crearGrupoDeOrdenes(this, ord))
 	}
 	

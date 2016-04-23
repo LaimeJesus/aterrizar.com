@@ -2,11 +2,15 @@ package ar.edu.unq.epers.aterrizar.domain.buscador.criterios
 
 import java.util.ArrayList
 import java.util.List
+import org.eclipse.xtend.lib.annotations.Accessors
 
+@Accessors
 abstract class Criterio {
 	
 	Integer idCriterio
-	
+	new(){
+		
+	}
 	def Criterio and(Criterio c){
 		return new CriterioCompuesto(this.crearGrupoDeCriterios(this, c)) => [
 			operador = " and "

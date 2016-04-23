@@ -54,7 +54,7 @@ class RepositorioBusquedas extends Repositorio<Busqueda>{
 		actualizar(busqueda, "no importa", "no importa")
 	}
 	override objectNotFoundError() throws Exception {
-		new BusquedaNoExisteException("no existe esa aerolinea")
+		new BusquedaNoExisteException("no existe esa busqueda")
 	}
 	
 	//deprecated

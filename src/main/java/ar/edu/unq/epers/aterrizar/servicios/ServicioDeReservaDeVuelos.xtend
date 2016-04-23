@@ -11,7 +11,7 @@ import ar.edu.unq.epers.aterrizar.domain.buscador.Busqueda
 import ar.edu.unq.epers.aterrizar.domain.buscador.BuscadorDeVuelos
 import ar.edu.unq.epers.aterrizar.persistence.RepositorioBusquedas
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorCostoDeVuelo
-import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorTrayecto
+import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorEscalas
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion
 import ar.edu.unq.epers.aterrizar.exceptions.ReservarException
 import ar.edu.unq.epers.aterrizar.persistence.SessionManager
@@ -63,6 +63,7 @@ class ServicioDeReservaDeVuelos {
 	}
 	
 	def List<Vuelo> buscar(Busqueda b){
+		
 		var	resultado =	buscador.buscarVuelos(b)
 		
 		guardar(b)
@@ -96,7 +97,7 @@ class ServicioDeReservaDeVuelos {
 		return b
 		}
 	def Busqueda ordenarPorMenorEscala(Busqueda b){
-		var menorTrayecto = new OrdenPorTrayecto
+		var menorTrayecto = new OrdenPorEscalas
 		menorTrayecto.porMenorOrden 
 
 		b.ordenarPor(menorTrayecto)
@@ -133,4 +134,19 @@ class ServicioDeReservaDeVuelos {
  			null
  		]
  	}
+	
+	def agregarAerolinea(Aerolinea aerolinea) {
+ 		SessionManager.runInSession[|
+ 			repositorioDeAerolineas.persistir(aerolinea)
+ 			null
+ 		]
+	}
+	
+	def existeAeroliena(Aerolinea aerolinea){
+		return SessionManager.runInSession[|
+ 			repositorioDeAerolineas.contiene("nombreAerolinea", aerolinea.nombreAerolinea)
+ 		]
+		
+	}
+	
 }

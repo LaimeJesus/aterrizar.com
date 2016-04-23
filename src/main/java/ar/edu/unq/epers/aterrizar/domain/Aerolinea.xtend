@@ -28,4 +28,9 @@ class Aerolinea {
 		}
 		return disponibles
 	}
+	
+	def agregarVuelo(Vuelo vuelo) {
+		vuelos.add(vuelo)
+	}
+	
 }

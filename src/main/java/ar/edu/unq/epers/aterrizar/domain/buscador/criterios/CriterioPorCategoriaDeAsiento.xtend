@@ -7,13 +7,15 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class CriterioPorCategoriaDeAsiento extends Criterio{
 	
 	TipoDeCategoria categoria
-	
+	new(){
+		
+	}
 	new(TipoDeCategoria cat){
 		this.categoria = cat
 	}
 	
 	override getCondicion() {
-		return "asientos.cat = '" + categoria + "'"
+		return "asientos.categoria = '" + categoria + "'"
 	}
 	
 }

@@ -6,7 +6,9 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class CriterioPorOrigen extends Criterio{
 	
 	String origen
-	
+	new(){
+		
+	}
 	new(String origen){
 		this.origen = origen
 	}

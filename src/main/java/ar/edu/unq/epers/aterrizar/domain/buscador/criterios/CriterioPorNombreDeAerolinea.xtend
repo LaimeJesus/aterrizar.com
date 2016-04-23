@@ -6,7 +6,9 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class CriterioPorNombreDeAerolinea extends Criterio{
 	
 	String nombre
-	
+	new(){
+		
+	}
 	new(String nombre){
 		this.nombre = nombre
 	}

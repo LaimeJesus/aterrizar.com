@@ -8,7 +8,9 @@ class CriterioCompuesto extends Criterio{
 	
 	List<Criterio> criterios
 	String operador
-	
+	new(){
+		
+	}
 	new(List<Criterio> criterios) {
 		this.criterios = criterios
 	}

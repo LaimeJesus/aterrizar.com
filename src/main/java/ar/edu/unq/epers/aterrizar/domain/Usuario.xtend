@@ -13,7 +13,11 @@ class Usuario {
 	String email
 	Date fechaDeNacimiento
 	String codigo
-
+	
+	new(){
+		
+	}
+	
 	def estaValidado(){
 		return codigo.equals('usado')
 	}
