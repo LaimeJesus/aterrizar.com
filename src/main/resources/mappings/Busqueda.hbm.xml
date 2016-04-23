@@ -10,13 +10,12 @@
 			<generator class="native"/>
 		</id>
 
-		<!-- 
+		
         <many-to-one name="filtro" 
         column="idCriterio"
         unique="false"
         not-null="false"
         cascade="all"/>
-        -->
        	<many-to-one name="orden" 
         column="idOrden"
         unique="false"

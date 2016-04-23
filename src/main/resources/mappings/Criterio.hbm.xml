@@ -4,31 +4,96 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
-	<class name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.Criterio" table="Criterio">
+	<class name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.Criterio" table="Criterio" abstract="true">
 		
 		<id name="idCriterio" type="java.lang.Integer" column="idCriterio">
 			<generator class="native"/>
 		</id>
 	    <discriminator column="discriminator" type="string"/>
 	
-		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioCompuesto" discriminator-value="Compuesto">
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioCompuesto"
+		extends="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.Criterio"
+		 discriminator-value="Compuesto">
 			<join table="CriterioCompuesto">
 	   	        <key column="idCriterio"/>
-		    	<many-to-one name="filtradoPor"	column="idCriterio"	unique="false"/>
+		    	<many-to-one name="criterios" column="idCriterioHijo" unique="false" class="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.Criterio" cascade="all"/>
 		      	<property name="operador" type="string">
 		      		<column name="Operador" length="80" not-null="true" unique="false"/>
 		      	</property>
 			</join>
 		</subclass>
 		
-		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorOrigen" discriminator-value="Origen">
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorOrigen" 
+		extends="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.Criterio"
+		discriminator-value="Origen">
 			<join table="CriterioPorOrigen">
 				<key column="idCriterio"/>
-					<property name="destino" type="string">
-						<column name="destino" length="80" not-null="true" unique="false" />
+					<property name="origen" type="string">
+						<column name="origen" length="80" not-null="true" unique="false" />
+					</property>
+			</join>
+		</subclass>
+ 
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorNombreDeAerolinea"
+		extends="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.Criterio"
+		discriminator-value="NombreDeAerolinea">
+			<join table="CriterioPorNombreDeAerolinea">
+				<key column="idCriterio"/>
+					<property name="nombre" type="string">
+						<column name="nombre" length="80" not-null="true" unique="false"></column>
 					</property>
 			</join>
 		</subclass>
 
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorDestino"
+		extends="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.Criterio"
+		discriminator-value="Destino">
+			<join table="CriterioPorDestino">
+				<key column="idCriterio"/>
+					<property name="destino" type="string">
+						<column name="destino" length="80" not-null="true" unique="false"></column>
+					</property>
+			</join>
+		</subclass>
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorFechaDeLlegada"
+		extends="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.Criterio"
+		discriminator-value="FechaDeLlegada">
+			<join table="CriterioPorFechaDeLlegada">
+				<key column="idCriterio"/>
+					<property name="llegada" type="java.sql.Date">
+						<column name="fechaDeLlegada" not-null="true" unique="false"></column>
+					</property>
+			</join>
+		</subclass>
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorFechaDeSalida"
+		extends="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.Criterio"
+		discriminator-value="FechaDeSalida">
+			<join table="CriterioPorFechaDeSalida">
+				<key column="idCriterio"/>
+					<property name="salida" type="java.sql.Date">
+						<column name="FechaDeSalida" not-null="true" unique="false"></column>
+					</property>
+			</join>
+		</subclass>
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorVueloDisponible"
+		extends="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.Criterio"
+		discriminator-value="Disponible">
+			<join table="CriterioPorVueloDisponible">
+				<key column="idCriterio"/>
+			</join>
+		</subclass>
+		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorCategoriaDeAsiento"
+		extends="ar.edu.unq.epers.aterrizar.domain.buscador.criterios.Criterio"
+		discriminator-value="TipoCategoria">
+			<join table="CriterioPorTipoDeCategoria">
+				<key column="idCriterio"/>
+					<property name="categoria" column="Categoria" not-null="true" unique="false">
+						<type name="org.hibernate.type.EnumType">
+							<param name="enumClass">ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria</param>
+						</type>
+					</property>
+			</join>
+		</subclass>
+						
 	</class>
 </hibernate-mapping>
