@@ -34,7 +34,8 @@ class RepositorioBusquedas extends Repositorio<Busqueda>{
 	}
 	def traerBusquedas(){
 		var stmt = "from Busqueda as b order by b.idBusqueda asc"
-		var query = this.getSession().createQuery(stmt)
+		val sesion = this.getSession()
+		val query = sesion.createQuery(stmt)
 		var busquedas = query.list() as List<Busqueda>
 		if(busquedas.isEmpty){
 			return null

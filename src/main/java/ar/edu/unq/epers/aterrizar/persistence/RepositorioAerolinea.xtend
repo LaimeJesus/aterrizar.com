@@ -3,6 +3,7 @@ package ar.edu.unq.epers.aterrizar.persistence
 import ar.edu.unq.epers.aterrizar.domain.Aerolinea
 import ar.edu.unq.epers.aterrizar.exceptions.AerolineaNoExisteException
 import java.util.ArrayList
+import java.util.List
 
 class RepositorioAerolinea extends Repositorio<Aerolinea>{
 	
@@ -23,21 +24,16 @@ class RepositorioAerolinea extends Repositorio<Aerolinea>{
 
 		this.getSession().delete(this.traer(campo, valor))
 	}
-	
-	override def Aerolinea traer(String field, String value) {
-
-	 
+	override def traer(String field, String value) {
 		var stmt = "from Aerolinea as a where a." + field + " = :" + field
 		var query = this.getSession().createQuery(stmt)
 		query.setParameter(field, value)
-		var aerolineas = query.list() //as ArrayList<Aerolinea>
+		var aerolineas = query.list() as List<Aerolinea>
 		if(aerolineas.isEmpty){
 			return null
 		}
-		var aerolinea = aerolineas.get(0) as Aerolinea
 		
-		return aerolinea
-	
+		return aerolineas.get(0)
 	}
 
 	override def boolean contiene(String field, String value) {
@@ -55,5 +51,7 @@ class RepositorioAerolinea extends Repositorio<Aerolinea>{
 	override objectNotFoundError() throws Exception {
 		new AerolineaNoExisteException("no existe esa aerolinea")
 	}
+	
+
 
 }
