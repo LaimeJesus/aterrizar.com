@@ -19,6 +19,8 @@ class RepositorioBusquedas extends Repositorio<Busqueda>{
 		this.getSession().delete(this.traer(campo, valor))
 	}
 
+
+
 	override traer(String field, String value) {
 		
 		var stmt = "from Busqueda as b where b." + field + " = :" + field
@@ -38,7 +40,7 @@ class RepositorioBusquedas extends Repositorio<Busqueda>{
 		val query = sesion.createQuery(stmt)
 		var busquedas = query.list() as List<Busqueda>
 		if(busquedas.isEmpty){
-			return null
+			return new ArrayList<Busqueda>()
 		}
 		return busquedas
 	}
@@ -67,6 +69,10 @@ class RepositorioBusquedas extends Repositorio<Busqueda>{
 	//deprecated
 	override valores(Busqueda obj) {
 		return new ArrayList<String>()
+	}
+	
+	def borrarBusqueda(Busqueda busqueda) {
+		session.delete(busqueda)
 	}
 	
 }

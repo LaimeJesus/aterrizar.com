@@ -32,6 +32,8 @@ class ServicioDeReservaDeVuelos {
 
 	}
 
+
+	//caso de uso un usuario quiere reservar un asiento de un tramo de un vuelo de una Aerolinea
 	def Asiento reservar(Usuario usuario, Aerolinea unaAerolinea, Vuelo unVuelo, Tramo unTramo, Asiento unAsiento) {
 
 		var aerolineaFromRepo = this.traerAerolinea(unaAerolinea)
@@ -45,7 +47,7 @@ class ServicioDeReservaDeVuelos {
 				if(asientos.exists[Asiento a|a.nroAsiento == unAsiento.nroAsiento]) {
 					var asientoAReservar = asientos.get(asientos.indexOf(unAsiento))
 					if(!asientoAReservar.reservado) {
-						return this.reservarAsiento(aerolineaFromRepo, unVuelo, unTramo, asientoAReservar, usuario)
+						return this.reservarAsiento(aerolineaFromRepo, asientoAReservar, usuario)
 					} else {
 						throw new ReservarException("asiento reservado")
 					}
@@ -60,22 +62,7 @@ class ServicioDeReservaDeVuelos {
 		}
 	}
 
-	def reservarAsiento(Aerolinea aerolinea, Vuelo vuelo, Tramo tramo, Asiento asiento, Usuario usuario) {
-
-		aerolinea.removerVuelo(vuelo)
-		vuelo.removerTramo(tramo)
-		tramo.removerAsiento(asiento)
-
-		asiento.reservar(usuario)
-		tramo.agregarAsiento(asiento)
-		vuelo.agregarTramo(tramo)
-		aerolinea.agregarVuelo(vuelo)
-
-		this.actualizarAerolinea(aerolinea)
-
-		return asiento
-	}
-
+//caso de uso: un usuario quiere buscar vuelos por un criterio y algun orden
 	def List<Vuelo> buscar(Busqueda b) {
 
 		var resultado = buscador.buscarVuelos(b)
@@ -84,10 +71,12 @@ class ServicioDeReservaDeVuelos {
 		return resultado
 	}
 
+//caso de uso que tal vez no deberia estar
 	def List<Asiento> consultarAsientos(Tramo t) {
 		return t.asientosDisponibles
 	}
 
+//caso de uso conseguir la ultima busqueda ejecutada
 	def Busqueda getUltimaBusqueda() {
 		var resultado = SessionManager.runInSession(
 			[
@@ -96,6 +85,7 @@ class ServicioDeReservaDeVuelos {
 		return resultado
 	}
 
+//caso de uso guardar una busqueda para volver a utilizarla luego
 	def void guardar(Busqueda b) {
 		SessionManager.runInSession(
 			[
@@ -104,6 +94,7 @@ class ServicioDeReservaDeVuelos {
 			])
 	}
 
+//caso de uso ordenar una busqueda por algun orden
 	def Busqueda ordenarPorMenorCosto(Busqueda b) {
 		var menorCosto = new OrdenPorCostoDeVuelo
 		menorCosto.porMenorOrden
@@ -111,6 +102,7 @@ class ServicioDeReservaDeVuelos {
 		return b
 	}
 
+//caso de uso ordenar una busqueda por algun orden
 	def Busqueda ordenarPorMenorEscala(Busqueda b) {
 		var menorTrayecto = new OrdenPorEscalas
 		menorTrayecto.porMenorOrden
@@ -119,12 +111,25 @@ class ServicioDeReservaDeVuelos {
 		return b
 	}
 
+//caso de uso ordenar una busqueda por algun orden
 	def Busqueda ordenarPorMenorDuracion(Busqueda b) {
 		var menorDuracion = new OrdenPorDuracion
 		menorDuracion.porMenorOrden
 
 		b.ordenarPor(menorDuracion)
 		return b
+	}
+
+/////////////////////////////////////////////////
+
+	def reservarAsiento(Aerolinea aerolinea, Asiento asiento, Usuario usuario) {
+
+
+		asiento.reservar(usuario)
+
+		this.actualizarAerolinea(aerolinea)
+
+		return asiento
 	}
 
 	def actualizarReservas(Aerolinea aerolinea, Asiento asiento, Usuario usuario) {
@@ -175,14 +180,16 @@ class ServicioDeReservaDeVuelos {
 	}
 
 	def eliminarBusquedas() {
-		val busquedas = busquedas
+		
+		val busquedas = getBusquedas()
+		if(!busquedas.isEmpty){
 		SessionManager.runInSession [|
-			for(Busqueda busqueda: busquedas){
-				var id = String.valueOf(busqueda.idBusqueda)
-				repositorioDeBusquedas.borrar("idBusqueda", id)
+			for(Busqueda busqueda : busquedas){
+				repositorioDeBusquedas.borrarBusqueda(busqueda)
 			}
 				
 			null
 		]
+		}
 	}
 }

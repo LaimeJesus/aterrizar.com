@@ -23,6 +23,11 @@ import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorVueloDisp
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorEscalas
 
+/*
+ * Esta clase esta para testear al servicio de reserva de asientos. Es decir integra los repositorios de Aerolinea y Busqueda.
+ * Ademas de testear sus casos de uso
+ */
+
 class ServicioDeReservaDeVuelosTest {
 	
 	Aerolinea prueba
@@ -37,12 +42,23 @@ class ServicioDeReservaDeVuelosTest {
 	@Before
 	def void setUp(){
 		
-		
+		//nuestro system under 
 		sudo = new ServicioDeReservaDeVuelos
 		
-		/////////////
-				
+///////////////////////////////////////////////////////////////
+// Creacion de dos aerolineas con sus vuelos que tienen tramos que tienen asientos
+///////////////////////////////////////////////////////////////	
+
+
+		//////////////////////////////////////
+		//Aerolineas Argentinas
+		//////////////////////////////////////
+
 		aerolineasArgentinas = new Aerolinea("Aerolineas Argentinas")
+
+		//////////////////////////////////////
+		//vuelos
+		//////////////////////////////////////
 		
 		var vueloNroUno = new Vuelo(1)
 		var vueloNroDos = new Vuelo(2)
@@ -53,7 +69,8 @@ class ServicioDeReservaDeVuelosTest {
 		aerolineasArgentinas.agregarVuelo(vueloNroTres)
 		
 		//////////////////////////////////////
-		
+		//tramos vuelo 1
+		//////////////////////////////////////
 		var tramoArgentinaUruguay = new Tramo("Argentina", "Uruguay", 20, '2016-05-12', '2016-05-12', 1)
 		tramoArgentinaUruguay.asientosStandard()
 		
@@ -64,6 +81,9 @@ class ServicioDeReservaDeVuelosTest {
 		vueloNroUno.agregarTramo(tramoUruguayBrasil)
 		
 		//////////////////////////////////////
+		//tramos vuelo 2
+		//////////////////////////////////////
+
 		
 		var tramoArgentinaUSA= new Tramo("Argentina", "USA", 20, '2016-05-12', '2016-06-12', 3)
 		tramoArgentinaUSA.asientosStandard()
@@ -71,6 +91,9 @@ class ServicioDeReservaDeVuelosTest {
 		vueloNroDos.agregarTramo(tramoArgentinaUSA)
 		
 		//////////////////////////////////////
+		//tramos vuelo 3
+		//////////////////////////////////////
+
 		
 		var tramoArgentinaChile = new Tramo("Argentina", "Chile", 10, '2016-5-12', '2016-5-20', 4)
 		tramoArgentinaChile.asientosStandard()
@@ -86,51 +109,81 @@ class ServicioDeReservaDeVuelosTest {
 		vueloNroTres.agregarTramo(tramoAustraliaJapon)
 		
 		//////////////////////////////////////
+		//Aerolinea prueba
+		//////////////////////////////////////
+
 		
 		prueba = new Aerolinea("prueba")
+		//////////////////////////////////////
+		//Vuelo nro 4
+		//////////////////////////////////////
 		
 		vuelo = new Vuelo(4)
+		//////////////////////////////////////
+		//tramos
+		//////////////////////////////////////
+		
 		var tramoArgentinaBrasil = new Tramo("Argentina", "Brasil", 100, '2016-1-5', '2016-2-5', 7)
 		var tramoBrasilMexico = new Tramo("Brasil", "Mexico", 200, '2016-2-5', '2016-3-5', 8)
 		var tramoMexicoEstadosUnidos = new Tramo("Mexico", "USA", 100, '2016-3-5', '2016-3-6', 9)
 		tramoEstadosUnidosArgentina = new Tramo("USA", "Argentina", 100, '2016-3-6', '2016-3-9', 10)
 		
+		//////////////////////////////////////
 		//asiento ocupado
+		//////////////////////////////////////
+
 		var asientoOcupadoPrimera = new Asiento(TipoDeCategoria.PRIMERA, 50)
 		var usuarioOcupantePrimera = new Usuario()
 		usuarioOcupantePrimera.nickname = "pepe"
 		asientoOcupadoPrimera.reservadoPorUsuario = usuarioOcupantePrimera 
 
+		//////////////////////////////////////
 		//asiento ocupado
+		//////////////////////////////////////
+
 		var asientoOcupadoBusiness = new Asiento(TipoDeCategoria.BUSINESS, 50)
 		var usuarioOcupanteBusiness = new Usuario()
 		usuarioOcupanteBusiness.nickname = "jose"
 		asientoOcupadoBusiness.reservadoPorUsuario = usuarioOcupanteBusiness
 
+		//////////////////////////////////////
 		//asiento ocupado
+		//////////////////////////////////////
+
 		var asientoOcupadoTurista = new Asiento(TipoDeCategoria.TURISTA, 50)
 		var usuarioOcupanteTurista = new Usuario()
 		usuarioOcupanteTurista.nickname = "carlos"
 		asientoOcupadoTurista.reservadoPorUsuario = usuarioOcupanteTurista
 
+		//////////////////////////////////////
 		//asiento desocupado
+		//////////////////////////////////////
+
 		asientoLibrePrimera = new Asiento(TipoDeCategoria.PRIMERA, 100)
 		
+		//////////////////////////////////////
 		//agrgando asientos ocupados a tramos
+		//////////////////////////////////////
+		
 		tramoArgentinaBrasil.agregarAsiento(asientoOcupadoPrimera)
 		tramoBrasilMexico.agregarAsiento(asientoOcupadoBusiness)
 		tramoMexicoEstadosUnidos.agregarAsiento(asientoOcupadoTurista)
 		tramoEstadosUnidosArgentina.agregarAsiento(asientoLibrePrimera)
-		
+
+		//////////////////////////////////////
 		//agregando tramos al vuelo
+		//////////////////////////////////////
+		
 		vuelo.agregarTramo(tramoArgentinaBrasil)
 		vuelo.agregarTramo(tramoBrasilMexico)
 		vuelo.agregarTramo(tramoMexicoEstadosUnidos)
 		vuelo.agregarTramo(tramoEstadosUnidosArgentina)
 		
 		prueba.agregarVuelo(vuelo)
-	
 
+///////////////////////////////////////////////////////////////	
+
+		//aqui comienza el verdadero set up
 		sudo.agregarAerolinea(aerolineasArgentinas)
 		sudo.agregarAerolinea(prueba)
 	}
@@ -205,12 +258,14 @@ class ServicioDeReservaDeVuelosTest {
 	@Test
 	def void testVolverARealizarUltimaConsultaDeberiaDarmeMismoResultadoQueTestAnterior(){
 		
+		//esto va cambiando ya que despues de cada test se vuelve a crear una busqueda con un nuevo id
+		
 		var ordenEscala = new OrdenPorEscalas()
 		busqueda = new Busqueda(ordenEscala)
 		sudo.buscar(busqueda)
 		var ultimaBusqueda = sudo.ultimaBusqueda
 		
-		Assert.assertEquals(1, ultimaBusqueda.idBusqueda)
+		Assert.assertTrue(ultimaBusqueda.idBusqueda >= 1)
 	}
 	
 	@Test
@@ -226,11 +281,11 @@ class ServicioDeReservaDeVuelosTest {
 	
 	//problema al eliminar busquedas
 	@After
-	def void testEliminarAerolineas(){
+	def void testEliminarAerolineasYBusquedas(){
 		
 		sudo.eliminarAerolinea(prueba)
 		sudo.eliminarAerolinea(aerolineasArgentinas)
-		//sudo.eliminarBusquedas()
+		sudo.eliminarBusquedas()
 	}
 
 }

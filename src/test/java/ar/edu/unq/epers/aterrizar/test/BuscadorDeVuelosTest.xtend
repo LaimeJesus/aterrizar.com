@@ -23,6 +23,13 @@ import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorFechaDeLl
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorFechaDeSalida
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorCategoriaDeAsiento
 
+/*
+ * Esta clase esta para testear al buscador de vuelos integrado busquedas que tiene los criterios y ordenes.
+ * Es decir busca de las aerolineas persistidas en la bd, los vuelos.
+ * 
+ */
+
+
 class BuscadorDeVuelosTest {
 	
 	BuscadorDeVuelos sudo
@@ -284,7 +291,7 @@ class BuscadorDeVuelosTest {
 		busqueda.filtrarPor(llegada2016520)
 		var resultados = sudo.buscarVuelos(busqueda)
 		
-		Assert.assertEquals(resultados.length, 1)
+		Assert.assertEquals(1, resultados.length)
 	}	
 
 	@Test
@@ -302,13 +309,13 @@ class BuscadorDeVuelosTest {
 		Assert.assertEquals(resultados.length, 3)
 	}
 
-//	@After
-//	def void testBorrarObjetosCreadosEnSetUp(){
-//		
-//		SessionManager.runInSession([
-//			repoPrueba.borrar("nombreAerolinea", aerolineasArgentinas.nombreAerolinea)
-//			void
-//		])
-//	}
-//	
+	@After
+	def void testBorrarObjetosCreadosEnSetUp(){
+		
+		SessionManager.runInSession([
+			repoPrueba.borrar("nombreAerolinea", aerolineasArgentinas.nombreAerolinea)
+			void
+		])
+	}
+	
 }
