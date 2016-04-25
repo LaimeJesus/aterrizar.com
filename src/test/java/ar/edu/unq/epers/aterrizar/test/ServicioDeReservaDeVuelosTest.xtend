@@ -71,6 +71,7 @@ class ServicioDeReservaDeVuelosTest {
 		//////////////////////////////////////
 		//tramos vuelo 1
 		//////////////////////////////////////
+		
 		var tramoArgentinaUruguay = new Tramo("Argentina", "Uruguay", 20, '2016-05-12', '2016-05-12', 1)
 		tramoArgentinaUruguay.asientosStandard()
 		
@@ -112,8 +113,8 @@ class ServicioDeReservaDeVuelosTest {
 		//Aerolinea prueba
 		//////////////////////////////////////
 
-		
 		prueba = new Aerolinea("prueba")
+		
 		//////////////////////////////////////
 		//Vuelo nro 4
 		//////////////////////////////////////
@@ -179,6 +180,11 @@ class ServicioDeReservaDeVuelosTest {
 		vuelo.agregarTramo(tramoMexicoEstadosUnidos)
 		vuelo.agregarTramo(tramoEstadosUnidosArgentina)
 		
+		//////////////////////////////////////
+		//agregando vuelo a prueba
+		//////////////////////////////////////
+		
+		
 		prueba.agregarVuelo(vuelo)
 
 ///////////////////////////////////////////////////////////////	
@@ -199,7 +205,7 @@ class ServicioDeReservaDeVuelosTest {
 	
 	
 	@Test
-	def void testBuscarVuelos(){
+	def void testBuscarVuelosConUnFiltroDeNombreYOrdenDeCosto(){
 		var filtro = new CriterioPorNombreDeAerolinea("Aerolineas Argentinas")
 		var orden = new OrdenPorCostoDeVuelo
 		orden.porMenorOrden
@@ -216,7 +222,7 @@ class ServicioDeReservaDeVuelosTest {
 	}
 	 
 	@Test
-	def void testBuscarVuelosPorUnCriterioComplicado(){
+	def void testBuscarVuelosPorUnFiltroComplicado(){
 		
 		/*
 		 *		origen USA y destino Argentina y llegaada 2016-5-20 
@@ -256,16 +262,27 @@ class ServicioDeReservaDeVuelosTest {
 	}
 	
 	@Test
-	def void testVolverARealizarUltimaConsultaDeberiaDarmeMismoResultadoQueTestAnterior(){
+	def void testVolverARealizarUltimaConsultaDeberiaDarmeUnaBusquedaConIdMayorA1(){
 		
 		//esto va cambiando ya que despues de cada test se vuelve a crear una busqueda con un nuevo id
 		
 		var ordenEscala = new OrdenPorEscalas()
 		busqueda = new Busqueda(ordenEscala)
 		sudo.buscar(busqueda)
+		var busquedas = sudo.busquedas
 		var ultimaBusqueda = sudo.ultimaBusqueda
 		
-		Assert.assertTrue(ultimaBusqueda.idBusqueda >= 1)
+		//buscando maximo deberia usar fold o algo mejorcito
+		var max = ultimaBusqueda
+		for(Busqueda b : busquedas){
+			if(b.idBusqueda > max.idBusqueda){
+				max = b
+			}
+		}
+		System.out.println(ultimaBusqueda.idBusqueda)
+		System.out.println("es mayor que")
+		System.out.println(max.idBusqueda)
+		Assert.assertTrue(ultimaBusqueda.idBusqueda >= max.idBusqueda)
 	}
 	
 	@Test
@@ -274,12 +291,13 @@ class ServicioDeReservaDeVuelosTest {
 		usuarioPepe.nickname = "jesus"
 		var asientoReservado = sudo.reservar(usuarioPepe, prueba, vuelo , tramoEstadosUnidosArgentina, asientoLibrePrimera)
 		
+		//prueba que asiento esta reservado
 		Assert.assertTrue(asientoReservado.reservadoPorUsuario != null)
 		
+		//prueba que sea el usuario correcto
 		Assert.assertEquals(usuarioPepe, asientoReservado.reservadoPorUsuario)
 	}
 	
-	//problema al eliminar busquedas
 	@After
 	def void testEliminarAerolineasYBusquedas(){
 		

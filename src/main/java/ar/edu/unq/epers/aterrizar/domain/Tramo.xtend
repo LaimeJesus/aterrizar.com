@@ -33,7 +33,7 @@ class Tramo {
 		fechaDeLlegada = Date.valueOf(llegada)
 		duracionDeTramo = fechaDeLlegada.time - fechaDeSalida.time
 	}
-	
+	//no me deja usar new con los parametros de arriba, entiendo que estoy repitiendo codigo 
 	new(String from, String to, int precio, String salida, String llegada, int numeroTramo){
 		nroTramo = numeroTramo
 		origen = from
@@ -88,7 +88,9 @@ class Tramo {
 	
 	def crearAsientos(TipoDeCategoria categoria, int precio, int cantidadDeAsientos) {
 		var cantidad = cantidadDeAsientos
-		while(cantidad != 0){
+		
+		//mejor manera de hacerlo seria con un for
+		while(cantidad >= 0){
 			asientos.add(new Asiento(categoria, precio))
 			cantidad -= 1
 		}

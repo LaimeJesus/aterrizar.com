@@ -20,6 +20,7 @@ class Asiento {
 		cat.factorPrecio = precioCat
 		categoria = cat
 	}
+	//no me deja usar new con los parametros de arriba, entiendo que estoy repitiendo codigo 
 	new(TipoDeCategoria cat, int precioCat, int numeroAsiento){
 		reservadoPorUsuario = null
 		cat.factorPrecio = precioCat

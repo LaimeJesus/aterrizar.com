@@ -24,7 +24,7 @@ import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorFechaDeSa
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorCategoriaDeAsiento
 
 /*
- * Esta clase esta para testear al buscador de vuelos integrado busquedas que tiene los criterios y ordenes.
+ * Esta clase esta para testear al buscador de vuelos integrado con busquedas, estas tienen criterios y ordenes.
  * Es decir busca de las aerolineas persistidas en la bd, los vuelos.
  * 
  */
@@ -61,18 +61,34 @@ class BuscadorDeVuelosTest {
 	
 	@Before
 	def void setUp(){
+		//Repositorio aerolinea
 		repoPrueba = new RepositorioAerolinea
+		
+		
+///////////////////////////////////////////////////////////////
+// Creacion de dos aerolineas con sus vuelos que tienen tramos que tienen asientos
+///////////////////////////////////////////////////////////////	
+
+		//////////////////////////////////////
+		//Aerolineas Argentinas
+		//////////////////////////////////////
 		
 		aerolineasArgentinas = new Aerolinea("Aerolineas Argentinas")
 		
+		//////////////////////////////////////
+		//vuelos
+		//////////////////////////////////////
+				
 		var vueloNroUno = new Vuelo(1)
 		var vueloNroDos = new Vuelo(2)
 		var vueloNroTres = new Vuelo(3)
 		
-		aerolineasArgentinas.vuelos.add(vueloNroUno)
-		aerolineasArgentinas.vuelos.add(vueloNroDos)
-		aerolineasArgentinas.vuelos.add(vueloNroTres)
+		aerolineasArgentinas.agregarVuelo(vueloNroUno)
+		aerolineasArgentinas.agregarVuelo(vueloNroDos)
+		aerolineasArgentinas.agregarVuelo(vueloNroTres)
 		
+		//////////////////////////////////////
+		//tramos vuelo 1
 		//////////////////////////////////////
 		
 		var tramoArgentinaUruguay = new Tramo("Argentina", "Uruguay", 20, '2016-05-12', '2016-05-12')
@@ -85,12 +101,17 @@ class BuscadorDeVuelosTest {
 		vueloNroUno.agregarTramo(tramoUruguayBrasil)
 		
 		//////////////////////////////////////
+		//tramos vuelo 2
+		//////////////////////////////////////
+
 		
 		var tramoArgentinaUSA= new Tramo("Argentina", "USA", 20, '2016-05-12', '2016-06-11')
 		tramoArgentinaUSA.asientosStandard()
 		
 		vueloNroDos.agregarTramo(tramoArgentinaUSA)
 		
+		//////////////////////////////////////
+		//tramos vuelo 3
 		//////////////////////////////////////
 		
 		var tramoArgentinaChile = new Tramo("Argentina", "Chile", 10, '2016-5-12', '2016-5-20')
@@ -106,24 +127,42 @@ class BuscadorDeVuelosTest {
 		vueloNroTres.agregarTramo(tramoChileAustralia)
 		vueloNroTres.agregarTramo(tramoAustraliaJapon)
 	
+		//////////////////////////////////////
+		//persistiendo aerolineas argentinas
+		//////////////////////////////////////
+		
 		SessionManager.runInSession([
 			repoPrueba.persistir(aerolineasArgentinas)
 			void
 		])
 		
-	
+		//////////////////////////////////////
+		//inicializando buscador
+		//////////////////////////////////////
 		sudo = new BuscadorDeVuelos(repoPrueba)
+		
+		//////////////////////////////////////
+		//inicializando busqueda
+		//////////////////////////////////////
+		
 		busqueda = new Busqueda()
-	
+
+		//////////////////////////////////////
+		//inicializando ordenes
+		//////////////////////////////////////
+
 		ordenPorEscala = new OrdenPorEscalas()
 		ordenPorCosto = new OrdenPorCostoDeVuelo()
 		ordenPorDuracion = new OrdenPorDuracion()
-		
+
+		//////////////////////////////////////
+		//inicializando filtros
+		//////////////////////////////////////
+	
 		origenArgentina = new CriterioPorOrigen("Argentina")
 		destinoJapon = new CriterioPorDestino("Japon")
 		nombreAerolineas = new CriterioPorNombreDeAerolinea("Aerolineas Argentinas")
 		vueloDisponible = new CriterioPorVueloDisponible()
-		
 		llegada2016520 = new CriterioPorFechaDeLlegada('2016-5-20')
 		salida2016512 = new CriterioPorFechaDeSalida('2016-5-12')
 		categoriaTurista = new CriterioPorCategoriaDeAsiento(TipoDeCategoria.TURISTA)
