@@ -33,4 +33,8 @@ class Aerolinea {
 		vuelos.add(vuelo)
 	}
 	
+	def removerVuelo(Vuelo vuelo) {
+		vuelos.remove(vuelo)
+	}
+	
 }

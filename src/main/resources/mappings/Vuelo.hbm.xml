@@ -10,9 +10,9 @@
 			<generator class="native"/>
 		</id>
 		<property name="nroVuelo" type="java.lang.Integer">
-			<column name="nroVuelo" not-null="true" unique="true" />
+			<column name="nroVuelo" not-null="true" unique="false" />
 		</property>
-      <bag name="tramos" cascade="all">
+      <bag name="tramos" cascade="all" lazy="false">
          <key column="idVuelo"/>
          <one-to-many class="ar.edu.unq.epers.aterrizar.domain.Tramo"/>
       </bag>

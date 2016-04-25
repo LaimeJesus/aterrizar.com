@@ -9,6 +9,7 @@ import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
 @Accessors
 
 class Tramo {
+	int nroTramo
 	int idTramo
 	String destino
 	String origen
@@ -24,6 +25,17 @@ class Tramo {
 	}
 	
 	new(String from, String to, int precio, String salida, String llegada){
+		origen = from
+		destino = to
+		asientos = new ArrayList<Asiento>()
+		precioBase = precio
+		fechaDeSalida = Date.valueOf(salida)
+		fechaDeLlegada = Date.valueOf(llegada)
+		duracionDeTramo = fechaDeLlegada.time - fechaDeSalida.time
+	}
+	
+	new(String from, String to, int precio, String salida, String llegada, int numeroTramo){
+		nroTramo = numeroTramo
 		origen = from
 		destino = to
 		asientos = new ArrayList<Asiento>()
@@ -84,6 +96,14 @@ class Tramo {
 	
 	def agregarAsiento(Asiento asiento) {
 		asientos.add(asiento)
+	}
+	
+	def removerAsiento(Asiento asiento) {
+		asientos.remove(asiento)
+	}
+	
+	def equals(Tramo t){
+		return nroTramo.equals(t.nroTramo)
 	}
 	
 }

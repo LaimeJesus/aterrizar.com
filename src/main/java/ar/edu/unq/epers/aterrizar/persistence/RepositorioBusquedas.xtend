@@ -32,15 +32,17 @@ class RepositorioBusquedas extends Repositorio<Busqueda>{
 		
 		return busqueda
 	}
-	def traerPorId(){
+	def traerBusquedas(){
 		var stmt = "from Busqueda as b order by b.idBusqueda asc"
 		var query = this.getSession().createQuery(stmt)
 		var busquedas = query.list() as List<Busqueda>
 		if(busquedas.isEmpty){
 			return null
 		}
-		var busqueda = busquedas.head
-		return busqueda
+		return busquedas
+	}
+	def traerPorId(){
+		return traerBusquedas.head
 	}
 	
 	override contiene(String field, String value) {

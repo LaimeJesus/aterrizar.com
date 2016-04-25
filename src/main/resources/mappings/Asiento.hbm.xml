@@ -9,6 +9,9 @@
 			<column name="idAsiento"/>
 			<generator class="native"/>
 		</id>
+		<property name="nroAsiento" type="java.lang.Integer">
+			<column name="nroAsiento" not-null="true" unique="false"/>
+		</property>
 		  
 		<property name="categoria" column="categoria" not-null="true">
 			<type name="org.hibernate.type.EnumType">

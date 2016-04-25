@@ -22,26 +22,31 @@ class ServicioDeReservaDeVuelos {
 	
 	//Nuestro sistema de reserva de asientos
 	
-
-	RepositorioAerolinea repositorioDeAerolineas = new RepositorioAerolinea
-	BuscadorDeVuelos buscador = new BuscadorDeVuelos(repositorioDeAerolineas)
-	RepositorioBusquedas repositorioDeBusquedas = new RepositorioBusquedas
+		RepositorioAerolinea repositorioDeAerolineas
+		BuscadorDeVuelos buscador
+		RepositorioBusquedas repositorioDeBusquedas 
+	new(){
+		repositorioDeAerolineas = new RepositorioAerolinea
+		buscador = new BuscadorDeVuelos(repositorioDeAerolineas)
+		repositorioDeBusquedas = new RepositorioBusquedas
+		
+	}
 	
-	def void reservar(Usuario usuario, Aerolinea unaAerolinea, Vuelo unVuelo, Tramo unTramo, Asiento unAsiento){
+	
+	def Asiento reservar(Usuario usuario, Aerolinea unaAerolinea, Vuelo unVuelo, Tramo unTramo, Asiento unAsiento){
 		
 		var aerolineaFromRepo = this.traerAerolinea(unaAerolinea)
 		var vuelos = aerolineaFromRepo.vuelos
 		
 		//no estoy seguro pero creo que esto funcionaria asi
-		if(vuelos.contains(unVuelo)){
+		if(vuelos.exists[Vuelo v| v.nroVuelo == unVuelo.nroVuelo]){
 			var tramos = unVuelo.tramos
-			if(tramos.contains(unTramo)){
-				//consultarAsientos(unTramo) podria usar este metodo
+			if(tramos.exists[Tramo t| t.nroTramo == unTramo.nroTramo]){
 				var asientos = unTramo.asientos
-				if(asientos.contains(unAsiento)){
-					if(!unAsiento.isReservado){
-						unAsiento.reservarPor(usuario)
-						this.actualizarReservas(aerolineaFromRepo)
+				if(asientos.exists[Asiento a| a.nroAsiento == unAsiento.nroAsiento]){
+					var asientoAReservar = asientos.get(asientos.indexOf(unAsiento)) 
+					if(!asientoAReservar.reservado){ 
+						return this.reservarAsiento(aerolineaFromRepo, unVuelo, unTramo, asientoAReservar, usuario)
 					}
 					else{
 						throw new ReservarException("asiento reservado")
@@ -50,22 +55,35 @@ class ServicioDeReservaDeVuelos {
 				else{
 					throw new ReservarException("asiento no pertenece a ese tramo")
 				}
-
 			}
 			else{
 				throw new ReservarException("ese tramo no pertenece a ese vuelo")
 				}
-			
 		}
 		else{
 			throw new ReservarException("ese vuelo no pertenece a esa aerolinea")
 		}
 	}
 	
+	def reservarAsiento(Aerolinea aerolinea, Vuelo vuelo, Tramo tramo, Asiento asiento, Usuario usuario) {
+
+		aerolinea.removerVuelo(vuelo)
+		vuelo.removerTramo(tramo)
+		tramo.removerAsiento(asiento)
+		
+		asiento.reservar(usuario)
+		tramo.agregarAsiento(asiento)
+		vuelo.agregarTramo(tramo)
+		aerolinea.agregarVuelo(vuelo)
+				
+		this.actualizarAerolinea(aerolinea)
+		
+		return asiento
+	}
+	
 	def List<Vuelo> buscar(Busqueda b){
 		
 		var	resultado =	buscador.buscarVuelos(b)
-		
 		guardar(b)
 		
 		return resultado
@@ -111,7 +129,8 @@ class ServicioDeReservaDeVuelos {
 		return b
 	}
 
-	def actualizarReservas(Aerolinea aerolinea) {
+	def actualizarReservas(Aerolinea aerolinea, Asiento asiento, Usuario usuario) {
+		
 		this.actualizarAerolinea(aerolinea)
 	}
 	
@@ -147,6 +166,19 @@ class ServicioDeReservaDeVuelos {
  			repositorioDeAerolineas.contiene("nombreAerolinea", aerolinea.nombreAerolinea)
  		]
 		
+	}
+	
+	def eliminarBusquedas() {
+			var busquedas = repositorioDeBusquedas.traerBusquedas
+			for(Busqueda b:busquedas){
+				eliminarBusqueda(b)
+			}
+	}
+	def eliminarBusqueda(Busqueda b){
+		SessionManager.runInSession[|
+			repositorioDeBusquedas.borrar("idBusqueda", b.idBusqueda.toString)
+			null
+		]
 	}
 	
 }

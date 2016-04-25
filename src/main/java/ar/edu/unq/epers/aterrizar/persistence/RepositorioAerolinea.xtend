@@ -16,7 +16,7 @@ class RepositorioAerolinea extends Repositorio<Aerolinea>{
 	}
 	
 	override def void actualizar(Aerolinea unaAerolinea, String field, String unique_value) {
-		this.getSession.update(unaAerolinea)
+		this.getSession.merge(unaAerolinea)
 	}
 	
 	override def void borrar(String campo, String valor) {

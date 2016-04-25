@@ -37,7 +37,6 @@ class Vuelo {
 		}
 		return disponible
 	}
-	
 	def equals(Vuelo v){
 		return nroVuelo.equals(v.nroVuelo)
 	}
@@ -53,4 +52,11 @@ class Vuelo {
 		}
 		return dur
 	}
+	
+	def removerTramo(Tramo tramo) {
+		tramos.remove(tramo)
+		duracionDeVuelo = duracionDeVuelo - tramo.duracionDeTramo
+		costoDeVuelo = costoDeVuelo - tramo.precioBase
+	}
+
 }

@@ -10,10 +10,11 @@
 			<generator class="native"/>
 		</id>
 		<property name="nombreAerolinea" type="string">
-			<column name="nombreAerolinea" length="30" not-null="true" unique="true" />
+		<!-- unique deberia ser true -->
+			<column name="nombreAerolinea" length="30" not-null="true" unique="false" />
 		</property>
        
-      <bag name="vuelos" cascade="all">
+      <bag name="vuelos" cascade="all" lazy="false">
          <key column="idAerolina"/>
          <one-to-many class="ar.edu.unq.epers.aterrizar.domain.Vuelo"/>
       </bag>

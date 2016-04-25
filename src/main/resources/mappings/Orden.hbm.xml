@@ -12,32 +12,35 @@
 	    <discriminator column="Order_Type" type="string"/>
 		  
 		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenCompuesto" 
-		extends="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden" 
 		discriminator-value="OrdenCompuesto">
-	    	<many-to-one name="grupoDeOrdenes" column="idOrdenHijo" unique="false" class="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden"/>
+
+			<list name="grupoDeOrdenes" cascade="all" inverse="false">
+			<key column="idOrdenPadre"></key>
+			<list-index column="posicionDeOrden"></list-index>
+			<one-to-many class="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden"/>
+			</list>
 	      	<property name="query" type="string">
-	      		<column name="Query" length="80" not-null="true" unique="false"/>
+	      		<column name="Query" length="80" not-null="false" unique="false"/>
 	      	</property>
 		</subclass>
+		
+		
 		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorCostoDeVuelo"
-		extends="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden" 
 		discriminator-value="PorCostoDeVuelo">
 	      	<property name="query" type="string">
-	      		<column name="Query" length="80" not-null="true" unique="false"/>
+	      		<column name="Query" length="80" not-null="false" unique="false"/>
 	      	</property>
 		</subclass>
 		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion" 
-		extends="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden" 
 		discriminator-value="PorDuracion">
 	      	<property name="query" type="string">
-	      		<column name="Query" length="80" not-null="true" unique="false"/>
+	      		<column name="Query" length="80" not-null="false" unique="false"/>
 	      	</property>
 		</subclass>
 		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorEscalas" 
-		extends="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden"
-		discriminator-value="PorEscala">
+		discriminator-value="PorEscalas">
 	      	<property name="query" type="string">
-	      		<column name="Query" length="80" not-null="true" unique="false"/>
+	      		<column name="Query" length="80" not-null="false" unique="false"/>
 	      	</property>
 		</subclass>
 

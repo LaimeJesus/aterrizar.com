@@ -17,7 +17,8 @@
 			<column name="apellido" not-null="false" unique="false"/>
 		</property>
 		<property name="nickname" type="string">
-			<column name="nickname" not-null="true" unique="true"/>
+		<!-- unique deberia ser true -->
+			<column name="nickname" not-null="true" unique="false"/>
 		</property>
 		<property name="password" type="string">
 			<column name="password" not-null="false" unique="false"/>

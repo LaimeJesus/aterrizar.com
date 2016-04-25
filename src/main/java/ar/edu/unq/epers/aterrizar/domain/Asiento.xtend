@@ -9,6 +9,7 @@ class Asiento {
 	TipoDeCategoria categoria
 	int idAsiento
 	Usuario reservadoPorUsuario
+	int nroAsiento
 	
 	new(){
 		
@@ -19,6 +20,12 @@ class Asiento {
 		cat.factorPrecio = precioCat
 		categoria = cat
 	}
+	new(TipoDeCategoria cat, int precioCat, int numeroAsiento){
+		reservadoPorUsuario = null
+		cat.factorPrecio = precioCat
+		categoria = cat
+		nroAsiento = numeroAsiento
+	}
 	def isReservado(){
 		return reservadoPorUsuario != null
 	}
@@ -27,8 +34,12 @@ class Asiento {
 		return categoria.factorPrecio
 	}
 	
-	def reservarPor(Usuario usuario) {
+	def reservar(Usuario usuario) {
 		reservadoPorUsuario = usuario
+	}
+	
+	def equals(Asiento a){
+		return nroAsiento.equals(a.nroAsiento)
 	}
 	
 }

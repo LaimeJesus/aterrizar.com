@@ -14,6 +14,14 @@ import ar.edu.unq.epers.aterrizar.domain.Asiento
 import ar.edu.unq.epers.aterrizar.domain.Usuario
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorNombreDeAerolinea
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorCostoDeVuelo
+import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorOrigen
+import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorFechaDeLlegada
+import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorDestino
+import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorFechaDeSalida
+import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorCategoriaDeAsiento
+import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorVueloDisponible
+import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion
+import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorEscalas
 
 class ServicioDeReservaDeVuelosTest {
 	
@@ -22,6 +30,9 @@ class ServicioDeReservaDeVuelosTest {
 
 	ServicioDeReservaDeVuelos sudo
 	Busqueda busqueda
+	Tramo tramoEstadosUnidosArgentina
+	Vuelo vuelo
+	Asiento asientoLibrePrimera
 	
 	@Before
 	def void setUp(){
@@ -43,10 +54,10 @@ class ServicioDeReservaDeVuelosTest {
 		
 		//////////////////////////////////////
 		
-		var tramoArgentinaUruguay = new Tramo("Argentina", "Uruguay", 20, '2016-05-12', '2016-05-12')
+		var tramoArgentinaUruguay = new Tramo("Argentina", "Uruguay", 20, '2016-05-12', '2016-05-12', 1)
 		tramoArgentinaUruguay.asientosStandard()
 		
-		var tramoUruguayBrasil = new Tramo("Uruguay", "Brasil", 50, '2016-05-10', '2016-05-12')
+		var tramoUruguayBrasil = new Tramo("Uruguay", "Brasil", 50, '2016-05-10', '2016-05-12', 2)
 		tramoUruguayBrasil.asientosStandard()
 		
 		vueloNroUno.agregarTramo(tramoArgentinaUruguay)
@@ -54,20 +65,20 @@ class ServicioDeReservaDeVuelosTest {
 		
 		//////////////////////////////////////
 		
-		var tramoArgentinaUSA= new Tramo("Argentina", "USA", 20, '2016-05-12', '2016-06-12')
+		var tramoArgentinaUSA= new Tramo("Argentina", "USA", 20, '2016-05-12', '2016-06-12', 3)
 		tramoArgentinaUSA.asientosStandard()
 		
 		vueloNroDos.agregarTramo(tramoArgentinaUSA)
 		
 		//////////////////////////////////////
 		
-		var tramoArgentinaChile = new Tramo("Argentina", "Chile", 10, '2016-5-12', '2016-5-20')
+		var tramoArgentinaChile = new Tramo("Argentina", "Chile", 10, '2016-5-12', '2016-5-20', 4)
 		tramoArgentinaChile.asientosStandard()
 		
-		var tramoChileAustralia = new Tramo("Chile", "Australia", 50, '2016-5-20', '2016-6-1')
+		var tramoChileAustralia = new Tramo("Chile", "Australia", 50, '2016-5-20', '2016-6-1', 5)
 		tramoChileAustralia.asientosStandard()
 		
-		var tramoAustraliaJapon = new Tramo("Australia", "Japon", 30, '2016-6-1', '2016-6-12')
+		var tramoAustraliaJapon = new Tramo("Australia", "Japon", 30, '2016-6-1', '2016-6-12', 6)
 		tramoAustraliaJapon.crearAsientos(TipoDeCategoria.BUSINESS, 5, 5)
 
 		vueloNroTres.agregarTramo(tramoArgentinaChile)
@@ -78,11 +89,11 @@ class ServicioDeReservaDeVuelosTest {
 		
 		prueba = new Aerolinea("prueba")
 		
-		var vuelo = new Vuelo(4)
-		var tramoArgentinaBrasil = new Tramo("Argentina", "Brasil", 100, '2016-1-5', '2016-2-5')
-		var tramoBrasilMexico = new Tramo("Brasil", "Mexico", 200, '2016-2-5', '2016-3-5')
-		var tramoMexicoEstadosUnidos = new Tramo("Mexico", "USA", 100, '2016-3-5', '2016-3-6')
-		var tramoEstadosUnidosArgentina = new Tramo("USA", "Argentina", 100, '2016-3-6', '2016-3-9')
+		vuelo = new Vuelo(4)
+		var tramoArgentinaBrasil = new Tramo("Argentina", "Brasil", 100, '2016-1-5', '2016-2-5', 7)
+		var tramoBrasilMexico = new Tramo("Brasil", "Mexico", 200, '2016-2-5', '2016-3-5', 8)
+		var tramoMexicoEstadosUnidos = new Tramo("Mexico", "USA", 100, '2016-3-5', '2016-3-6', 9)
+		tramoEstadosUnidosArgentina = new Tramo("USA", "Argentina", 100, '2016-3-6', '2016-3-9', 10)
 		
 		//asiento ocupado
 		var asientoOcupadoPrimera = new Asiento(TipoDeCategoria.PRIMERA, 50)
@@ -103,7 +114,7 @@ class ServicioDeReservaDeVuelosTest {
 		asientoOcupadoTurista.reservadoPorUsuario = usuarioOcupanteTurista
 
 		//asiento desocupado
-		var asientoLibrePrimera = new Asiento(TipoDeCategoria.PRIMERA, 100)
+		asientoLibrePrimera = new Asiento(TipoDeCategoria.PRIMERA, 100)
 		
 		//agrgando asientos ocupados a tramos
 		tramoArgentinaBrasil.agregarAsiento(asientoOcupadoPrimera)
@@ -135,7 +146,7 @@ class ServicioDeReservaDeVuelosTest {
 	
 	
 	@Test
-	def void testBuscarVuelosPorUnTipoDeCriterio(){
+	def void testBuscarVuelos(){
 		var filtro = new CriterioPorNombreDeAerolinea("Aerolineas Argentinas")
 		var orden = new OrdenPorCostoDeVuelo
 		orden.porMenorOrden
@@ -151,79 +162,75 @@ class ServicioDeReservaDeVuelosTest {
 		
 	}
 	 
-//	@Test
-//	def void testCriterioPorNombreAerolinea(){
-//		busqueda = new Busqueda(criterioNombre)
-//		var resultados = buscador.buscarVuelos(busqueda)
-//		Assert.assertEquals(resultados.length, 1)
-//	}
-//	
-//	@Test
-//	def void testCriterioPorVueloDisponible(){
-//		busqueda = new Busqueda(criterioVueloDisponible)
-//		var resultados = buscador.buscarVuelos(busqueda)
-//		Assert.assertEquals(resultados.length, 4)
-//	}
-//	
-//	
-//	@Test
-//	def void testCriterioPorConjuncion(){
-//		var criterio = criterioOrigen.and(criterioNombre)
-//		busqueda = new Busqueda(criterio)
-//		var resultados = buscador.buscarVuelos(busqueda)
-//		
-//		Assert.assertEquals(resultados.length, 1)
-//	}
-//	@Test
-//	def void testCriterioPorDisjuncion(){
-//		var criterio = criterioOrigen.or(criterioDestino)
-//		busqueda = new Busqueda(criterio)
-//		var resultados = buscador.buscarVuelos(busqueda)
-//		
-//		Assert.assertEquals(resultados.length, 4)
-//	}
-//
-//	@Test
-//	def void testBuscarPorOrdenDeMenorCosto(){
-//		var ordenCosto = new OrdenPorCostoDeVuelo()
-//		ordenCosto.porMenorOrden
-//		busqueda = new Busqueda(criterioOrigen, ordenCosto)
-//		var resultados = buscador.buscarVuelos(busqueda)
-//		
-//		Assert.assertEquals(2, resultados.head.nroVuelo)
-//	}
-//	@Test
-//	def void testBuscarPorOrdenMenorTrayecto(){
-//		
-//		var ordenTrayecto = new OrdenPorEscalas()
-//		ordenTrayecto.porMenorOrden
-//		busqueda = new Busqueda(criterioOrigen, ordenTrayecto)		
-//		var resultados = buscador.buscarVuelos(busqueda)
-//		var vuelo = resultados.head
-//		
-//		Assert.assertEquals(2, vuelo.nroVuelo)
-//	}
-//	@Test
-//	def void testBuscarPorMenorDuracion(){
-//		
-//		
-//		var ordenDuracion = new OrdenPorDuracion()
-//		ordenDuracion.porMenorOrden
-//		busqueda = new Busqueda(criterioOrigen, ordenDuracion)
-//		var resultados = buscador.buscarVuelos(busqueda)
-//		
-//		Assert.assertEquals(1, resultados.get(0).nroVuelo)
-//		
-//	}
-//	
-//	@After
-//	def void testBorrarObjetosCreadosEnSetUp(){
-//		
-//		SessionManager.runInSession([
-//			repoPrueba.borrar("nombreAerolinea", prueba.nombreAerolinea)
-//			repoPrueba.borrar("nombreAerolinea", aerolineasArgentinas.nombreAerolinea)
-//			void
-//		])
-//	}
+	@Test
+	def void testBuscarVuelosPorUnCriterioComplicado(){
+		
+		/*
+		 *		origen USA y destino Argentina y llegaada 2016-5-20 
+		 * 		or
+		 * 		(salida 2016-5-20 o categoria de asiento Turista
+		 * 		and
+		 * 		nombre Aerolineas Argentinas y vuelos disponibles)
+		 * 
+		 * 		esto es igual a todos los vuelos de aerolineaas argentinas
+		 */
+
+		
+		var unFiltro = new CriterioPorOrigen("USA").and(new CriterioPorDestino("Argentina").and(new CriterioPorFechaDeLlegada('2016-5-20')))
+		var otroFiltro = new CriterioPorFechaDeSalida('2016-5-20').or(new CriterioPorCategoriaDeAsiento(TipoDeCategoria.TURISTA))
+		var ultimoFiltro = new CriterioPorNombreDeAerolinea("Aerolineas Argentinas").and(new CriterioPorVueloDisponible)
+		
+		var filtro = unFiltro.or(otroFiltro.and(ultimoFiltro))
+		busqueda = new Busqueda(filtro)
+		var resultados = sudo.buscar(busqueda)
+		
+		Assert.assertEquals(3, resultados.length)
+	}
+	
+	@Test
+	def void testBuscarVuelosYOrdenarlos(){
+		
+		var ordenDuracion = new OrdenPorDuracion()
+		var ordenEscala = new OrdenPorEscalas()
+		var ordenCosto = new OrdenPorCostoDeVuelo()
+		var orden = ordenCosto.and(ordenDuracion).and(ordenEscala)
+		orden.porMenorOrden
+		busqueda = new Busqueda(orden)
+		var resultados = sudo.buscar(busqueda)
+		
+		//verificar al vuelo con menor duracion, menor escala y menor costo
+		Assert.assertEquals(2, resultados.head.nroVuelo)
+	}
+	
+	@Test
+	def void testVolverARealizarUltimaConsultaDeberiaDarmeMismoResultadoQueTestAnterior(){
+		
+		var ordenEscala = new OrdenPorEscalas()
+		busqueda = new Busqueda(ordenEscala)
+		sudo.buscar(busqueda)
+		var ultimaBusqueda = sudo.ultimaBusqueda
+		
+		Assert.assertEquals(1, ultimaBusqueda.idBusqueda)
+	}
+	
+	@Test
+	def void testReservarUnAsientoDisponiblePorUnUsuarioLoActualiza(){
+		var usuarioPepe = new Usuario()
+		usuarioPepe.nickname = "jesus"
+		var asientoReservado = sudo.reservar(usuarioPepe, prueba, vuelo , tramoEstadosUnidosArgentina, asientoLibrePrimera)
+		
+		Assert.assertTrue(asientoReservado.reservadoPorUsuario != null)
+		
+		Assert.assertEquals(usuarioPepe, asientoReservado.reservadoPorUsuario)
+	}
+	
+	//problema al eliminar busquedas
+	@After
+	def void testEliminarAerolineas(){
+		
+		sudo.eliminarAerolinea(prueba)
+		sudo.eliminarAerolinea(aerolineasArgentinas)
+		//sudo.eliminarBusquedas()
+	}
 
 }
