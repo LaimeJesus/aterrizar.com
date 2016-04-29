@@ -1,20 +1,19 @@
 package ar.edu.unq.epers.aterrizar.servicios
 
-import ar.edu.unq.epers.aterrizar.domain.Usuario
 import ar.edu.unq.epers.aterrizar.domain.Aerolinea
-import ar.edu.unq.epers.aterrizar.domain.Vuelo
-import ar.edu.unq.epers.aterrizar.domain.Tramo
 import ar.edu.unq.epers.aterrizar.domain.Asiento
-import ar.edu.unq.epers.aterrizar.persistence.RepositorioAerolinea
-import java.util.List
-import ar.edu.unq.epers.aterrizar.domain.buscador.Busqueda
+import ar.edu.unq.epers.aterrizar.domain.Tramo
+import ar.edu.unq.epers.aterrizar.domain.Usuario
+import ar.edu.unq.epers.aterrizar.domain.Vuelo
 import ar.edu.unq.epers.aterrizar.domain.buscador.BuscadorDeVuelos
-import ar.edu.unq.epers.aterrizar.persistence.RepositorioBusquedas
+import ar.edu.unq.epers.aterrizar.domain.buscador.Busqueda
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorCostoDeVuelo
-import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorEscalas
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion
-import ar.edu.unq.epers.aterrizar.exceptions.ReservarException
+import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorEscalas
+import ar.edu.unq.epers.aterrizar.persistence.RepositorioAerolinea
+import ar.edu.unq.epers.aterrizar.persistence.RepositorioBusquedas
 import ar.edu.unq.epers.aterrizar.persistence.SessionManager
+import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
@@ -37,29 +36,11 @@ class ServicioDeReservaDeVuelos {
 	def Asiento reservar(Usuario usuario, Aerolinea unaAerolinea, Vuelo unVuelo, Tramo unTramo, Asiento unAsiento) {
 
 		var aerolineaFromRepo = this.traerAerolinea(unaAerolinea)
-		var vuelos = aerolineaFromRepo.vuelos
 
-		//no estoy seguro pero creo que esto funcionaria asi
-		if(vuelos.exists[Vuelo v|v.nroVuelo == unVuelo.nroVuelo]) {
-			var tramos = unVuelo.tramos
-			if(tramos.exists[Tramo t|t.nroTramo == unTramo.nroTramo]) {
-				var asientos = unTramo.asientos
-				if(asientos.exists[Asiento a|a.nroAsiento == unAsiento.nroAsiento]) {
-					var asientoAReservar = asientos.get(asientos.indexOf(unAsiento))
-					if(!asientoAReservar.reservado) {
-						return this.reservarAsiento(aerolineaFromRepo, asientoAReservar, usuario)
-					} else {
-						throw new ReservarException("asiento reservado")
-					}
-				} else {
-					throw new ReservarException("asiento no pertenece a ese tramo")
-				}
-			} else {
-				throw new ReservarException("ese tramo no pertenece a ese vuelo")
-			}
-		} else {
-			throw new ReservarException("ese vuelo no pertenece a esa aerolinea")
-		}
+		aerolineaFromRepo.validarReserva(unVuelo, unTramo, unAsiento)
+		
+		reservarAsiento(aerolineaFromRepo, unAsiento, usuario)
+		// el param unAsiento es el asiento que va reservar?		
 	}
 
 //caso de uso: un usuario quiere buscar vuelos por un criterio y algun orden

@@ -3,6 +3,7 @@ package ar.edu.unq.epers.aterrizar.domain
 import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.List
 import java.util.ArrayList
+import ar.edu.unq.epers.aterrizar.exceptions.AerolineaNoExisteException
 
 @Accessors
 class Aerolinea {
@@ -35,6 +36,15 @@ class Aerolinea {
 	
 	def removerVuelo(Vuelo vuelo) {
 		vuelos.remove(vuelo)
+	}
+	
+	def validarReserva(Vuelo vuelo, Tramo tramo, Asiento asiento) {
+		
+		if(!vuelos.exists[Vuelo v|v.nroVuelo == vuelo.nroVuelo]) {
+			throw new AerolineaNoExisteException("no existe ese vuelo")
+		}
+		
+		vuelo.validarReserva(tramo,asiento)
 	}
 	
 }

@@ -298,6 +298,23 @@ class ServicioDeReservaDeVuelosTest {
 		Assert.assertEquals(usuarioPepe, asientoReservado.reservadoPorUsuario)
 	}
 	
+	@Test
+	def void testReservarUnAsientoExceptionPorUnUsuario(){
+		var usuarioPepe = new Usuario()
+		usuarioPepe.nickname = "jesus"
+		
+		var tramoArg_EEUU = vuelo.tramos.get(0)
+		var asientoOK = tramoArg_EEUU.asientos.get(0)
+		
+		var asientoReservado = sudo.reservar(usuarioPepe, prueba , vuelo , tramoArg_EEUU, asientoOK)
+		
+		// asiento esta reservado exception
+		Assert.assertFalse(asientoReservado.reservadoPorUsuario != null)
+		
+		//prueba que sea el usuario correcto
+		Assert.assertNotEquals(usuarioPepe, asientoOK.reservadoPorUsuario)
+	}
+	
 	@After
 	def void testEliminarAerolineasYBusquedas(){
 		
