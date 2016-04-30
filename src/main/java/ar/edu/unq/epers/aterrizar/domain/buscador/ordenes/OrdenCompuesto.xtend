@@ -7,7 +7,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class OrdenCompuesto extends Orden{
 	
 	List<Orden> grupoDeOrdenes
-	String query
+	String orderBy
 	
 	new(){
 		
@@ -18,16 +18,18 @@ class OrdenCompuesto extends Orden{
 	
 	override getOrdenadoPor() {
 		
-		query = intercalarOrdenes(",", grupoDeOrdenes)
-		return query
+		orderBy = intercalarOrdenes(",", grupoDeOrdenes)
+		return orderBy
 	}
 	
-	def porMenorOrden() {
-		query = intercalarOrdenes(" asc,", grupoDeOrdenes)
+	override def porMenorOrden() {
+		grupoDeOrdenes.forEach[Orden o| o.porMenorOrden]
+		null
 	}
 	
-	def porMayorOrden() {
-		query = intercalarOrdenes(" desc,", grupoDeOrdenes)	
+	override def porMayorOrden() {
+		grupoDeOrdenes.forEach[Orden o| o.porMayorOrden]
+		null
 	}
 	
 }

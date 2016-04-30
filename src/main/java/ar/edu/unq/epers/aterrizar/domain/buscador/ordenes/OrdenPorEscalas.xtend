@@ -5,21 +5,8 @@ import org.eclipse.xtend.lib.annotations.Accessors
 @Accessors
 class OrdenPorEscalas extends Orden{
 	
-	String query = "vuelos.tramos.size"
 	new(){
-		
+		orderBy = "vuelos.tramos.size"
+		sortedBy = ""
 	}
-	
-	override getOrdenadoPor() {
-		return query
-	}
-
-	def porMenorOrden() {
-		query = query + " asc"
-	}
-	
-	def porMayorOrden() {
-		query = query + " desc"
-	}
-	
 }

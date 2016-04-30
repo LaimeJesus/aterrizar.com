@@ -10,38 +10,35 @@
 			<generator class="native"/>
 		</id>
 	    <discriminator column="Order_Type" type="string"/>
-		  
+		
+		<property name="orderBy" type="string"></property>
+		<property name="sortedBy" type="string"></property>
+		 
 		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenCompuesto" 
-		discriminator-value="OrdenCompuesto">
+		discriminator-value="OrdenCompuesto"
+		extends="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden">
 
 			<list name="grupoDeOrdenes" cascade="all" inverse="false">
 			<key column="idOrdenPadre"></key>
 			<list-index column="posicionDeOrden"></list-index>
 			<one-to-many class="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden"/>
 			</list>
-	      	<property name="query" type="string">
-	      		<column name="Query" length="80" not-null="false" unique="false"/>
-	      	</property>
 		</subclass>
 		
 		
 		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorCostoDeVuelo"
-		discriminator-value="PorCostoDeVuelo">
-	      	<property name="query" type="string">
-	      		<column name="Query" length="80" not-null="false" unique="false"/>
-	      	</property>
+		discriminator-value="PorCostoDeVuelo"
+		extends="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden">
 		</subclass>
+
 		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion" 
-		discriminator-value="PorDuracion">
-	      	<property name="query" type="string">
-	      		<column name="Query" length="80" not-null="false" unique="false"/>
-	      	</property>
+		discriminator-value="PorDuracion"
+		extends="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden">
 		</subclass>
+
 		<subclass name="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorEscalas" 
-		discriminator-value="PorEscalas">
-	      	<property name="query" type="string">
-	      		<column name="Query" length="80" not-null="false" unique="false"/>
-	      	</property>
+		discriminator-value="PorEscalas"
+		extends="ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.Orden">
 		</subclass>
 
 	</class>

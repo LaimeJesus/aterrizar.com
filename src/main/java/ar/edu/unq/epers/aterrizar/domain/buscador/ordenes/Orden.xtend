@@ -7,7 +7,10 @@ import org.eclipse.xtend.lib.annotations.Accessors
 @Accessors
 abstract class Orden {
 	
-	Integer idOrden
+	private Integer idOrden
+	private String orderBy 
+	private String sortedBy
+	
 	new(){
 		
 	}
@@ -22,10 +25,20 @@ abstract class Orden {
 		return grupo
 	}
 
-	def abstract String getOrdenadoPor()
+	def String getOrdenadoPor(){
+		var res = this.getOrderBy() + "" + this.getSortedBy()
+		res
+	}
 	
 	def intercalarOrdenes(String operador, List<Orden> ordenes) {
 		var res = String.join(operador, ordenes.map[c| c.getOrdenadoPor()])
 		return res
+	}
+	def porMenorOrden() {
+		sortedBy = " asc"
+	}
+	
+	def porMayorOrden() {
+		sortedBy = " desc"
 	}
 }
