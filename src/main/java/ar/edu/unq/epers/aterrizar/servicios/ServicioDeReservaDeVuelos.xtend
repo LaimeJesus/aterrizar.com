@@ -61,7 +61,7 @@ class ServicioDeReservaDeVuelos {
 	def Busqueda getUltimaBusqueda() {
 		var resultado = SessionManager.runInSession(
 			[
-				repositorioDeBusquedas.traerPorId
+				repositorioDeBusquedas.traerUltimaBusqueda
 			])
 		return resultado
 	}
@@ -113,15 +113,10 @@ class ServicioDeReservaDeVuelos {
 		return asiento
 	}
 
-	def actualizarReservas(Aerolinea aerolinea, Asiento asiento, Usuario usuario) {
-
-		this.actualizarAerolinea(aerolinea)
-	}
-
-	def actualizarAerolinea(Aerolinea aerolinea) {
+	def actualizarAerolinea(Aerolinea unaAerolinea) {
 		SessionManager.runInSession(
 			[
-				repositorioDeAerolineas.actualizar(aerolinea, "nombreAerolinea", aerolinea.nombreAerolinea)
+				repositorioDeAerolineas.actualizar(unaAerolinea)
 				null
 			])
 	}
@@ -135,9 +130,9 @@ class ServicioDeReservaDeVuelos {
 		return resultado
 	}
 
-	def eliminarAerolinea(Aerolinea unaAero) {
+	def eliminarAerolinea(Aerolinea unaAerolinea) {
 		SessionManager.runInSession [|
-			repositorioDeAerolineas.borrar("nombreAerolinea", unaAero.nombreAerolinea)
+			repositorioDeAerolineas.borrar(unaAerolinea)
 			null
 		]
 	}
@@ -149,7 +144,7 @@ class ServicioDeReservaDeVuelos {
 		]
 	}
 
-	def existeAeroliena(Aerolinea aerolinea) {
+	def existeAerolinea(Aerolinea aerolinea) {
 		return SessionManager.runInSession [|
 			repositorioDeAerolineas.contiene("nombreAerolinea", aerolinea.nombreAerolinea)
 		]
@@ -166,7 +161,7 @@ class ServicioDeReservaDeVuelos {
 		if(!busquedas.isEmpty){
 		SessionManager.runInSession [|
 			for(Busqueda busqueda : busquedas){
-				repositorioDeBusquedas.borrarBusqueda(busqueda)
+				repositorioDeBusquedas.borrar(busqueda)
 			}
 				
 			null

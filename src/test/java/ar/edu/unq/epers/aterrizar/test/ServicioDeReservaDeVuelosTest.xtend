@@ -196,8 +196,8 @@ class ServicioDeReservaDeVuelosTest {
 	 
 	@Test
 	def void testCrearAerolineaParaProbarBaseDeDatos(){
-		var existeAerolienas = sudo.existeAeroliena(aerolineasArgentinas)
-		var existePrueba = sudo.existeAeroliena(prueba)
+		var existeAerolienas = sudo.existeAerolinea(aerolineasArgentinas)
+		var existePrueba = sudo.existeAerolinea(prueba)
 		
 		Assert.assertEquals(true, existeAerolienas)
 		Assert.assertEquals(true, existePrueba)
