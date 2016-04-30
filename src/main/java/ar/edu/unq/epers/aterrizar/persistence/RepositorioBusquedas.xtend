@@ -3,6 +3,7 @@ package ar.edu.unq.epers.aterrizar.persistence
 import ar.edu.unq.epers.aterrizar.domain.buscador.Busqueda
 import java.util.List
 import java.util.ArrayList
+import ar.edu.unq.epers.aterrizar.exceptions.BusquedaNoExisteException
 
 class RepositorioBusquedas extends RepositorioHibernate<Busqueda>{
 	
@@ -22,6 +23,10 @@ class RepositorioBusquedas extends RepositorioHibernate<Busqueda>{
 			
 	override getTable() {
 		"Busqueda"
+	}
+	
+	override objectDoesnotExist() {
+		throw new BusquedaNoExisteException("NO existe esta busqueda")
 	}
 	
 }

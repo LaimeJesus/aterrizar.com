@@ -30,15 +30,14 @@ abstract class RepositorioHibernate<T> {
 		
 		var query = session.createQuery(stmt)
 		query.setParameter(field, value)
-		
-		var objects = query.list() as List<T>
-		
-		if(objects.isEmpty){
-			return null
+		var results = query.list as List<T>
+		if(results.isEmpty){
+			objectDoesnotExist
 		}
-		
-		return objects.get(0)
+		return results.get(0)
 	}
+	
+	def abstract void objectDoesnotExist()
 	
 	def List<T> traerTodos(){
 		var stmt = stmtBase
