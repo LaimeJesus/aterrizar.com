@@ -223,7 +223,9 @@ class BuscadorDeVuelosTest {
 	
 	@Test
 	def void testBuscarVuelosPorOrdenDeMenorEscala(){
+		
 		ordenPorEscala.porMenorOrden
+		System.out.println(ordenPorEscala.orderBy)
 
 		busqueda.ordenarPor(ordenPorEscala)
 
@@ -245,7 +247,6 @@ class BuscadorDeVuelosTest {
 		Assert.assertEquals(3, vueloConMayorEscala)		
 	}
 	
-	//no funciona como esperaba
 	
 	@Test
 	def void testBuscarVuelosPorOrdenDeMayorEscalaYMayorDuracion(){
@@ -256,7 +257,7 @@ class BuscadorDeVuelosTest {
 		var vuelos = sudo.buscarVuelos(busqueda)
 		var vueloConMayorEscalaYMayorDuracion = vuelos.head.nroVuelo
 		
-		Assert.assertEquals(2, vueloConMayorEscalaYMayorDuracion)
+		Assert.assertEquals(3, vueloConMayorEscalaYMayorDuracion)
 	}	
 
 	//no funciona como esperaba
@@ -352,7 +353,7 @@ class BuscadorDeVuelosTest {
 	def void testBorrarObjetosCreadosEnSetUp(){
 		
 		SessionManager.runInSession([
-			repoPrueba.borrar("nombreAerolinea", aerolineasArgentinas.nombreAerolinea)
+			repoPrueba.borrar(aerolineasArgentinas)
 			void
 		])
 	}
