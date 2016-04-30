@@ -30,12 +30,8 @@ class Busqueda {
 		return "select distinct vuelos from Aerolinea as aerolinea join aerolinea.vuelos as vuelos join vuelos.tramos as tramos join tramos.asientos as asientos"
 	}
 	
-	def getCondicion(){
-		return " where " + filtro.condicion
-	}
-	
 	def getQuery(){
-		var query = queryBase
+		var query = getQueryBase()
 		var condicion = armarCondicion()
 		var ordenado = armarOrden()
 		var queryAEjecutar = query + condicion + ordenado

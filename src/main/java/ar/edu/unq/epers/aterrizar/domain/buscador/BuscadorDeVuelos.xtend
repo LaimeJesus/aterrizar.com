@@ -25,6 +25,7 @@ class BuscadorDeVuelos {
 		[|
 			var sesion = aerolineas.getSession()
 			var query = b.getQuery()
+			System.out.println(query)
 			var queryResultado = sesion.createQuery(query)
 			
 			queryResultado.list() as List<Vuelo>
