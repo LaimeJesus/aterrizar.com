@@ -22,6 +22,7 @@ import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorCategoria
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorVueloDisponible
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorEscalas
+import ar.edu.unq.epers.aterrizar.persistence.SessionManager
 
 /*
  * Esta clase esta para testear al servicio de reserva de asientos. Es decir integra los repositorios de Aerolinea y Busqueda.
@@ -38,6 +39,7 @@ class ServicioDeReservaDeVuelosTest {
 	Tramo tramoEstadosUnidosArgentina
 	Vuelo vuelo
 	Asiento asientoLibrePrimera
+	Usuario usuario
 	
 	@Before
 	def void setUp(){
@@ -192,6 +194,15 @@ class ServicioDeReservaDeVuelosTest {
 		//aqui comienza el verdadero set up
 		sudo.agregarAerolinea(aerolineasArgentinas)
 		sudo.agregarAerolinea(prueba)
+		
+		usuario = new Usuario
+		usuario.nickname = "Pepe"
+		
+		SessionManager.runInSession[|
+			var s = SessionManager.getSession
+			s.persist(usuario)
+			null
+		]
 	}
 	 
 	@Test
@@ -219,6 +230,9 @@ class ServicioDeReservaDeVuelosTest {
 		//vrificar orden
 		Assert.assertEquals(resultados.head.nroVuelo, 2)
 		
+		//prueba que se agrego una busqueda
+		var busquedas = sudo.busquedas
+		Assert.assertEquals(1, busquedas.length)		
 	}
 	 
 	@Test
@@ -262,7 +276,7 @@ class ServicioDeReservaDeVuelosTest {
 	}
 	
 	@Test
-	def void testVolverARealizarUltimaConsultaDeberiaDarmeUnaBusquedaConIdMayorA1(){
+	def void testVolverARealizarUltimaConsultaDeberiaDarmeUnaBusquedaConIdMayorOIgualAlMaximoDeLosIdDeLasBusquedas(){
 		
 		//esto va cambiando ya que despues de cada test se vuelve a crear una busqueda con un nuevo id
 		
@@ -273,6 +287,7 @@ class ServicioDeReservaDeVuelosTest {
 		var ultimaBusqueda = sudo.ultimaBusqueda
 		
 		//buscando maximo deberia usar fold o algo mejorcito
+
 		var max = ultimaBusqueda
 		for(Busqueda b : busquedas){
 			if(b.idBusqueda > max.idBusqueda){
@@ -286,19 +301,26 @@ class ServicioDeReservaDeVuelosTest {
 	}
 	
 	@Test
-	def void testReservarUnAsientoDisponiblePorUnUsuarioLoActualiza(){
-		var usuarioPepe = new Usuario()
-		usuarioPepe.nickname = "jesus"
-		var asientoReservado = sudo.reservar(usuarioPepe, prueba, vuelo , tramoEstadosUnidosArgentina, asientoLibrePrimera)
+	def void testReservarUnAsientoDisponiblePorUnUsuarioLoReserva(){
+		
+		var unUsuario = usuario
+		var unaAerolinea = prueba
+		var unVuelo = vuelo
+		var unTramo = tramoEstadosUnidosArgentina
+		var unAsiento = asientoLibrePrimera
+		
+		System.out.println(unaAerolinea.contieneVuelo(unVuelo))
+		
+		var asientoReservado = sudo.reservar(unUsuario, unaAerolinea, unVuelo , unTramo, unAsiento)
 		
 		//prueba que asiento esta reservado
-		Assert.assertTrue(asientoReservado.reservadoPorUsuario != null)
+		Assert.assertTrue(asientoReservado.isReservado)
 		
 		//prueba que sea el usuario correcto
-		Assert.assertEquals(usuarioPepe, asientoReservado.reservadoPorUsuario)
+		Assert.assertEquals(usuario, asientoReservado.reservadoPorUsuario)
 	}
 	
-	@Test
+	@Test(expected=Exception)
 	def void testReservarUnAsientoExceptionPorUnUsuario(){
 		var usuarioPepe = new Usuario()
 		usuarioPepe.nickname = "jesus"
@@ -321,6 +343,12 @@ class ServicioDeReservaDeVuelosTest {
 		sudo.eliminarAerolinea(prueba)
 		sudo.eliminarAerolinea(aerolineasArgentinas)
 		sudo.eliminarBusquedas()
+		
+		SessionManager.runInSession[|
+			var s = SessionManager.getSession
+			s.delete(usuario)
+			null
+		]
 	}
 
 }

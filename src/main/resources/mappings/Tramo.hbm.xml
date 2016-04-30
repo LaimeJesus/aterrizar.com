@@ -9,28 +9,36 @@
 			<column name="idTramo"/>
 			<generator class="native"/>
 		</id>
+		
 		<property name="nroTramo" type="java.lang.Integer">
 			<column name="nroTramo" not-null="false" unique="false"/>
 		</property>
+		
 		<property name="destino" type="string">
 			<column name="destino" length="45" not-null="true" unique="false" />
 		</property>
+		
        	<property name="origen" type="string">
        		<column name="origen" length="45" not-null="true" unique="false"/>
        	</property>
+       	
        <property name="precioBase" type="java.lang.Integer">
        		<column name="precioBase" not-null="true" unique="false"/>
        </property>
+       
        <property name="fechaDeSalida" type="java.sql.Date">
        		<column name="fechaDeSalida" not-null="true" unique="false"/>
        </property>
+       
        <property name="fechaDeLlegada" type="java.sql.Date">
        		<column name="fechaDeLlegada" not-null="true" unique="false"/>
        </property>
-      <bag name="asientos" cascade="all" lazy="false">
+       
+      <bag name="asientos" cascade="all" lazy="false" inverse="false">
          <key column="idTramo"/>
          <one-to-many class="ar.edu.unq.epers.aterrizar.domain.Asiento"/>
       </bag>     
+      
        <property name="duracionDeTramo" type="java.lang.Long">
       	<column name="duracionDeTramo" not-null="true" unique="false"/>
       </property>
