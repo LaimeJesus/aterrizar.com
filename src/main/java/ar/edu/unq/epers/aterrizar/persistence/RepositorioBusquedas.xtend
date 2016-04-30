@@ -16,7 +16,7 @@ class RepositorioBusquedas extends RepositorioHibernate<Busqueda>{
 		}
 		return busquedas
 	}
-	def traerPorId(){
+	def traerUltimaBusqueda(){
 		return traerBusquedas.head
 	}
 			

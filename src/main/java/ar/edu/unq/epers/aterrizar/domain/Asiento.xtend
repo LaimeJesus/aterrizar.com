@@ -2,6 +2,7 @@ package ar.edu.unq.epers.aterrizar.domain
 
 import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
+import ar.edu.unq.epers.aterrizar.exceptions.ReservarException
 
 @Accessors
 
@@ -41,6 +42,14 @@ class Asiento {
 	
 	def equals(Asiento a){
 		return nroAsiento.equals(a.nroAsiento)
+	}
+	
+	def validarReserva() {
+		if(reservado) {
+			throw new ReservarException("el asiento esta reservado")
+		}
+		//return true
+		// no me parece algo muy logico
 	}
 	
 }
