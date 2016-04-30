@@ -5,6 +5,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.ArrayList
 import java.sql.Date
 import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
+import ar.edu.unq.epers.aterrizar.exceptions.AsientoNoExisteException
 
 @Accessors
 
@@ -104,8 +105,19 @@ class Tramo {
 		asientos.remove(asiento)
 	}
 	
+	def contieneAsiento(Asiento asiento){
+		asientos.exists[it.equals(asiento)]
+	}
+	
 	def equals(Tramo t){
 		return nroTramo.equals(t.nroTramo)
+	}
+	def void validarReserva(Asiento asiento){
+
+		if(!contieneAsiento(asiento)){
+			throw new AsientoNoExisteException("no existe el asiento con nro " + asiento.nroAsiento.toString)
+		}
+		asiento.validarReserva()
 	}
 	
 }

@@ -2,7 +2,7 @@ package ar.edu.unq.epers.aterrizar.domain
 
 import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
-import ar.edu.unq.epers.aterrizar.exceptions.ReservarException
+import ar.edu.unq.epers.aterrizar.exceptions.AsientoReservadoException
 
 @Accessors
 
@@ -45,11 +45,10 @@ class Asiento {
 	}
 	
 	def validarReserva() {
+		
 		if(reservado) {
-			throw new ReservarException("el asiento esta reservado")
+			throw new AsientoReservadoException("el asiento esta reservado")
 		}
-		//return true
-		// no me parece algo muy logico
 	}
 	
 }

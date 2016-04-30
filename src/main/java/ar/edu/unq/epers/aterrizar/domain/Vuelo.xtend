@@ -3,7 +3,7 @@ package ar.edu.unq.epers.aterrizar.domain
 import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.List
 import java.util.ArrayList
-import ar.edu.unq.epers.aterrizar.exceptions.ReservarException
+import ar.edu.unq.epers.aterrizar.exceptions.TramoNoExisteException
 
 @Accessors
 class Vuelo {
@@ -60,13 +60,17 @@ class Vuelo {
 		costoDeVuelo = costoDeVuelo - tramo.precioBase
 	}
 	
-	def validarReserva(Tramo tramo, Asiento asiento) {
-		
-		if(!tramos.exists[Tramo t|t.nroTramo == tramo.nroTramo]) {
-			throw new ReservarException("no existe ese tramo")
+	def contieneTramo(Tramo tramo){
+		tramos.exists[it.equals(tramo)] 
+	}
+	
+	def void validarReserva(Tramo tramo, Asiento asiento) {
+
+		if(!contieneTramo(tramo)){
+			throw new TramoNoExisteException("no existe tramo " + tramo.nroTramo.toString)
 		}
-		
-		asiento.validarReserva()
+		tramo.validarReserva(asiento)
+
 	}
 
 }

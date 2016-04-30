@@ -1,8 +1,7 @@
 package ar.edu.unq.epers.aterrizar.exceptions
 
-class ReservarException extends Exception{
+class AsientoReservadoException extends Exception{
 	new(String msg){
 		super(msg)
 	}
-	
 }

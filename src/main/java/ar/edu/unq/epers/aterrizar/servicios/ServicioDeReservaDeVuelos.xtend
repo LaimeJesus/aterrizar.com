@@ -35,7 +35,12 @@ class ServicioDeReservaDeVuelos {
 	//caso de uso un usuario quiere reservar un asiento de un tramo de un vuelo de una Aerolinea
 	def Asiento reservar(Usuario usuario, Aerolinea unaAerolinea, Vuelo unVuelo, Tramo unTramo, Asiento unAsiento) {
 
-		var aerolineaFromRepo = this.traerAerolinea(unaAerolinea)
+		var aerolineaFromRepo = traerAerolinea(unaAerolinea)
+		
+					System.out.println(aerolineaFromRepo.nombreAerolinea)
+		aerolineaFromRepo.vuelos.forEach[
+					System.out.println(it.nroVuelo)			
+		]
 
 		aerolineaFromRepo.validarReserva(unVuelo, unTramo, unAsiento)
 		
