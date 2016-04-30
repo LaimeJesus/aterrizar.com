@@ -34,9 +34,7 @@ abstract class Criterio {
 	def abstract String getCondicion()
 	
 	def intercalarCondiciones(String operador, List<Criterio> criterios) {
-		
-		var res = String.join(operador, criterios.map[c| c.getCondicion()])
-		return res
+		criterios.map[it.condicion ].join(operador)
 	}
 	
 }
