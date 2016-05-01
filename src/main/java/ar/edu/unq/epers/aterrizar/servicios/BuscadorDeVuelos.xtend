@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.aterrizar.domain.buscador
+package ar.edu.unq.epers.aterrizar.servicios
 
 import ar.edu.unq.epers.aterrizar.persistence.RepositorioAerolinea
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -20,7 +20,7 @@ class BuscadorDeVuelos {
 	}
 
 	
-	def buscarVuelos(Busqueda b){
+	def buscarVuelos(ar.edu.unq.epers.aterrizar.domain.buscador.Busqueda b){
 		var res = SessionManager.runInSession
 		[|
 			var sesion = aerolineas.getSession()

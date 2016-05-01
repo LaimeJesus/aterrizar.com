@@ -9,7 +9,6 @@ import ar.edu.unq.epers.aterrizar.domain.Tramo
 import ar.edu.unq.epers.aterrizar.domain.Vuelo
 import ar.edu.unq.epers.aterrizar.persistence.RepositorioAerolinea
 import ar.edu.unq.epers.aterrizar.domain.Aerolinea
-import ar.edu.unq.epers.aterrizar.domain.buscador.BuscadorDeVuelos
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorCostoDeVuelo
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorEscalas
@@ -22,6 +21,7 @@ import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorVueloDisp
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorFechaDeLlegada
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorFechaDeSalida
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorCategoriaDeAsiento
+import ar.edu.unq.epers.aterrizar.servicios.BuscadorDeVuelos
 
 /*
  * Esta clase esta para testear al buscador de vuelos integrado con busquedas, estas tienen criterios y ordenes.
