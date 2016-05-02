@@ -8,7 +8,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 abstract class Orden {
 	
 	private Integer idOrden
-	private String orderBy 
+	private String orderBy
 	private String sortedBy
 	
 	new(){

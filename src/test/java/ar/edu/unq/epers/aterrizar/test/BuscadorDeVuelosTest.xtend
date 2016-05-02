@@ -33,6 +33,7 @@ import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorCategoria
 class BuscadorDeVuelosTest {
 	
 	BuscadorDeVuelos sudo
+	
 	Busqueda busqueda
 	
 	Aerolinea aerolineasArgentinas
@@ -328,6 +329,7 @@ class BuscadorDeVuelosTest {
 
 	@Test
 	def void testFiltrarPorFechaDeLlegada(){
+		
 		busqueda.filtrarPor(llegada2016520)
 		var resultados = sudo.buscarVuelos(busqueda)
 		
@@ -350,12 +352,14 @@ class BuscadorDeVuelosTest {
 	}
 
 	@After
-	def void testBorrarObjetosCreadosEnSetUp(){
+	def void testBorrarBusquedasCreadasEnElSetUp(){
+		SessionManager.runInSession[|
+		val session = SessionManager.getSession()
+		session.delete(aerolineasArgentinas)
+		null
+		]
 		
-		SessionManager.runInSession([
-			repoPrueba.borrar(aerolineasArgentinas)
-			void
-		])
+		sudo.eliminarBusquedas()
 	}
 	
 }

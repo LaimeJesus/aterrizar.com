@@ -8,20 +8,9 @@ import org.junit.Assert
 import ar.edu.unq.epers.aterrizar.domain.Vuelo
 import ar.edu.unq.epers.aterrizar.domain.Tramo
 import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
-import ar.edu.unq.epers.aterrizar.domain.buscador.Busqueda
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDeReservaDeVuelos
 import ar.edu.unq.epers.aterrizar.domain.Asiento
 import ar.edu.unq.epers.aterrizar.domain.Usuario
-import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorNombreDeAerolinea
-import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorCostoDeVuelo
-import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorOrigen
-import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorFechaDeLlegada
-import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorDestino
-import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorFechaDeSalida
-import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorCategoriaDeAsiento
-import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorVueloDisponible
-import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion
-import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorEscalas
 import ar.edu.unq.epers.aterrizar.persistence.SessionManager
 
 /*
@@ -35,7 +24,6 @@ class ServicioDeReservaDeVuelosTest {
 	Aerolinea aerolineasArgentinas
 
 	ServicioDeReservaDeVuelos sudo
-	Busqueda busqueda
 	Tramo tramoEstadosUnidosArgentina
 	Vuelo vuelo
 	Asiento asientoLibrePrimera
@@ -204,7 +192,7 @@ class ServicioDeReservaDeVuelosTest {
 			null
 		]
 	}
-	 
+	
 	@Test
 	def void testCrearAerolineaParaProbarBaseDeDatos(){
 		var existeAerolienas = sudo.existeAerolinea(aerolineasArgentinas)
@@ -212,92 +200,6 @@ class ServicioDeReservaDeVuelosTest {
 		
 		Assert.assertEquals(true, existeAerolienas)
 		Assert.assertEquals(true, existePrueba)
-	}
-	
-	
-	@Test
-	def void testBuscarVuelosConUnFiltroDeNombreYOrdenDeCosto(){
-		var filtro = new CriterioPorNombreDeAerolinea("Aerolineas Argentinas")
-		var orden = new OrdenPorCostoDeVuelo
-		orden.porMenorOrden
-		busqueda = new Busqueda(filtro, orden)
-
-		var resultados = sudo.buscar(busqueda)
-		
-		//verificar si funciona el filtro
-		Assert.assertEquals(resultados.length, 3)
-		
-		//vrificar orden
-		Assert.assertEquals(resultados.head.nroVuelo, 2)
-		
-		//prueba que se agrego una busqueda
-		var busquedas = sudo.busquedas
-		Assert.assertEquals(1, busquedas.length)		
-	}
-	 
-	@Test
-	def void testBuscarVuelosPorUnFiltroComplicado(){
-		
-		/*
-		 *		origen USA y destino Argentina y llegaada 2016-5-20 
-		 * 		or
-		 * 		(salida 2016-5-20 o categoria de asiento Turista
-		 * 		and
-		 * 		nombre Aerolineas Argentinas y vuelos disponibles)
-		 * 
-		 * 		esto es igual a todos los vuelos de aerolineaas argentinas
-		 */
-
-		
-		var unFiltro = new CriterioPorOrigen("USA").and(new CriterioPorDestino("Argentina").and(new CriterioPorFechaDeLlegada('2016-5-20')))
-		var otroFiltro = new CriterioPorFechaDeSalida('2016-5-20').or(new CriterioPorCategoriaDeAsiento(TipoDeCategoria.TURISTA))
-		var ultimoFiltro = new CriterioPorNombreDeAerolinea("Aerolineas Argentinas").and(new CriterioPorVueloDisponible)
-		
-		var filtro = unFiltro.or(otroFiltro.and(ultimoFiltro))
-		busqueda = new Busqueda(filtro)
-		var resultados = sudo.buscar(busqueda)
-		
-		Assert.assertEquals(3, resultados.length)
-	}
-	
-	@Test
-	def void testBuscarVuelosYOrdenarlos(){
-		
-		var ordenDuracion = new OrdenPorDuracion()
-		var ordenEscala = new OrdenPorEscalas()
-		var ordenCosto = new OrdenPorCostoDeVuelo()
-		var orden = ordenCosto.and(ordenDuracion).and(ordenEscala)
-		orden.porMenorOrden
-		busqueda = new Busqueda(orden)
-		var resultados = sudo.buscar(busqueda)
-		
-		//verificar al vuelo con menor duracion, menor escala y menor costo
-		Assert.assertEquals(2, resultados.head.nroVuelo)
-	}
-	
-	@Test
-	def void testVolverARealizarUltimaConsultaDeberiaDarmeUnaBusquedaConIdMayorOIgualAlMaximoDeLosIdDeLasBusquedas(){
-		
-		//esto va cambiando ya que despues de cada test se vuelve a crear una busqueda con un nuevo id
-		
-		var ordenEscala = new OrdenPorEscalas()
-		busqueda = new Busqueda(ordenEscala)
-		sudo.buscar(busqueda)
-		var busquedas = sudo.busquedas
-		var ultimaBusqueda = sudo.ultimaBusqueda
-		
-		//buscando maximo deberia usar fold o algo mejorcito
-
-		var max = ultimaBusqueda
-		for(Busqueda b : busquedas){
-			if(b.idBusqueda > max.idBusqueda){
-				max = b
-			}
-		}
-		System.out.println(ultimaBusqueda.idBusqueda)
-		System.out.println("es mayor que")
-		System.out.println(max.idBusqueda)
-		Assert.assertTrue(ultimaBusqueda.idBusqueda >= max.idBusqueda)
 	}
 	
 	@Test
@@ -309,15 +211,13 @@ class ServicioDeReservaDeVuelosTest {
 		var unTramo = tramoEstadosUnidosArgentina
 		var unAsiento = asientoLibrePrimera
 		
-		System.out.println(unaAerolinea.contieneVuelo(unVuelo))
-		
 		var asientoReservado = sudo.reservar(unUsuario, unaAerolinea, unVuelo , unTramo, unAsiento)
 		
 		//prueba que asiento esta reservado
 		Assert.assertTrue(asientoReservado.isReservado)
 		
 		//prueba que sea el usuario correcto
-		Assert.assertEquals(usuario, asientoReservado.reservadoPorUsuario)
+		Assert.assertEquals(unUsuario, asientoReservado.reservadoPorUsuario)
 	}
 	
 	@Test(expected=Exception)
@@ -342,11 +242,10 @@ class ServicioDeReservaDeVuelosTest {
 		
 		sudo.eliminarAerolinea(prueba)
 		sudo.eliminarAerolinea(aerolineasArgentinas)
-		sudo.eliminarBusquedas()
 		
 		SessionManager.runInSession[|
-			var s = SessionManager.getSession
-			s.delete(usuario)
+			var session = SessionManager.getSession
+			session.delete(usuario)
 			null
 		]
 	}
