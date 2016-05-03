@@ -5,8 +5,6 @@ import ar.edu.unq.epers.aterrizar.domain.Asiento
 import ar.edu.unq.epers.aterrizar.domain.Tramo
 import ar.edu.unq.epers.aterrizar.domain.Usuario
 import ar.edu.unq.epers.aterrizar.domain.Vuelo
-import ar.edu.unq.epers.aterrizar.domain.buscador.BuscadorDeVuelos
-import ar.edu.unq.epers.aterrizar.domain.buscador.Busqueda
 import ar.edu.unq.epers.aterrizar.persistence.RepositorioAerolinea
 import ar.edu.unq.epers.aterrizar.persistence.RepositorioBusquedas
 import ar.edu.unq.epers.aterrizar.persistence.SessionManager
@@ -18,40 +16,38 @@ class ServicioDeReservaDeVuelos {
 
 	//Nuestro sistema de reserva de asientos
 	RepositorioAerolinea repositorioDeAerolineas
-	BuscadorDeVuelos buscador
 	RepositorioBusquedas repositorioDeBusquedas
 
 	new() {
 		repositorioDeAerolineas = new RepositorioAerolinea
-		buscador = new BuscadorDeVuelos(repositorioDeAerolineas)
-		repositorioDeBusquedas = new RepositorioBusquedas
-
 	}
 
 
 	//caso de uso un usuario quiere reservar un asiento de un tramo de un vuelo de una Aerolinea
 	def Asiento reservar(Usuario usuario, Aerolinea unaAerolinea, Vuelo unVuelo, Tramo unTramo, Asiento unAsiento) {
 
-		var aerolineaFromRepo = traerAerolinea(unaAerolinea)
+//no entiendo xq pero no me deja usar estos tres metodos para realizar la reserva. asi que lo hago todo en una session
+//		var aerolineaFromRepo = traerAerolinea(unaAerolinea)
+//		aerolineaFromRepo.validarReserva(unVuelo, unTramo, unAsiento)
+//		reservarAsiento(aerolineaFromRepo, unAsiento, usuario)
 		
-					System.out.println(aerolineaFromRepo.nombreAerolinea)
-		aerolineaFromRepo.vuelos.forEach[
-					System.out.println(it.nroVuelo)			
-		]
+		SessionManager.runInSession[|
+			val session = SessionManager.getSession()
 
-		aerolineaFromRepo.validarReserva(unVuelo, unTramo, unAsiento)
-		
-		reservarAsiento(aerolineaFromRepo, unAsiento, usuario)
-		// el param unAsiento es el asiento que va reservar?		
+			session.saveOrUpdate(usuario)
+			
+			val aero = repositorioDeAerolineas.traer("nombreAerolinea", unaAerolinea.nombreAerolinea)
+			
+			aero.validarReserva(unVuelo, unTramo, unAsiento)
+			
+			unAsiento.reservar(usuario)
+			
+			repositorioDeAerolineas.actualizar(aero)
+			null
+			]
+		unAsiento
 	}
 
-//caso de uso: un usuario quiere buscar vuelos por un criterio y algun orden
-	def List<Vuelo> buscar(Busqueda b) {
-
-		var resultado = buscador.buscarVuelos(b)
-
-		return resultado
-	}
 //caso de uso que tal vez no deberia estar
 	def List<Asiento> consultarAsientos(Tramo t) {
 		return t.asientosDisponibles

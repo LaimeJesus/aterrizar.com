@@ -18,7 +18,7 @@
 		</property>
 		<property name="nickname" type="string">
 		<!-- unique deberia ser true -->
-			<column name="nickname" not-null="true" unique="false"/>
+			<column name="nickname" not-null="false" unique="false"/>
 		</property>
 		<property name="password" type="string">
 			<column name="password" not-null="false" unique="false"/>

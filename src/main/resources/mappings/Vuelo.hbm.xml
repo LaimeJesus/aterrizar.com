@@ -10,7 +10,7 @@
 			<generator class="native"/>
 		</id>
 		<property name="nroVuelo" type="java.lang.Integer">
-			<column name="nroVuelo" not-null="true" unique="false" />
+			<column name="nroVuelo" not-null="false" unique="false" />
 		</property>
       
       <bag name="tramos" cascade="all" lazy="false" inverse="false">
@@ -19,11 +19,11 @@
       </bag>
       
       <property name="duracionDeVuelo" type="java.lang.Long">
-      	<column name="duracionDeVuelo" not-null="true" unique="false"/>
+      	<column name="duracionDeVuelo" not-null="false" unique="false"/>
       </property>
       
        <property name="costoDeVuelo" type="java.lang.Integer">
-       		<column name="costoDeVuelo" not-null="true" unique="false"/>
+       		<column name="costoDeVuelo" not-null="false" unique="false"/>
        </property>      
 	</class>
 </hibernate-mapping>

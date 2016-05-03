@@ -112,7 +112,7 @@ class Tramo {
 	def equals(Tramo t){
 		return nroTramo.equals(t.nroTramo)
 	}
-	def void validarReserva(Asiento asiento){
+	def void validarReserva(Asiento asiento) throws AsientoNoExisteException{
 
 		if(!contieneAsiento(asiento)){
 			throw new AsientoNoExisteException("no existe el asiento con nro " + asiento.nroAsiento.toString)

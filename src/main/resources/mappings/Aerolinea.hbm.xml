@@ -11,7 +11,7 @@
 		</id>
 		<property name="nombreAerolinea" type="string">
 		<!-- unique deberia ser true -->
-			<column name="nombreAerolinea" length="30" not-null="true" unique="false" />
+			<column name="nombreAerolinea" length="30" not-null="false" unique="false" />
 		</property>
        
       <bag name="vuelos" cascade="all" lazy="false" inverse="false">

@@ -44,9 +44,9 @@ class Asiento {
 		return nroAsiento.equals(a.nroAsiento)
 	}
 	
-	def validarReserva() {
+	def validarReserva() throws Exception{
 		
-		if(reservado) {
+		if(this.isReservado()) {
 			throw new AsientoReservadoException("el asiento esta reservado")
 		}
 	}

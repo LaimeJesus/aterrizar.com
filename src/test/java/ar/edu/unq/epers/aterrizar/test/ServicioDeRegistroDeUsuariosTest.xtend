@@ -117,7 +117,7 @@ class RecorderServiceTest{
 		Mockito.verify(creadorDeMailsMock).crearMailParaUsuario('registrador', cepillo, codigoFromMock)
 
 	}
-	
+
 	@Test(expected=RegistrationException)
 	def void testRegistrarUsuarioQueYaExisteEnElSistemaArrojaUnaExcepcionDeRegistracion() throws Exception{
 		

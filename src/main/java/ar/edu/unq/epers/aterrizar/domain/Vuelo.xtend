@@ -64,7 +64,7 @@ class Vuelo {
 		tramos.exists[it.equals(tramo)] 
 	}
 	
-	def void validarReserva(Tramo tramo, Asiento asiento) {
+	def void validarReserva(Tramo tramo, Asiento asiento) throws TramoNoExisteException{
 
 		if(!contieneTramo(tramo)){
 			throw new TramoNoExisteException("no existe tramo " + tramo.nroTramo.toString)

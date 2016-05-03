@@ -42,12 +42,10 @@ class Aerolinea {
 		vuelos.exists[Vuelo v|v.nroVuelo == unVuelo.nroVuelo]
 	}
 	
-	def void validarReserva(Vuelo vuelo, Tramo tramo, Asiento asiento) {
-		var bool = contieneVuelo(vuelo)
-		if(!bool) {
+	def void validarReserva(Vuelo vuelo, Tramo tramo, Asiento asiento) throws VueloNoExisteException{
+		if(!contieneVuelo(vuelo)) {
 			throw new VueloNoExisteException("no existe vuelo " + vuelo.nroVuelo.toString)
 		}
-		
 		vuelo.validarReserva(tramo,asiento)
 	}
 	

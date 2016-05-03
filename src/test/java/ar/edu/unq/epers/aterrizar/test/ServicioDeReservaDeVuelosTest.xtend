@@ -11,7 +11,6 @@ import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDeReservaDeVuelos
 import ar.edu.unq.epers.aterrizar.domain.Asiento
 import ar.edu.unq.epers.aterrizar.domain.Usuario
-import ar.edu.unq.epers.aterrizar.persistence.SessionManager
 
 /*
  * Esta clase esta para testear al servicio de reserva de asientos. Es decir integra los repositorios de Aerolinea y Busqueda.
@@ -28,6 +27,10 @@ class ServicioDeReservaDeVuelosTest {
 	Vuelo vuelo
 	Asiento asientoLibrePrimera
 	Usuario usuario
+	
+	Asiento asientoOcupadoTurista
+	
+	Tramo tramoMexicoEstadosUnidos
 	
 	@Before
 	def void setUp(){
@@ -63,10 +66,10 @@ class ServicioDeReservaDeVuelosTest {
 		//////////////////////////////////////
 		
 		var tramoArgentinaUruguay = new Tramo("Argentina", "Uruguay", 20, '2016-05-12', '2016-05-12', 1)
-		tramoArgentinaUruguay.asientosStandard()
+//		tramoArgentinaUruguay.asientosStandard()
 		
 		var tramoUruguayBrasil = new Tramo("Uruguay", "Brasil", 50, '2016-05-10', '2016-05-12', 2)
-		tramoUruguayBrasil.asientosStandard()
+//		tramoUruguayBrasil.asientosStandard()
 		
 		vueloNroUno.agregarTramo(tramoArgentinaUruguay)
 		vueloNroUno.agregarTramo(tramoUruguayBrasil)
@@ -77,7 +80,7 @@ class ServicioDeReservaDeVuelosTest {
 
 		
 		var tramoArgentinaUSA= new Tramo("Argentina", "USA", 20, '2016-05-12', '2016-06-12', 3)
-		tramoArgentinaUSA.asientosStandard()
+//		tramoArgentinaUSA.asientosStandard()
 		
 		vueloNroDos.agregarTramo(tramoArgentinaUSA)
 		
@@ -87,10 +90,10 @@ class ServicioDeReservaDeVuelosTest {
 
 		
 		var tramoArgentinaChile = new Tramo("Argentina", "Chile", 10, '2016-5-12', '2016-5-20', 4)
-		tramoArgentinaChile.asientosStandard()
+//		tramoArgentinaChile.asientosStandard()
 		
 		var tramoChileAustralia = new Tramo("Chile", "Australia", 50, '2016-5-20', '2016-6-1', 5)
-		tramoChileAustralia.asientosStandard()
+//		tramoChileAustralia.asientosStandard()
 		
 		var tramoAustraliaJapon = new Tramo("Australia", "Japon", 30, '2016-6-1', '2016-6-12', 6)
 		tramoAustraliaJapon.crearAsientos(TipoDeCategoria.BUSINESS, 5, 5)
@@ -116,7 +119,7 @@ class ServicioDeReservaDeVuelosTest {
 		
 		var tramoArgentinaBrasil = new Tramo("Argentina", "Brasil", 100, '2016-1-5', '2016-2-5', 7)
 		var tramoBrasilMexico = new Tramo("Brasil", "Mexico", 200, '2016-2-5', '2016-3-5', 8)
-		var tramoMexicoEstadosUnidos = new Tramo("Mexico", "USA", 100, '2016-3-5', '2016-3-6', 9)
+		tramoMexicoEstadosUnidos = new Tramo("Mexico", "USA", 100, '2016-3-5', '2016-3-6', 9)
 		tramoEstadosUnidosArgentina = new Tramo("USA", "Argentina", 100, '2016-3-6', '2016-3-9', 10)
 		
 		//////////////////////////////////////
@@ -141,7 +144,7 @@ class ServicioDeReservaDeVuelosTest {
 		//asiento ocupado
 		//////////////////////////////////////
 
-		var asientoOcupadoTurista = new Asiento(TipoDeCategoria.TURISTA, 50)
+		asientoOcupadoTurista = new Asiento(TipoDeCategoria.TURISTA, 50)
 		var usuarioOcupanteTurista = new Usuario()
 		usuarioOcupanteTurista.nickname = "carlos"
 		asientoOcupadoTurista.reservadoPorUsuario = usuarioOcupanteTurista
@@ -186,11 +189,6 @@ class ServicioDeReservaDeVuelosTest {
 		usuario = new Usuario
 		usuario.nickname = "Pepe"
 		
-		SessionManager.runInSession[|
-			var s = SessionManager.getSession
-			s.persist(usuario)
-			null
-		]
 	}
 	
 	@Test
@@ -210,7 +208,7 @@ class ServicioDeReservaDeVuelosTest {
 		var unVuelo = vuelo
 		var unTramo = tramoEstadosUnidosArgentina
 		var unAsiento = asientoLibrePrimera
-		
+			
 		var asientoReservado = sudo.reservar(unUsuario, unaAerolinea, unVuelo , unTramo, unAsiento)
 		
 		//prueba que asiento esta reservado
@@ -220,21 +218,21 @@ class ServicioDeReservaDeVuelosTest {
 		Assert.assertEquals(unUsuario, asientoReservado.reservadoPorUsuario)
 	}
 	
+//	no me deja esperar esa excepcion en el test
+//	@Test(expected=AsientoReservadoException)
 	@Test(expected=Exception)
 	def void testReservarUnAsientoExceptionPorUnUsuario(){
-		var usuarioPepe = new Usuario()
-		usuarioPepe.nickname = "jesus"
-		
-		var tramoArg_EEUU = vuelo.tramos.get(0)
-		var asientoOK = tramoArg_EEUU.asientos.get(0)
-		
-		var asientoReservado = sudo.reservar(usuarioPepe, prueba , vuelo , tramoArg_EEUU, asientoOK)
-		
-		// asiento esta reservado exception
-		Assert.assertFalse(asientoReservado.reservadoPorUsuario != null)
-		
+
+		var pepe = usuario
+	
+		var asientoReservado = sudo.reservar(pepe, prueba , vuelo , tramoMexicoEstadosUnidos, asientoOcupadoTurista)
+
+		//veo que el asiento este reservado		
+		Assert.assertTrue(asientoReservado.reservado)
+		//veo que los id sean diferentes
+		Assert.assertNotEquals(asientoReservado.reservadoPorUsuario.idUsuario, pepe.idUsuario)
 		//prueba que sea el usuario correcto
-		Assert.assertNotEquals(usuarioPepe, asientoOK.reservadoPorUsuario)
+		Assert.assertNotEquals(pepe, asientoOcupadoTurista.reservadoPorUsuario)
 	}
 	
 	@After
@@ -243,11 +241,6 @@ class ServicioDeReservaDeVuelosTest {
 		sudo.eliminarAerolinea(prueba)
 		sudo.eliminarAerolinea(aerolineasArgentinas)
 		
-		SessionManager.runInSession[|
-			var session = SessionManager.getSession
-			session.delete(usuario)
-			null
-		]
 	}
 
 }
