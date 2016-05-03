@@ -6,7 +6,6 @@ import ar.edu.unq.epers.aterrizar.domain.Tramo
 import ar.edu.unq.epers.aterrizar.domain.Usuario
 import ar.edu.unq.epers.aterrizar.domain.Vuelo
 import ar.edu.unq.epers.aterrizar.persistence.RepositorioAerolinea
-import ar.edu.unq.epers.aterrizar.persistence.RepositorioBusquedas
 import ar.edu.unq.epers.aterrizar.persistence.SessionManager
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -16,7 +15,6 @@ class ServicioDeReservaDeVuelos {
 
 	//Nuestro sistema de reserva de asientos
 	RepositorioAerolinea repositorioDeAerolineas
-	RepositorioBusquedas repositorioDeBusquedas
 
 	new() {
 		repositorioDeAerolineas = new RepositorioAerolinea
