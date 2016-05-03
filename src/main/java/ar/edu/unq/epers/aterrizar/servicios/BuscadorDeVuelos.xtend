@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.aterrizar.domain.buscador
+package ar.edu.unq.epers.aterrizar.servicios
 
 import ar.edu.unq.epers.aterrizar.persistence.RepositorioAerolinea
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -9,6 +9,7 @@ import ar.edu.unq.epers.aterrizar.persistence.RepositorioBusquedas
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorCostoDeVuelo
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorEscalas
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion
+import ar.edu.unq.epers.aterrizar.domain.buscador.Busqueda
 
 @Accessors
 class BuscadorDeVuelos {
