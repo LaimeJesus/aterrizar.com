@@ -15,8 +15,6 @@ import org.junit.After
 import ar.edu.unq.epers.aterrizar.exceptions.RegistrationException
 import ar.edu.unq.epers.aterrizar.exceptions.MyValidateException
 import ar.edu.unq.epers.aterrizar.exceptions.UsuarioNoEstaEnElServicioException
-import ar.edu.unq.epers.aterrizar.exceptions.ChangingPasswordException
-import ar.edu.unq.epers.aterrizar.exceptions.MyLoginException
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDeRegistroDeUsuarios
 
 class RecorderServiceTest{
@@ -156,7 +154,7 @@ class RecorderServiceTest{
 		assertFalse(userCode.equals(codigoerroneo))			
 	}
 	
-	@Test(expected=MyLoginException)
+	@Test(expected=MyValidateException)
 	def void testLogearUnUsuarioQueNoFueValidadoEnElSistemaArrojaUnaExcepcionDeLogeo(){
 		//arroja una excepcion
 		sudo.login(pepillo.nickname, pepillo.password)
@@ -164,7 +162,7 @@ class RecorderServiceTest{
 		assertFalse(usuario.estaValidado)
 	}
 	
-	@Test(expected=MyLoginException)
+	@Test(expected=MyValidateException)
 	def void testLogearUnUsuarioConContrasenhaIncorrectaArrojaUnaExcepcionDeLogeo(){
 
 		var wrongPassword = 'wrong'
@@ -185,7 +183,7 @@ class RecorderServiceTest{
 	}
 	
 	
-	@Test(expected=ChangingPasswordException)
+	@Test(expected=MyValidateException)
 	def void testCambiarContrasenhaPorLaMismaContrasenhaArrojaUnaExcepcionDeCambiarContrasenha(){
 		
 		var actualPw = pepillo.password
@@ -215,7 +213,9 @@ class RecorderServiceTest{
 	def void testBorrarUsuarioQueFueCreadoEnSetUpYCerrarConexion(){
 		sudo.repositorio.borrar('nickname', pepillo.nickname)
 		sudo.repositorio.borrar('nickname', cepillo.nickname)
-		sudo.repositorio.cerrarConeccion()	
+		sudo.servicioDeAmigos.eliminarUsuarioDeAmigos(cepillo)
+		sudo.servicioDeAmigos.eliminarUsuarioDeAmigos(pepillo)
+		sudo.repositorio.cerrarConeccion()
 	}
 	
 }

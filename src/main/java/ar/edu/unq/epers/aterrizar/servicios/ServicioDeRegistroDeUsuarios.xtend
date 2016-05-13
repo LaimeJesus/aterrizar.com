@@ -1,16 +1,13 @@
 package ar.edu.unq.epers.aterrizar.servicios
 
-import ar.edu.unq.epers.aterrizar.exceptions.ChangingPasswordException
-import ar.edu.unq.epers.aterrizar.exceptions.MyLoginException
-import ar.edu.unq.epers.aterrizar.exceptions.MyValidateException
 import ar.edu.unq.epers.aterrizar.exceptions.RegistrationException
-import ar.edu.unq.epers.aterrizar.persistence.RepositorioUsuario
 import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.domain.Usuario
 import ar.edu.unq.epers.aterrizar.domain.CreadorDeCodigos
 import ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails
 import ar.edu.unq.epers.aterrizar.domain.CreadorDeMails
-import ar.edu.unq.epers.aterrizar.persistence.Repositorio
+import ar.edu.unq.epers.aterrizar.persistence.jdbc.Repositorio
+import ar.edu.unq.epers.aterrizar.persistence.jdbc.RepositorioUsuario
 
 @Accessors
 class ServicioDeRegistroDeUsuarios {
@@ -39,49 +36,38 @@ class ServicioDeRegistroDeUsuarios {
 		
 		val usuarioAValidar = this.traerUsuarioPorNickname(usr.nickname)
 		
-		if(!usuarioAValidar.estaValidado()){
-			if(usuarioAValidar.codigo.equals(codigo)){
-				usuarioAValidar.validarCodigo()
-				this.actualizarUsuarioPorNickname(usuarioAValidar)
-			}
-			else{
-				throw new MyValidateException('codigo de validacion erroneo')
-			}
-		}
-		else{
-			throw new MyValidateException('codigo de validacion usado')
-		}		
+		//si el codigo ya esta usado, entonces arroja una exc
+		usuarioAValidar.isValidadoCodigo()
+		//si el codigo que tiene el usuario es difierente a codigo, entonces arroja una exc
+		usuarioAValidar.validarCodigo(codigo)
+		//cambia code a usado
+		usuarioAValidar.usarCodigo()
+		this.actualizarUsuarioPorNickname(usuarioAValidar)
+
 	}
 	
 	def login(String nickname, String password) throws Exception{
 		val usuarioFromRepo = this.traerUsuarioPorNickname(nickname)
-		if(usuarioFromRepo.estaValidado()){
-			if(usuarioFromRepo.password.equals(password)){
-				return usuarioFromRepo
-			}
-			else{
-				throw new MyLoginException("password doesn't match")
-			}
-		}
-		else{
-			throw new MyLoginException("usuario no esta validado")
-		}
+		//ve que este validado
+		usuarioFromRepo.validarCodigo(this.codigoUsado())
+		//valida la password
+		usuarioFromRepo.validarPassword(password)
+		return usuarioFromRepo
+	}
+	
+	def codigoUsado() {
+		'usado'
 	}
 	
 	def changePassword(Usuario usr, String newpassword) throws Exception{
 		
 		val usuarioACambiarPassword = this.traerUsuarioPorNickname(usr.nickname)
-		if(usuarioACambiarPassword.password.equals(newpassword))
-		{
-			throw new ChangingPasswordException('newpassword is the same that previous password')
-		}
-		else
-		{
-			usuarioACambiarPassword.password = newpassword
-			repositorio.actualizar(usuarioACambiarPassword, 'nickname', usuarioACambiarPassword.nickname)	
-		}
+		usuarioACambiarPassword.validarCambioPassword(newpassword)
+		usuarioACambiarPassword.password = newpassword
+		repositorio.actualizar(usuarioACambiarPassword, 'nickname', usuarioACambiarPassword.nickname)	
 	}
 	
+	////////////////////////////////////////////
 	def traerUsuarioDelRepositorio(String field, String value) throws Exception{
 		if(repositorio.contiene(field, value)){
 			return repositorio.traer(field, value)
