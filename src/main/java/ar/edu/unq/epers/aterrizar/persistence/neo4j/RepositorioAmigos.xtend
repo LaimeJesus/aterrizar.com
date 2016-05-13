@@ -8,7 +8,6 @@ import ar.edu.unq.epers.aterrizar.domain.relaciones.TipoDeRelacion
 import org.neo4j.graphdb.Direction
 import org.neo4j.graphdb.Node
 import org.neo4j.graphdb.traversal.Uniqueness
-import java.util.ArrayList
 
 @Accessors
 class RepositorioAmigos {
@@ -64,16 +63,30 @@ class RepositorioAmigos {
 	
 	def getAmigos(Usuario u){
 		val nodoUsuario = getNodo(u)
-		val amigos = nodosRelacionados(nodoUsuario, TipoDeRelacion.AMIGO, Direction.OUTGOING)
-		amigos.map[toUsuario(it)].toSet
+		val nodos = nodosRelacionados(nodoUsuario, TipoDeRelacion.AMIGO, Direction.OUTGOING)
+		//puedo hacer mi propio toSet en el cual saco al nodo u, que no quiero que aparezca en amigos
+		var amigos = nodos.map[toUsuario(it)].toSet
+		amigos.forEach[
+			System.out.println(it.nickname)
+		]
+		//no encontre el metodo para no agregarme en el recorrido
+		amigos.removeIf([it.nickname.equals(u.nickname)])
+		return amigos
 	}
 	
 	//todos mis conocidos
 	
 	def getAmigosDeAmigos(Usuario u){
 		val nodoUsuario = getNodo(u)
-		val amigos = todosLosRelacionados(nodoUsuario, TipoDeRelacion.AMIGO, Direction.OUTGOING)
-		amigos.map[toUsuario(it)].toSet
+		val nodos = todosLosRelacionados(nodoUsuario, TipoDeRelacion.AMIGO, Direction.OUTGOING)
+		//puedo hacer mi propio toSet en el cual saco al nodo u, que no quiero que aparezca en amigos
+		val amigos = nodos.map[toUsuario(it)].toSet
+		amigos.forEach[
+			System.out.println(it.nickname)
+		]
+		//no encontre el metodo para no agregarme en el recorrido
+		amigos.removeIf([it.nickname.equals(u.nickname)])
+		return amigos
 	}
 
 
@@ -100,7 +113,7 @@ class RepositorioAmigos {
 
     	val nodesInComponent = traveler.traverse(n).nodes();
     	return nodesInComponent
-
+//si le quiero hacer algo al nodo que estoy recorriendo
 //		for(Node current : traveler.traverse(n).nodes()){
 //			res.add(current)
 //		}

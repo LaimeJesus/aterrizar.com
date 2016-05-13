@@ -7,6 +7,10 @@ import ar.edu.unq.epers.aterrizar.servicios.ServicioDeAmigos
 import org.junit.Assert
 import org.junit.After
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDeRegistroDeUsuarios
+import org.mockito.Mockito
+import ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails
+import ar.edu.unq.epers.aterrizar.domain.CreadorDeCodigos
+import ar.edu.unq.epers.aterrizar.domain.CreadorDeMails
 
 class ServicioDeAmigosTest {
 	
@@ -16,7 +20,7 @@ class ServicioDeAmigosTest {
 	
 	Usuario jose
 	
-	ServicioDeAmigos sudo
+	ServicioDeAmigos sut
 	
 	Usuario tito
 	
@@ -24,16 +28,33 @@ class ServicioDeAmigosTest {
 	
 	ServicioDeRegistroDeUsuarios loginService
 	
+	CreadorDeCodigos creadorDeCodigosMock
+	
+	EnviadorDeMails enviadorDeMailsMock
+	
+	CreadorDeMails creadorDeMailsMock
+	
 	@Before
 	def void setUp(){
+		//usando servicio de login
+		//inicializandolo
 		loginService = new ServicioDeRegistroDeUsuarios
 		
 		var url = "jdbc:mysql://localhost:3306/aterrizar"
 		var user = 'root'
 		var pass = 'jstrike1234'
 		
+		creadorDeCodigosMock = Mockito.mock(CreadorDeCodigos)
+		enviadorDeMailsMock = Mockito.mock(EnviadorDeMails)
+		creadorDeMailsMock = Mockito.mock(CreadorDeMails)
+		
+		loginService.creadorDeCodigos = creadorDeCodigosMock
+		loginService.enviadorDeMails = enviadorDeMailsMock
+		loginService.creadorDeMails = creadorDeMailsMock
+		
 		loginService.repositorio.conectarABDConMySql(url,user,pass)
-		sudo = loginService.servicioDeAmigos
+		///////////////////////////
+		sut = loginService.servicioDeAmigos
 		pepe = new Usuario()
 		pepe.nickname = "pepe"
 		jose = new Usuario()
@@ -43,32 +64,31 @@ class ServicioDeAmigosTest {
 		nico = new Usuario()
 		nico.nickname = "nico"
 		
-		
 		loginService.registrarUsuario(pepe)
 		loginService.registrarUsuario(jose)
 		loginService.registrarUsuario(tito)
 		loginService.registrarUsuario(nico)
 
-		sudo.agregarAmigo(pepe, jose)
+		sut.agregarAmigo(pepe, jose)
 	}
 	
 	@Test
-	def void testProbarQueRelacionarUnAmigoFunciona(){
+	def void testRelacionarUnAmigoAumentaLaCantidadDeAmigosQueTieneEnUno(){
 		
 		
-		var cantidadDeAmigos = sudo.consultarAmigos(pepe).length
+		var cantidadDeAmigos = sut.consultarAmigos(pepe).length
 		
 		Assert.assertEquals(1, cantidadDeAmigos)
 		
 	}
 	
 	@Test
-	def void testProbarACuantosConozco(){
-		sudo.agregarAmigo(jose,tito)
-		sudo.agregarAmigo(tito,pepe)
-		sudo.agregarAmigo(nico,pepe)
+	def void testRelacionarAVariosAmigosYContarATodosLosConocidosDebeDarmeTodosMenosUno(){
+		sut.agregarAmigo(jose,tito)
+		sut.agregarAmigo(tito,pepe)
+		sut.agregarAmigo(nico,pepe)
 		
-		var cantidad = sudo.consultarACuantoConozco(pepe)
+		var cantidad = sut.consultarACuantoConozco(pepe)
 		Assert.assertEquals(2, cantidad)
 	}
 	
