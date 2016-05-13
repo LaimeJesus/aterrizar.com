@@ -19,9 +19,11 @@ class ServicioDeRegistroDeUsuarios {
 	CreadorDeCodigos creadorDeCodigos
 	EnviadorDeMails enviadorDeMails
 	CreadorDeMails creadorDeMails
+	ServicioDeAmigos servicioDeAmigos
 	
 	new(){
 		repositorio = new RepositorioUsuario()
+		servicioDeAmigos = new ServicioDeAmigos(this)
 	}
 	
 	def registrarUsuario(Usuario usr) throws Exception{
@@ -99,6 +101,9 @@ class ServicioDeRegistroDeUsuarios {
 	
 	def nuevoUsuarioEnElSistema(Usuario usuario) {
 		repositorio.persistir(usuario)
+		
+		//a mi nuevo servicio de amigos le digo que lo agregue al usuario
+		servicioDeAmigos.crearUsuarioDeAmigos(usuario)
 		this.avisarNuevoUsuarioRegistrado(usuario)
 	}
 	
@@ -110,6 +115,11 @@ class ServicioDeRegistroDeUsuarios {
 	}
 	def actualizarUsuarioPorNickname(Usuario usuario) {
 		repositorio.actualizar(usuario,'nickname', usuario.nickname)
+	}
+	
+	def eliminarUsuario(Usuario u){
+		repositorio.borrar("nickname", u.nickname)
+		servicioDeAmigos.eliminarUsuarioDeAmigos(u)
 	}
 	
 }
