@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.aterrizar.persistence
+package ar.edu.unq.epers.aterrizar.persistence.hibernate
 
 import ar.edu.unq.epers.aterrizar.domain.Aerolinea
 import ar.edu.unq.epers.aterrizar.exceptions.AerolineaNoExisteException

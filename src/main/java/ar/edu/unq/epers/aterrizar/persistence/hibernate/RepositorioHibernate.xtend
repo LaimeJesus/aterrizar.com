@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.aterrizar.persistence
+package ar.edu.unq.epers.aterrizar.persistence.hibernate
 
 import java.util.List
 

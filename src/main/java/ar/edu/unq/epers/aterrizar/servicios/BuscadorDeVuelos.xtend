@@ -1,15 +1,15 @@
 package ar.edu.unq.epers.aterrizar.servicios
 
-import ar.edu.unq.epers.aterrizar.persistence.RepositorioAerolinea
 import org.eclipse.xtend.lib.annotations.Accessors
-import ar.edu.unq.epers.aterrizar.persistence.SessionManager
 import ar.edu.unq.epers.aterrizar.domain.Vuelo
 import java.util.List
-import ar.edu.unq.epers.aterrizar.persistence.RepositorioBusquedas
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorCostoDeVuelo
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorEscalas
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion
 import ar.edu.unq.epers.aterrizar.domain.buscador.Busqueda
+import ar.edu.unq.epers.aterrizar.persistence.hibernate.RepositorioBusquedas
+import ar.edu.unq.epers.aterrizar.persistence.hibernate.RepositorioAerolinea
+import ar.edu.unq.epers.aterrizar.persistence.hibernate.SessionManager
 
 @Accessors
 class BuscadorDeVuelos {

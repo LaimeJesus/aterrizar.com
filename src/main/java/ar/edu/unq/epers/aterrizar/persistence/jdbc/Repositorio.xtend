@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.aterrizar.persistence
+package ar.edu.unq.epers.aterrizar.persistence.jdbc
 
 import java.sql.DriverManager
 import java.sql.Connection

@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.aterrizar.persistence
+package ar.edu.unq.epers.aterrizar.persistence.hibernate
 
 import org.hibernate.SessionFactory
 import org.hibernate.Session

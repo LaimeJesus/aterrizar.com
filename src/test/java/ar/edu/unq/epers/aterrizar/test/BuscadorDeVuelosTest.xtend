@@ -7,13 +7,11 @@ import org.junit.Assert
 import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
 import ar.edu.unq.epers.aterrizar.domain.Tramo
 import ar.edu.unq.epers.aterrizar.domain.Vuelo
-import ar.edu.unq.epers.aterrizar.persistence.RepositorioAerolinea
 import ar.edu.unq.epers.aterrizar.domain.Aerolinea
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorCostoDeVuelo
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorEscalas
 import org.junit.After
-import ar.edu.unq.epers.aterrizar.persistence.SessionManager
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorOrigen
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorNombreDeAerolinea
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorDestino
@@ -22,6 +20,8 @@ import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorFechaDeLl
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorFechaDeSalida
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorCategoriaDeAsiento
 import ar.edu.unq.epers.aterrizar.servicios.BuscadorDeVuelos
+import ar.edu.unq.epers.aterrizar.persistence.hibernate.RepositorioAerolinea
+import ar.edu.unq.epers.aterrizar.persistence.hibernate.SessionManager
 
 /*
  * Esta clase esta para testear al buscador de vuelos integrado con busquedas, estas tienen criterios y ordenes.
@@ -63,7 +63,7 @@ class BuscadorDeVuelosTest {
 	@Before
 	def void setUp(){
 		//Repositorio aerolinea
-		repoPrueba = new RepositorioAerolinea
+		repoPrueba = new RepositorioAerolinea()
 		
 		
 ///////////////////////////////////////////////////////////////

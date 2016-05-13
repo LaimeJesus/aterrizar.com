@@ -41,7 +41,7 @@ class ServicioDeAmigos {
 	}
 	
 	//funciona
-	def List<Usuario> consultarMiConexion(Usuario u){
+	def List<Usuario> consultarMisConocidos(Usuario u){
 		
 		val usuario = servicioDeUsuarios.traerUsuarioPorNickname(u.nickname)
 		
@@ -52,7 +52,7 @@ class ServicioDeAmigos {
 	}
 	
 	def consultarACuantoConozco(Usuario u){
-		consultarMiConexion(u).length - 1
+		consultarMisConocidos(u).length
 	}
 	
 	def createHome(GraphDatabaseService graph){

@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.aterrizar.persistence
+package ar.edu.unq.epers.aterrizar.persistence.jdbc
 
 import ar.edu.unq.epers.aterrizar.domain.Usuario
 import java.sql.ResultSet
