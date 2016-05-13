@@ -5,6 +5,8 @@ import ar.edu.unq.epers.aterrizar.persistence.neo4j.RepositorioAmigos
 import org.neo4j.graphdb.GraphDatabaseService
 import ar.edu.unq.epers.aterrizar.persistence.neo4j.GraphServiceRunner
 import java.util.List
+import ar.edu.unq.epers.aterrizar.domain.Mail
+import ar.edu.unq.epers.aterrizar.persistence.neo4j.RepositorioMensajesEntreAmigos
 
 class ServicioDeAmigos {
 	
@@ -40,6 +42,24 @@ class ServicioDeAmigos {
 		]
 	}
 	
+	def void enviarMensajeAUnUsuario(Usuario emisor, Usuario receptor, Mail m){
+		GraphServiceRunner::run[
+			crearRepoMails(it).relacionEnviarMensaje(emisor, m, receptor)
+		]
+	}
+	
+	def List<Mail> buscarMailsEnviados(Usuario u){
+		GraphServiceRunner::run[
+			crearRepoMails(it).mailsEnviadosPor(u).toList
+		]
+	}
+
+	def List<Mail> buscarMailsRecibidos(Usuario u){
+		GraphServiceRunner::run[
+			crearRepoMails(it).mailsRecibidosPor(u).toList
+		]
+	}
+	
 	//funciona
 	def List<Usuario> consultarMisConocidos(Usuario u){
 		
@@ -50,13 +70,17 @@ class ServicioDeAmigos {
 			todosMisConocidos.toList
 		]
 	}
-	
+
 	def consultarACuantoConozco(Usuario u){
 		consultarMisConocidos(u).length
 	}
-	
+
+///////////////////////////////////////////////////	
 	def createHome(GraphDatabaseService graph){
 		new RepositorioAmigos(graph)
+	}
+	def crearRepoMails(GraphDatabaseService graph){
+		new RepositorioMensajesEntreAmigos(graph)
 	}
 	
 	def eliminarUsuarioDeAmigos(Usuario usuario) {
@@ -71,6 +95,12 @@ class ServicioDeAmigos {
 			createHome(it).crearNodo(usuario)
 			null
 		]		
+	}
+	def eliminarMail(Mail m){
+		GraphServiceRunner::run[
+			crearRepoMails(it).eliminarNodo(m)
+			null
+		]
 	}
 	
 }

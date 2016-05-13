@@ -8,4 +8,5 @@ class Mail {
 	String subject
 	String to
 	String from
+	Integer idMail
 }
