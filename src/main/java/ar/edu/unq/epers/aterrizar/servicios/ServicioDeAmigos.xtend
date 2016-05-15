@@ -44,19 +44,19 @@ class ServicioDeAmigos {
 	
 	def void enviarMensajeAUnUsuario(Usuario emisor, Usuario receptor, Mail m){
 		GraphServiceRunner::run[
-			crearRepoMails(it).relacionEnviarMensaje(emisor, m, receptor)
+			createHome(it).enviarMensaje(emisor, m, receptor)
 		]
 	}
 	
 	def List<Mail> buscarMailsEnviados(Usuario u){
 		GraphServiceRunner::run[
-			crearRepoMails(it).mailsEnviadosPor(u).toList
+			createHome(it).enviadosPor(u).toList
 		]
 	}
 
 	def List<Mail> buscarMailsRecibidos(Usuario u){
 		GraphServiceRunner::run[
-			crearRepoMails(it).mailsRecibidosPor(u).toList
+			createHome(it).recibidosPor(u).toList
 		]
 	}
 	
@@ -98,7 +98,15 @@ class ServicioDeAmigos {
 	}
 	def eliminarMail(Mail m){
 		GraphServiceRunner::run[
-			crearRepoMails(it).eliminarNodo(m)
+//			crearRepoMails(it).eliminarNodo(m)
+			createHome(it).eliminarMensajes(m)
+			null
+		]
+	}
+	
+	def eliminarMailsDeUsuario(Usuario usuario) {
+		GraphServiceRunner::run[
+			createHome(it).eliminarMensajesDeUsuario(usuario)
 			null
 		]
 	}

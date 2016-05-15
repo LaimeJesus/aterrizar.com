@@ -11,6 +11,7 @@ import org.mockito.Mockito
 import ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails
 import ar.edu.unq.epers.aterrizar.domain.CreadorDeCodigos
 import ar.edu.unq.epers.aterrizar.domain.CreadorDeMails
+import ar.edu.unq.epers.aterrizar.domain.Mail
 
 class ServicioDeAmigosTest {
 	
@@ -89,9 +90,26 @@ class ServicioDeAmigosTest {
 		sut.agregarAmigo(nico,pepe)
 		
 		var cantidad = sut.consultarACuantoConozco(pepe)
-		Assert.assertEquals(2, cantidad)
+		Assert.assertEquals(3, cantidad)
 	}
 	
+	@Test
+	def void testEnviarUnMensajeAumentaLaCantidadDeMensajesEnviados(){
+		var antes = sut.buscarMailsEnviados(pepe).length
+		var saludo = new Mail() => [
+			from = pepe.nickname
+			to = jose.nickname
+			body = "hola"
+			subject = "saludo"
+			idMail = 1
+		]
+		sut.enviarMensajeAUnUsuario(pepe, jose, saludo)
+		var despues = sut.buscarMailsEnviados(pepe).length
+		var recibidos = sut.buscarMailsRecibidos(jose).length
+		Assert.assertTrue(antes < despues)
+		Assert.assertEquals(despues,1)
+		Assert.assertEquals(recibidos,1)
+	}	
 	@After
 	def void borrarRelacionesCreadas(){
 		loginService.eliminarUsuario(pepe)

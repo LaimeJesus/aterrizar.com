@@ -9,6 +9,8 @@ import org.neo4j.graphdb.traversal.Uniqueness
 import org.neo4j.graphdb.traversal.Evaluators
 import ar.edu.unq.epers.aterrizar.exceptions.NoExisteObjectTException
 
+//no se puede usar junto con repoamigos y repomails, no entiendo xq no pueden compartir el mismo graph
+
 abstract class RepositorioNeo4j<T> {
 		GraphDatabaseService graph
 	

@@ -9,6 +9,7 @@ import ar.edu.unq.epers.aterrizar.domain.relaciones.TipoDeMensajes
 import ar.edu.unq.epers.aterrizar.domain.Mail
 import org.neo4j.graphdb.Direction
 
+//no se puede usar junto con repoamigos, no entiendo xq no pueden compartir el mismo graph
 @Accessors
 class RepositorioMensajesEntreAmigos extends RepositorioNeo4j<Mail> {
 	
@@ -25,8 +26,12 @@ class RepositorioMensajesEntreAmigos extends RepositorioNeo4j<Mail> {
 		graph.findNodes(objLabel, "idMensaje", obj.idMail).head			
 	}
 	
-	def getUserNode(Usuario u){
+	def getUserNode(Usuario u) throws Exception{
+		try{
 		graph.findNodes(DynamicLabel.label("Usuario"), "nickname", u.nickname).head
+		}catch(Exception e){
+			System.out.println("No hay head")
+		}
 	}
 	
 	override toObject(Node node) {

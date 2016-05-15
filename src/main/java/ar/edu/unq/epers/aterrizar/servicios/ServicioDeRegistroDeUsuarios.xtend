@@ -106,6 +106,7 @@ class ServicioDeRegistroDeUsuarios {
 	def eliminarUsuario(Usuario u){
 		repositorio.borrar("nickname", u.nickname)
 		servicioDeAmigos.eliminarUsuarioDeAmigos(u)
+//		servicioDeAmigos.eliminarMailsDeUsuario(u)
 	}
 	
 }
