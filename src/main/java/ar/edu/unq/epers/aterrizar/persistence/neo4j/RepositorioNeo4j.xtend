@@ -8,11 +8,14 @@ import org.neo4j.graphdb.Direction
 import org.neo4j.graphdb.traversal.Uniqueness
 import org.neo4j.graphdb.traversal.Evaluators
 import ar.edu.unq.epers.aterrizar.exceptions.NoExisteObjectTException
+import org.eclipse.xtend.lib.annotations.Accessors
 
 //no se puede usar junto con repoamigos y repomails, no entiendo xq no pueden compartir el mismo graph
 
+@Accessors
 abstract class RepositorioNeo4j<T> {
-		GraphDatabaseService graph
+		
+	GraphDatabaseService graph
 	
 	new(GraphDatabaseService g){
 		graph = g
@@ -27,8 +30,7 @@ abstract class RepositorioNeo4j<T> {
 	}
 	def void eliminarNodo(T obj){
 		val nodo = getNodo(obj)
-		nodo.relationships.forEach[delete]
-		nodo.delete
+		borrarRelaciones(nodo)
 	}
 	
 	def abstract void agregarPropiedades(Node node, T obj)
@@ -51,17 +53,6 @@ abstract class RepositorioNeo4j<T> {
 
 	//no estoy seguro cual de las 2 formas es la que funciona voy a probar las 2
 	def todosLosRelacionados(Node n, RelationshipType r, Direction d){
-//		val res = new ArrayList<Node>
-//		val traveler = graph.traversalDescription()
-//            .depthFirst()
-//            .relationships(r, d)
-//            .uniqueness(Uniqueness.NODE_GLOBAL);
-//si le quiero hacer algo al nodo que estoy recorriendo
-//		for(Node current : traveler.traverse(n).nodes()){
-//			res.add(current)
-//		}
-//		return res
-
 		val traveler = graph.traversalDescription()
             .depthFirst()
             .relationships(r, d)
@@ -72,5 +63,8 @@ abstract class RepositorioNeo4j<T> {
     	return nodesInComponent
 
 	}
-	
+	def void borrarRelaciones(Node nodo){
+		nodo.relationships.forEach[delete]
+		nodo.delete
+	}	
 }

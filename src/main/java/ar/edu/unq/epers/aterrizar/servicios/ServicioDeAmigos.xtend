@@ -41,25 +41,30 @@ class ServicioDeAmigos {
 		amigos.toList
 		]
 	}
-	
+	////////////////////////////////////////////////////////
+	//mails
+	////////////////////////////////////////////////////////
 	def void enviarMensajeAUnUsuario(Usuario emisor, Usuario receptor, Mail m){
 		GraphServiceRunner::run[
-			createHome(it).enviarMensaje(emisor, m, receptor)
+			crearRepoMails(it).relacionEnviarMensaje(emisor, m, receptor)
 		]
 	}
 	
 	def List<Mail> buscarMailsEnviados(Usuario u){
 		GraphServiceRunner::run[
-			createHome(it).enviadosPor(u).toList
+			crearRepoMails(it).mailsEnviadosPor(u).toList
 		]
 	}
 
 	def List<Mail> buscarMailsRecibidos(Usuario u){
 		GraphServiceRunner::run[
-			createHome(it).recibidosPor(u).toList
-//			crearRepoMails(it).recibidosPor(u).toList
+			crearRepoMails(it).mailsRecibidosPor(u).toList
 		]
 	}
+
+	////////////////////////////////////////////////////////
+	//
+	////////////////////////////////////////////////////////
 	
 	//funciona
 	def List<Usuario> consultarMisConocidos(Usuario u){
@@ -76,10 +81,16 @@ class ServicioDeAmigos {
 		consultarMisConocidos(u).length
 	}
 
-///////////////////////////////////////////////////	
+	////////////////////////////////////////////////////////
+
 	def createHome(GraphDatabaseService graph){
 		new RepositorioAmigos(graph)
 	}
+
+	////////////////////////////////////////////////////////
+	//mails
+	////////////////////////////////////////////////////////	
+
 	def crearRepoMails(GraphDatabaseService graph){
 		new RepositorioMensajesEntreAmigos(graph)
 	}
@@ -97,17 +108,19 @@ class ServicioDeAmigos {
 			null
 		]		
 	}
+	////////////////////////////////////////////////////////
+	//mails
+	////////////////////////////////////////////////////////	
+
 	def eliminarMail(Mail m){
 		GraphServiceRunner::run[
 			crearRepoMails(it).eliminarNodo(m)
-//			createHome(it).eliminarMensajes(m)
 			null
 		]
 	}
-	
 	def eliminarMailsDeUsuario(Usuario usuario) {
 		GraphServiceRunner::run[
-			createHome(it).eliminarMensajesDeUsuario(usuario)
+			crearRepoMails(it).eliminarMensajesDeUsuario(usuario)
 			null
 		]
 	}
