@@ -51,7 +51,7 @@ class RepositorioMensajesEntreAmigos extends RepositorioNeo4j<Mail> {
 		val nodoReceptor = getUserNode(receptor)
 		
 		relacionar(nodoEmisor, nodoMensaje, TipoDeMensajes.EMISOR)
-		relacionar(nodoReceptor, nodoMensaje, TipoDeMensajes.RECEPTOR)
+		relacionar(nodoMensaje, nodoReceptor, TipoDeMensajes.RECEPTOR)
 	}
 	
 	def mailsEnviadosPor(Usuario usuario) {
@@ -60,7 +60,7 @@ class RepositorioMensajesEntreAmigos extends RepositorioNeo4j<Mail> {
 	}
 	def mailsRecibidosPor(Usuario usuario) {
 		val nodoReceptor = getUserNode(usuario)
-		nodosRelacionados(nodoReceptor, TipoDeMensajes.RECEPTOR, Direction.OUTGOING).map[toObject(it)].toSet
+		nodosRelacionados(nodoReceptor, TipoDeMensajes.RECEPTOR, Direction.INCOMING).map[toObject(it)].toSet
 	}
 	def eliminarMensajes(Mail mail) {
 		eliminarNodo(mail)
