@@ -57,6 +57,7 @@ class ServicioDeAmigos {
 	def List<Mail> buscarMailsRecibidos(Usuario u){
 		GraphServiceRunner::run[
 			createHome(it).recibidosPor(u).toList
+//			crearRepoMails(it).recibidosPor(u).toList
 		]
 	}
 	
@@ -98,8 +99,8 @@ class ServicioDeAmigos {
 	}
 	def eliminarMail(Mail m){
 		GraphServiceRunner::run[
-//			crearRepoMails(it).eliminarNodo(m)
-			createHome(it).eliminarMensajes(m)
+			crearRepoMails(it).eliminarNodo(m)
+//			createHome(it).eliminarMensajes(m)
 			null
 		]
 	}

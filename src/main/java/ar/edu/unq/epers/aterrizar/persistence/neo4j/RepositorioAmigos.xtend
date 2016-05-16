@@ -15,13 +15,14 @@ import org.neo4j.graphdb.traversal.Evaluators
 
 @Accessors
 class RepositorioAmigos {
+
 	GraphDatabaseService graph
 	
-	RepositorioMensajesEntreAmigos repoMensajes
+//	RepositorioMensajesEntreAmigos repoMensajes
 	
 	new(GraphDatabaseService g){
 		graph = g
-		repoMensajes = new RepositorioMensajesEntreAmigos(g)
+//		repoMensajes = new RepositorioMensajesEntreAmigos(g)
 	}
 	
 	// relacionar usuarios por la relacion amigo

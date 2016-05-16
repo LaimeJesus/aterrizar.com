@@ -109,7 +109,8 @@ class ServicioDeAmigosTest {
 		Assert.assertTrue(antes < despues)
 		Assert.assertEquals(despues,1)
 		Assert.assertEquals(recibidos,1)
-	}	
+	}
+	
 	@After
 	def void borrarRelacionesCreadas(){
 		loginService.eliminarUsuario(pepe)

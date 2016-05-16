@@ -28,7 +28,7 @@ class RepositorioMensajesEntreAmigos extends RepositorioNeo4j<Mail> {
 	
 	def getUserNode(Usuario u) throws Exception{
 		try{
-		graph.findNodes(DynamicLabel.label("Usuario"), "nickname", u.nickname).head
+			graph.findNodes(DynamicLabel.label("Usuario"), "nickname", u.nickname).head
 		}catch(Exception e){
 			System.out.println("No hay head")
 		}
@@ -68,5 +68,35 @@ class RepositorioMensajesEntreAmigos extends RepositorioNeo4j<Mail> {
 		val nodoReceptor = getUserNode(usuario)
 		nodosRelacionados(nodoReceptor, TipoDeMensajes.RECEPTOR, Direction.INCOMING).map[toObject(it)].toSet
 	}
+//	def eliminarMensajes(Mail mail) {
+//		eliminarNodo(mail)
+//	}
+//	
+//	def enviadosPor(Usuario usuario) {
+//		mailsEnviadosPor(usuario)
+//	}
+//	
+//	def recibidosPor(Usuario usuario) {
+//		mailsRecibidosPor(usuario)
+//	}
+//	
+//	def enviarMensaje(Usuario emisor, Mail mail, Usuario receptor) {
+//		relacionEnviarMensaje(emisor, mail, receptor)
+//	}
+//	
+//	def eliminarMensajesDeUsuario(Usuario usuario) {
+//		eliminarMensajesEnviados(usuario)
+//		eliminarMensajesRecibidos(usuario)
+//	}
+//
+//	def eliminarMensajesEnviados(Usuario u){
+//		val nodoUsuario = getUserNode(u)
+//		nodosRelacionados(nodoUsuario,TipoDeMensajes.EMISOR, Direction.OUTGOING).forEach[delete]		
+//	}
+//	
+//	def eliminarMensajesRecibidos(Usuario u){
+//		val nodoUsuario = getUserNode(u)
+//		nodosRelacionados(nodoUsuario,TipoDeMensajes.RECEPTOR, Direction.INCOMING).forEach[delete]		
+//	}
 
 }
