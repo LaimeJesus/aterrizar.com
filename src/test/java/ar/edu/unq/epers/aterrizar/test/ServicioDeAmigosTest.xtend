@@ -6,43 +6,30 @@ import org.junit.Test
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDeAmigos
 import org.junit.Assert
 import org.junit.After
-import ar.edu.unq.epers.aterrizar.servicios.ServicioDeRegistroDeUsuarios
 import org.mockito.Mockito
 import ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails
 import ar.edu.unq.epers.aterrizar.domain.CreadorDeCodigos
 import ar.edu.unq.epers.aterrizar.domain.CreadorDeMails
 import ar.edu.unq.epers.aterrizar.domain.Mail
+import ar.edu.unq.epers.aterrizar.servicios.ServicioRegistroUsuarioConHibernate
 
 class ServicioDeAmigosTest {
 
 	Usuario pepe
-
 	Usuario jose
-
 	ServicioDeAmigos sut
-
 	Usuario tito
-
 	Usuario nico
-
-	ServicioDeRegistroDeUsuarios loginService
-
 	CreadorDeCodigos creadorDeCodigosMock
-
 	EnviadorDeMails enviadorDeMailsMock
-
 	CreadorDeMails creadorDeMailsMock
+	ServicioRegistroUsuarioConHibernate loginService
+	
 
 	@Before
 	def void setUp() {
 
-		//usando servicio de login
-		//inicializandolo
-		loginService = new ServicioDeRegistroDeUsuarios
-
-		var url = "jdbc:mysql://localhost:3306/aterrizar"
-		var user = 'root'
-		var pass = 'jstrike1234'
+		loginService = new ServicioRegistroUsuarioConHibernate
 
 		creadorDeCodigosMock = Mockito.mock(CreadorDeCodigos)
 		enviadorDeMailsMock = Mockito.mock(EnviadorDeMails)
@@ -51,8 +38,6 @@ class ServicioDeAmigosTest {
 		loginService.creadorDeCodigos = creadorDeCodigosMock
 		loginService.enviadorDeMails = enviadorDeMailsMock
 		loginService.creadorDeMails = creadorDeMailsMock
-
-		loginService.repositorio.conectarABDConMySql(url, user, pass)
 
 		///////////////////////////
 		sut = loginService.servicioDeAmigos
@@ -275,11 +260,6 @@ class ServicioDeAmigosTest {
 		Assert.assertEquals(enviadosJose, enviadosPepe)
 		Assert.assertEquals(recibidosJose, recibidosPepe)		
 		
-//		
-//		sut.eliminarMail(saludo)
-//		sut.eliminarMail(respuestaSaludo)
-//		sut.eliminarMail(enviarInfo)
-//		sut.eliminarMail(responderInfo)
 	}
 
 	@After
@@ -289,6 +269,5 @@ class ServicioDeAmigosTest {
 		loginService.eliminarUsuario(tito)
 		loginService.eliminarUsuario(nico)
 
-		loginService.repositorio.cerrarConeccion()
 	}
 }
