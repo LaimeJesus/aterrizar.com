@@ -7,7 +7,9 @@ import ar.edu.unq.epers.aterrizar.persistence.neo4j.GraphServiceRunner
 import java.util.List
 import ar.edu.unq.epers.aterrizar.domain.Mail
 import ar.edu.unq.epers.aterrizar.persistence.neo4j.RepositorioMensajesEntreAmigos
+import org.eclipse.xtend.lib.annotations.Accessors
 
+@Accessors
 class ServicioDeAmigos {
 	
 	ServicioDeRegistroDeUsuarios servicioDeUsuarios
