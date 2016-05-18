@@ -11,7 +11,12 @@ class Post {
 	LikeAdmin likesAdmin
 	Visibility visibility
 	
-	new(){
+	String destino
+	
+	new(){}
+	
+	new(String msg){
+		destino = msg
 		comments = new ArrayList<Comment>()
 		likesAdmin = new LikeAdmin()
 		visibility = new Private()
@@ -28,4 +33,20 @@ class Post {
 	def getComment(Comment c){
 		comments.get(comments.indexOf(c))
 	}
+	
+	def void meGusta(Perfil p){
+		likesAdmin.agregarMeGusta(p)
+	}
+	def void noMeGusta(Perfil p){
+		likesAdmin.agregarNoMeGusta(p)
+	}
+	
+	def puedeVer(Perfil preguntado, Perfil preguntando) {
+		visibility.puedeVer(preguntado, preguntando)
+	}
+	
+	def void filtrarComentarios(Perfil preguntado, Perfil preguntando) {
+		this.comments = comments.filter[it.puedeVer(preguntado, preguntando)].toList
+	}
+	
 }

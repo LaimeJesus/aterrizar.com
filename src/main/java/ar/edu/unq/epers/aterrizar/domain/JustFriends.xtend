@@ -11,8 +11,8 @@ class JustFriends extends Visibility{
 	ServicioDeRegistroDeUsuarios servicioDeUsuarios
 	
 	override puedeVer(Perfil owner, Perfil asking) {
-		var ownerUser = servicioDeUsuarios.traerUsuarioPorNickname(owner.username)
-		var askingUser = servicioDeUsuarios.traerUsuarioPorNickname(asking.username)		
+		var ownerUser = servicioDeUsuarios.traerUsuarioPorNickname(owner.nickname)
+		var askingUser = servicioDeUsuarios.traerUsuarioPorNickname(asking.nickname)		
 		servicioDeAmigos.consultarAmigos(ownerUser).contains(askingUser)
 	}
 	

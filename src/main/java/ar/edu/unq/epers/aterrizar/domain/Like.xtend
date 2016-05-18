@@ -4,13 +4,13 @@ package ar.edu.unq.epers.aterrizar.domain
 class Like {
 	
 //	Perfil perfil
-	String username
+	String nickname
 	
 	new(Perfil p){
-		username = p.username
+		nickname = p.nickname
 	}
 	
 	def equals(Perfil p){
-		username.equals(p.username)
+		nickname.equals(p.nickname)
 	}
 }
