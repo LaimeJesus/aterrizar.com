@@ -49,6 +49,11 @@ abstract class RepositorioNeo4j<T> {
 		node.getRelationships(relacion, direction).map[it.getOtherNode(node)]
 	}
 
+	def isRelacionados(Node unNode, Node otroNode, RelationshipType relacion){
+		val n = unNode.getRelationships(relacion).findFirst[it.getOtherNode(unNode).equals(otroNode)]
+		return n != null
+	}
+
 	//no estoy seguro cual de las 2 formas es la que funciona voy a probar las 2
 	def todosLosRelacionados(Node n, RelationshipType r, Direction d){
 		val traveler = graph.traversalDescription()
