@@ -10,7 +10,8 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios{
 	ServicioDeAmigos servicioDeAmigos
 	
 	new() {
-		super()
+		servicioDeAmigos = new ServicioDeAmigos(this)
+		servicioDePerfiles = new ServicioDePerfiles(this)		
 		repositorio = new RepositorioUsuarioHibernate
 	}
 
@@ -64,7 +65,12 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios{
 	override nuevoUsuarioEnElSistema(Usuario usuario) {
 		persist(usuario)
 		servicioDeAmigos.crearUsuarioDeAmigos(usuario)
+		servicioDePerfiles.crearPerfil(usuario)
 		this.avisarNuevoUsuarioRegistrado(usuario)
+	}
+	//no les envio mas mails a estos usuarios
+	override avisarNuevoUsuarioRegistrado(Usuario u){
+		
 	}
 
 	override actualizarUsuarioPorNickname(Usuario usuario) {
@@ -75,6 +81,7 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios{
 
 		delete(u)
 		servicioDeAmigos.eliminarUsuarioDeAmigos(u)
+		servicioDePerfiles.eliminarPerfil(u)
 	}
 
 	def contain(String nick) {
