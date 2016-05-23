@@ -1,32 +1,31 @@
 package ar.edu.unq.epers.aterrizar.test
 
-import org.junit.Before
-import org.junit.Test
 import ar.edu.unq.epers.aterrizar.domain.Usuario
+import ar.edu.unq.epers.aterrizar.domain.redsocial.Comment
+import ar.edu.unq.epers.aterrizar.domain.redsocial.DestinoPost
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDePerfiles
 import ar.edu.unq.epers.aterrizar.servicios.ServicioRegistroUsuarioConHibernate
-import ar.edu.unq.epers.aterrizar.domain.redsocial.DestinoPost
-import ar.edu.unq.epers.aterrizar.domain.redsocial.Comment
 import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
 
 class ServicioDePerfilesTest {
-	
+
 	ServicioRegistroUsuarioConHibernate userService
-	
+
 	ServicioDePerfiles sut
-	
+
 	Usuario pepe
-	
+
 	Usuario jose
 	
 	DestinoPost salidaALaPlaza
 	
-	
 	@Before
-	def void setUp(){
+	def void setUp() {
 		pepe = new Usuario()
 		pepe.nickname = "pepe"
-		
+
 		jose = new Usuario()
 		jose.nickname = "jose"
 		
@@ -40,12 +39,15 @@ class ServicioDePerfilesTest {
 		userService.servicioDeAmigos.agregarAmigo(pepe,jose) // amigos
 		sut.agregarPost(pepe, salidaALaPlaza)
 	}
-	
+
 	@Test
-	def void testAgregarUnPostDestinoDeUnLugarQueVisiteMeActualizaElPerfil(){
+	def void testUnUsuarioRegistradoTieneUnPerfilSinNada() {
+		//
+		var perfilPepe = sut.getPerfil(pepe)
 		
+		Assert.assertTrue(perfilPepe.nickname.equals("pepe"))
 	}
-	
+
 	@Test
 	def void testAgregarUnComentarioAUnPostPropio(){
 		
@@ -57,7 +59,7 @@ class ServicioDePerfilesTest {
 	}
 	
 	@Test
-	def void borrarDatosCreadosEnSetUp(){
-		sut.eliminarPerfil(pepe)
+	def void borrarDatosCreadosEnSetUp() {
+		userService.eliminarUsuario(pepe)
 	}
 }
