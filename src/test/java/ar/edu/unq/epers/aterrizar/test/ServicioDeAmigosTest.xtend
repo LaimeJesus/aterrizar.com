@@ -43,7 +43,7 @@ class ServicioDeAmigosTest {
 		
 		var url = "jdbc:mysql://localhost:3306/aterrizar"
 		var user = 'root'
-		var pass = 'jstrike1234'
+		var pass = 'root'
 		
 		creadorDeCodigosMock = Mockito.mock(CreadorDeCodigos)
 		enviadorDeMailsMock = Mockito.mock(EnviadorDeMails)
@@ -110,6 +110,16 @@ class ServicioDeAmigosTest {
 		Assert.assertEquals(despues,1)
 		Assert.assertEquals(recibidos,1)
 	}
+	
+	/////////////////////////////////////////////
+	// Eliminar amistades, mensajes
+	/////////////////////////////////////////////
+	
+//	@Test
+//	def void testEliminarLaRelacionDeAmistad(){
+//		
+//		var cantAmigos = sut.eliminarAmistadEntre(pepe, jose)
+//	}
 	
 	@After
 	def void borrarRelacionesCreadas(){

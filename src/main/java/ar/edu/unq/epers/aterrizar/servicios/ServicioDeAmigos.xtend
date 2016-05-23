@@ -30,6 +30,17 @@ class ServicioDeAmigos {
 		]
 	}
 	
+	def eliminarAmistadEntre(Usuario usr, Usuario amigo) {
+		
+		val u = servicioDeUsuarios.traerUsuarioPorNickname(usr.nickname)
+		val a = servicioDeUsuarios.traerUsuarioPorNickname(amigo.nickname)
+		
+		GraphServiceRunner::run[
+			createHome(it).desrelacionarAmistad(u,a)
+			null
+		]
+	}
+	
 	//funciona
 	def List<Usuario> consultarAmigos(Usuario u){ 
 
@@ -108,6 +119,7 @@ class ServicioDeAmigos {
 			null
 		]		
 	}
+	
 	////////////////////////////////////////////////////////
 	//mails
 	////////////////////////////////////////////////////////	
