@@ -1,12 +1,12 @@
 package ar.edu.unq.epers.aterrizar.servicios
 
 import ar.edu.unq.epers.aterrizar.persistence.mongodb.Home
-import ar.edu.unq.epers.aterrizar.domain.Perfil
 import ar.edu.unq.epers.aterrizar.persistence.mongodb.SistemDB
 import ar.edu.unq.epers.aterrizar.domain.Usuario
-import ar.edu.unq.epers.aterrizar.domain.Post
 import org.mongojack.DBQuery
-import ar.edu.unq.epers.aterrizar.domain.Comment
+import ar.edu.unq.epers.aterrizar.domain.redsocial.Perfil
+import ar.edu.unq.epers.aterrizar.domain.redsocial.Post
+import ar.edu.unq.epers.aterrizar.domain.redsocial.Comment
 
 class ServicioDePerfiles {
 	

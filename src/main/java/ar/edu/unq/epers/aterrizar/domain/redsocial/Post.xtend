@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.aterrizar.domain
+package ar.edu.unq.epers.aterrizar.domain.redsocial
 
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
