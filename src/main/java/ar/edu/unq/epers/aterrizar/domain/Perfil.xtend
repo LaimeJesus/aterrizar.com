@@ -9,9 +9,10 @@ import java.util.ArrayList
 @Accessors
 class Perfil {
 	
-	List<Post> posts
+	List<DestinoPost> posts
 	@ObjectId
-	@JsonProperty("_nickname")
+	@JsonProperty("_idPerfil")
+	String idPerfil
 	String nickname
 
 	new(){
@@ -19,7 +20,7 @@ class Perfil {
 	}
 
 	new(String nick){
-		posts = new ArrayList<Post>()
+		posts = new ArrayList<DestinoPost>()
 		nickname = nick
 	}
 	
@@ -27,52 +28,52 @@ class Perfil {
 	//POSTS
 	///////////////////////////////////////
 
-	def configVisibilityIntoPublic(Post p){
+	def configVisibilityIntoPublic(DestinoPost p){
 		p.visibility = new Public
 	}
-	def configVisibilityIntoPublic(Post p, Comment c){
+	def configVisibilityIntoPublic(DestinoPost p, Comment c){
 		p.getComment(c).visibility = new Public
 	}
-	def configVisibilityIntoPrivate(Post p){
+	def configVisibilityIntoPrivate(DestinoPost p){
 		p.visibility = new Private
 	}
-	def addPost(Post p){
+	def addPost(DestinoPost p){
 		posts.add(p)
 	}
 
-	def deletePost(Post p){
+	def deletePost(DestinoPost p){
 		posts.remove(p)
 	}
 	///////////////////////////////////////
 	//COMMENTS
 	///////////////////////////////////////
-	def configVisibilityIntoPrivate(Post p, Comment c){
+	def configVisibilityIntoPrivate(DestinoPost p, Comment c){
 		p.getComment(c).visibility = new Private
 	}
-	def configVisibilityIntoJustFriends(Post p){
+	def configVisibilityIntoJustFriends(DestinoPost p){
 		p.visibility = new JustFriends
 	}
-	def configVisibilityIntoJustFriends(Post p, Comment c){
+	def configVisibilityIntoJustFriends(DestinoPost p, Comment c){
 		p.getComment(c).visibility = new JustFriends
 	}
 	
-	def void commentToPost(Post post, Comment comment) {
+	def void commentToPost(DestinoPost post, Comment comment) {
 		getPost(post).addComment(comment)
 	}
 	
-	def getPost(Post p) {
+	def getPost(DestinoPost p) {
 		posts.get(posts.indexOf(p))
 	}
-	def void agregarMeGusta(Post p){
+	def void agregarMeGusta(DestinoPost p){
 		getPost(p).meGusta(this)
 	}
-	def void agregarNoMeGusta(Post p){
+	def void agregarNoMeGusta(DestinoPost p){
 		getPost(p).noMeGusta(this)
 	}
-	def void agregarMeGusta(Post p, Comment c){
+	def void agregarMeGusta(DestinoPost p, Comment c){
 		getPost(p).getComment(c).meGusta(this)
 	}
-	def void agregarNoMeGusta(Post p, Comment c){
+	def void agregarNoMeGusta(DestinoPost p, Comment c){
 		getPost(p).getComment(c).noMeGusta(this)
 	}
 	

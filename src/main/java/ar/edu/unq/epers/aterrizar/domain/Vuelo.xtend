@@ -70,7 +70,13 @@ class Vuelo {
 			throw new TramoNoExisteException("no existe tramo " + tramo.nroTramo.toString)
 		}
 		tramo.validarReserva(asiento)
-
+	}
+	def verDestinos(){
+		val destinos = new ArrayList<String>
+		tramos.forEach[
+			destinos.add(it.destino)
+		]
+		destinos
 	}
 
 }

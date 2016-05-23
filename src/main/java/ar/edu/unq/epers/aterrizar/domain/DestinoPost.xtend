@@ -5,7 +5,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.ArrayList
 
 @Accessors
-class Post {
+class DestinoPost {
 	
 	List<Comment> comments
 	LikeAdmin likesAdmin
