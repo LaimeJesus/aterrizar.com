@@ -5,12 +5,16 @@ import ar.edu.unq.epers.aterrizar.persistence.hibernate.SessionManager
 import ar.edu.unq.epers.aterrizar.persistence.hibernate.RepositorioUsuarioHibernate
 
 class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios{
+	
 	RepositorioUsuarioHibernate repositorio
 	ServicioDeAmigos servicioDeAmigos
+	
+	ServicioDePerfiles servicioDePerfiles
 
 	new() {
 		repositorio = new RepositorioUsuarioHibernate
 		servicioDeAmigos = new ServicioDeAmigos(this)
+		servicioDePerfiles = new ServicioDePerfiles(this)
 	}
 
 	override registrarUsuario(Usuario usr) throws Exception{
@@ -45,13 +49,13 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios{
 
 	////////////////////////////////////////////
 	override traerUsuarioDelRepositorio(String field, String value) throws Exception{
-		val u = getUsuario(value)
-		if(u == null){
+		val usuarioATraer = getUsuario(value)
+		if(usuarioATraer == null){
 			repositorio.objectDoesnotExist
 		}
-		u
+		usuarioATraer
 	}
-
+	
 	override contieneUsuarioPorNickname(String nickname) {
 		contain(nickname)
 	}

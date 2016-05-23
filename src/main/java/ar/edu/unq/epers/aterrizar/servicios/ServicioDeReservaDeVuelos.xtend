@@ -20,41 +20,32 @@ class ServicioDeReservaDeVuelos {
 		repositorioDeAerolineas = new RepositorioAerolinea
 	}
 
-
 	//caso de uso un usuario quiere reservar un asiento de un tramo de un vuelo de una Aerolinea
 	def Asiento reservar(Usuario usuario, Aerolinea unaAerolinea, Vuelo unVuelo, Tramo unTramo, Asiento unAsiento) {
 
-//no entiendo xq pero no me deja usar estos tres metodos para realizar la reserva. asi que lo hago todo en una session
-//		var aerolineaFromRepo = traerAerolinea(unaAerolinea)
-//		aerolineaFromRepo.validarReserva(unVuelo, unTramo, unAsiento)
-//		reservarAsiento(aerolineaFromRepo, unAsiento, usuario)
-		
-		SessionManager.runInSession[|
+		//no entiendo xq pero no me deja usar estos tres metodos para realizar la reserva. asi que lo hago todo en una session
+		//		var aerolineaFromRepo = traerAerolinea(unaAerolinea)
+		//		aerolineaFromRepo.validarReserva(unVuelo, unTramo, unAsiento)
+		//		reservarAsiento(aerolineaFromRepo, unAsiento, usuario)
+		SessionManager.runInSession [|
 			val session = SessionManager.getSession()
-
 			session.saveOrUpdate(usuario)
-			
 			val aero = repositorioDeAerolineas.traer("nombreAerolinea", unaAerolinea.nombreAerolinea)
-			
 			aero.validarReserva(unVuelo, unTramo, unAsiento)
-			
 			unAsiento.reservar(usuario)
-			
 			repositorioDeAerolineas.actualizar(aero)
 			null
-			]
+		]
 		unAsiento
 	}
 
-//caso de uso que tal vez no deberia estar
+	//caso de uso que tal vez no deberia estar
 	def List<Asiento> consultarAsientos(Tramo t) {
 		return t.asientosDisponibles
 	}
-
-/////////////////////////////////////////////////
-
+	
+	/////////////////////////////////////////////////
 	def reservarAsiento(Aerolinea aerolinea, Asiento asiento, Usuario usuario) {
-
 
 		asiento.reservar(usuario)
 
