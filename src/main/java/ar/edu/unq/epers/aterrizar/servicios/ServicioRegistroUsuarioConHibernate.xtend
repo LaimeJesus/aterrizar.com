@@ -9,12 +9,9 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios{
 	RepositorioUsuarioHibernate repositorio
 	ServicioDeAmigos servicioDeAmigos
 	
-	ServicioDePerfiles servicioDePerfiles
-
 	new() {
+		super()
 		repositorio = new RepositorioUsuarioHibernate
-		servicioDeAmigos = new ServicioDeAmigos(this)
-		servicioDePerfiles = new ServicioDePerfiles(this)
 	}
 
 	override registrarUsuario(Usuario usr) throws Exception{

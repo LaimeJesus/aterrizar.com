@@ -50,7 +50,18 @@ class Home<T> {
 		return mongoCollection;
 	}
 	
-	def update(String id, T objec){
-		mongoCollection.updateById(id, objec)
+	def update(String id, T object){
+		mongoCollection.updateById(id, object)
+	}
+	
+	def delete(String id) {
+		mongoCollection.removeById(id)
+	}
+	
+	def deleteAll() {
+		mongoCollection.drop()
+	}
+	def find(String id){
+		mongoCollection.findOneById(id)
 	}
 }
