@@ -14,8 +14,8 @@ import ar.edu.unq.epers.aterrizar.domain.CreadorDeMails
 import org.junit.After
 import ar.edu.unq.epers.aterrizar.exceptions.RegistrationException
 import ar.edu.unq.epers.aterrizar.exceptions.MyValidateException
-import ar.edu.unq.epers.aterrizar.exceptions.UsuarioNoEstaEnElServicioException
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDeRegistroDeUsuarios
+import ar.edu.unq.epers.aterrizar.exceptions.UsuarioNoExisteException
 
 class RecorderServiceTest{
 	
@@ -201,7 +201,7 @@ class RecorderServiceTest{
 		assertEquals(nuevaPassword, newPasswordFromRepo)
 	}
 	
-	@Test(expected=UsuarioNoEstaEnElServicioException)
+	@Test(expected=UsuarioNoExisteException)
 	def void testTraerUnUsuarioQueNoExisteEnElRepositorioArrojaUnaExcepcionDeUsuarioNoEncontrado(){
 		var pw = 'doesnt care'
 		var nickname = 'pichu'
@@ -211,10 +211,9 @@ class RecorderServiceTest{
 	
 	@After
 	def void testBorrarUsuarioQueFueCreadoEnSetUpYCerrarConexion(){
-		sudo.repositorio.borrar('nickname', pepillo.nickname)
-		sudo.repositorio.borrar('nickname', cepillo.nickname)
-		sudo.servicioDeAmigos.eliminarUsuarioDeAmigos(cepillo)
-		sudo.servicioDeAmigos.eliminarUsuarioDeAmigos(pepillo)
+	
+		sudo.eliminarUsuario(pepillo)
+		sudo.eliminarUsuario(cepillo)		
 		sudo.repositorio.cerrarConeccion()
 	}
 	

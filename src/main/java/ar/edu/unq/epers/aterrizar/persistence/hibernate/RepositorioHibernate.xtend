@@ -32,7 +32,7 @@ abstract class RepositorioHibernate<T> {
 		query.setParameter(field, value)
 		var results = query.list as List<T>
 		if(results.isEmpty){
-			objectDoesnotExist
+			return null
 		}
 		return results.get(0)
 	}

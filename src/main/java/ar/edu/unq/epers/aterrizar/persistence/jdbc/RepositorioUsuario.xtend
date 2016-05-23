@@ -3,9 +3,9 @@ package ar.edu.unq.epers.aterrizar.persistence.jdbc
 import ar.edu.unq.epers.aterrizar.domain.Usuario
 import java.sql.ResultSet
 import java.util.ArrayList
-import ar.edu.unq.epers.aterrizar.exceptions.UsuarioNoEstaEnElServicioException
 import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.utils.ArmadorDeDeclaraciones
+import ar.edu.unq.epers.aterrizar.exceptions.UsuarioNoExisteException
 
 @Accessors
 class RepositorioUsuario extends Repositorio<Usuario>{
@@ -152,7 +152,7 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 	}
 	
 	override objectNotFoundError() throws Exception {
-		throw new UsuarioNoEstaEnElServicioException()
+		throw new UsuarioNoExisteException()
 	}
 	
 	def conectarAMiDB(){

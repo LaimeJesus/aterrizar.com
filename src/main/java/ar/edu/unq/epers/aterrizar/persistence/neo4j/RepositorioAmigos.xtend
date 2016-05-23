@@ -33,13 +33,8 @@ class RepositorioAmigos extends RepositorioNeo4j<Usuario>{
 	
 	def getAmigos(Usuario u){
 		val nodoUsuario = getNodo(u)
-		val nodos = nodosRelacionados(nodoUsuario, TipoDeRelacion.AMIGO, Direction.OUTGOING)
-		//puedo hacer mi propio toSet en el cual saco al nodo u, que no quiero que aparezca en amigos
+		val nodos = nodosRelacionados(nodoUsuario, TipoDeRelacion.AMIGO, Direction.BOTH)
 		var amigos = nodos.map[toObject(it)].toSet
-		amigos.forEach[
-			System.out.println(it.nickname)
-		]
-		//no encontre el metodo para no agregarme en el recorrido
 		amigos.removeIf([it.nickname.equals(u.nickname)])
 		return amigos
 	}
@@ -48,18 +43,13 @@ class RepositorioAmigos extends RepositorioNeo4j<Usuario>{
 	
 	def getAmigosDeAmigos(Usuario u){
 		val nodoUsuario = getNodo(u)
-		val nodos = todosLosRelacionados(nodoUsuario, TipoDeRelacion.AMIGO, Direction.OUTGOING)
-		//puedo hacer mi propio toSet en el cual saco al nodo u, que no quiero que aparezca en amigos
+		val nodos = todosLosRelacionados(nodoUsuario, TipoDeRelacion.AMIGO, Direction.BOTH)
 		val amigos = nodos.map[toObject(it)].toSet
-		amigos.forEach[
-			System.out.println(it.nickname)
-		]
 		return amigos
 	}
 
 	override agregarPropiedades(Node node, Usuario obj){
 		node.setProperty("nickname", obj.nickname)
-		//node.setProperty("idUsuario", usuario.idUsuario)
 	}
 		
 	override objLabel() {

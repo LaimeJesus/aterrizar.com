@@ -21,8 +21,6 @@ abstract class RepositorioNeo4j<T> {
 		graph = g
 	}
 	
-	//crear un nodo desde un usuario
-	
 	def crearNodo(T obj){
 		val node = graph.createNode(objLabel)
 		agregarPropiedades(node, obj)
