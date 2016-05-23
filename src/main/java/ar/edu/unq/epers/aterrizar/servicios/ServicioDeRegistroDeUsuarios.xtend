@@ -17,10 +17,12 @@ class ServicioDeRegistroDeUsuarios {
 	EnviadorDeMails enviadorDeMails
 	CreadorDeMails creadorDeMails
 	ServicioDeAmigos servicioDeAmigos
+	ServicioDePerfiles servicioDePerfiles
 	
 	new(){
 		repositorio = new RepositorioUsuario()
 		servicioDeAmigos = new ServicioDeAmigos(this)
+		servicioDePerfiles = new ServicioDePerfiles(this)
 	}
 	
 	def registrarUsuario(Usuario usr) throws Exception{
@@ -90,6 +92,7 @@ class ServicioDeRegistroDeUsuarios {
 		
 		//a mi nuevo servicio de amigos le digo que lo agregue al usuario
 		servicioDeAmigos.crearUsuarioDeAmigos(usuario)
+		servicioDePerfiles.crearPerfil(usuario)
 		this.avisarNuevoUsuarioRegistrado(usuario)
 	}
 	
@@ -99,13 +102,14 @@ class ServicioDeRegistroDeUsuarios {
 		val mailAEnviar = creadorDeMails.crearMailParaUsuario('registrador', usuario, codigo)
 		enviadorDeMails.enviarMail(mailAEnviar)
 	}
+
 	def actualizarUsuarioPorNickname(Usuario usuario) {
 		repositorio.actualizar(usuario,'nickname', usuario.nickname)
 	}
 	
-	def eliminarUsuario(Usuario u){
+	def void eliminarUsuario(Usuario u){
 		repositorio.borrar("nickname", u.nickname)
-		servicioDeAmigos.eliminarUsuarioDeAmigos(u)
+		servicioDePerfiles.eliminarPerfil(u)
 //		servicioDeAmigos.eliminarMailsDeUsuario(u)
 	}
 	

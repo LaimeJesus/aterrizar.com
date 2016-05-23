@@ -140,5 +140,19 @@ class ServicioDePerfiles {
 	def insertPerfil(Perfil perfil) {
 		repositorioDePerfiles.insert(perfil)
 	}
+	
+	def crearPerfil(Usuario usuario) {
+		var p = new Perfil(usuario.nickname)
+		repositorioDePerfiles.insert(p)
+	}
+	
+	def eliminarPerfil(Usuario usuario) {
+		var perfil = repositorioDePerfiles.find(usuario.perfil.idPerfil)
+		repositorioDePerfiles.delete(perfil.idPerfil)
+	}
+	
+	def eliminarTodosLosPerfiles(){
+		repositorioDePerfiles.deleteAll()
+	}
 
 }
