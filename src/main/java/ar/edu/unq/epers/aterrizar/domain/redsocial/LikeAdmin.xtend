@@ -4,6 +4,8 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.List
 import java.util.ArrayList
 
+
+//esta clase existe para no repetir codigo en postDestino y comment
 @Accessors
 class LikeAdmin {
 	
@@ -19,7 +21,7 @@ class LikeAdmin {
 	def puedeVotar(Perfil p, List<Like> likes){
 		!likes.contains(p)
 	}
-	
+	//que se rompa si no puede agregar
 	def agregarMeGusta(Perfil p){
 		if(puedeVotar(p, meGusta)){
 			agregarLike(p, meGusta)

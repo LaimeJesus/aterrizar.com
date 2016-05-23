@@ -20,7 +20,7 @@
 		</property>
     	<many-to-one name="reservadoPorUsuario" 
         column="idUsuario"
-        unique="true"
+        not-null="false"
         cascade="all"/>
 
 	</class>

@@ -10,9 +10,12 @@ import ar.edu.unq.epers.aterrizar.domain.buscador.Busqueda
 import ar.edu.unq.epers.aterrizar.persistence.hibernate.RepositorioBusquedas
 import ar.edu.unq.epers.aterrizar.persistence.hibernate.RepositorioAerolinea
 import ar.edu.unq.epers.aterrizar.persistence.hibernate.SessionManager
+import ar.edu.unq.epers.aterrizar.domain.Usuario
+import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorVueloReservado
+import java.util.ArrayList
 
 @Accessors
-class BuscadorDeVuelos {
+class ServicioDeBusquedaDeVuelos {
 	
 	RepositorioBusquedas repositorioDeBusquedas = new RepositorioBusquedas
 	RepositorioAerolinea repositorioAerolineas
@@ -38,6 +41,22 @@ class BuscadorDeVuelos {
 		]
 		guardar(b)
 		return res
+	}
+	
+	//caso de uso extra ver reservas realizadas por un usuario
+	def verLugaresVisitados(Usuario u){
+		var v = getVuelosReservados(u)
+		val visitados = new ArrayList<String>()
+		v.forEach[
+			visitados.addAll(it.verDestinos())
+		]
+		visitados
+	}
+	def getVuelosReservados(Usuario u){
+		var c = new CriterioPorVueloReservado(u)
+		var b = new Busqueda(c)
+		buscarVuelos(b)
+		
 	}
 
 
@@ -101,6 +120,10 @@ class BuscadorDeVuelos {
 			null
 		]
 		}
+	}
+	
+	def viajeA(Usuario usuario, String destino) {
+		verLugaresVisitados(usuario).contains(destino)
 	}
 
 }

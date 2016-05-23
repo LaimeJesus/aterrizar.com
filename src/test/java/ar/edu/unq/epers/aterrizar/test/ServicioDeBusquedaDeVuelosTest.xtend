@@ -19,9 +19,9 @@ import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorVueloDisp
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorFechaDeLlegada
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorFechaDeSalida
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorCategoriaDeAsiento
-import ar.edu.unq.epers.aterrizar.servicios.BuscadorDeVuelos
 import ar.edu.unq.epers.aterrizar.persistence.hibernate.RepositorioAerolinea
 import ar.edu.unq.epers.aterrizar.persistence.hibernate.SessionManager
+import ar.edu.unq.epers.aterrizar.servicios.ServicioDeBusquedaDeVuelos
 
 /*
  * Esta clase esta para testear al buscador de vuelos integrado con busquedas, estas tienen criterios y ordenes.
@@ -30,9 +30,9 @@ import ar.edu.unq.epers.aterrizar.persistence.hibernate.SessionManager
  */
 
 
-class BuscadorDeVuelosTest {
+class ServicioDeBusquedaDeVuelosTest {
 	
-	BuscadorDeVuelos sudo
+	ServicioDeBusquedaDeVuelos sudo
 	
 	Busqueda busqueda
 	
@@ -140,7 +140,7 @@ class BuscadorDeVuelosTest {
 		//////////////////////////////////////
 		//inicializando buscador
 		//////////////////////////////////////
-		sudo = new BuscadorDeVuelos(repoPrueba)
+		sudo = new ServicioDeBusquedaDeVuelos(repoPrueba)
 		
 		//////////////////////////////////////
 		//inicializando busqueda

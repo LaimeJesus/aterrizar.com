@@ -3,9 +3,14 @@ package ar.edu.unq.epers.aterrizar.domain.redsocial
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.ArrayList
+import ar.edu.unq.epers.aterrizar.domain.redsocial.Comment
+import ar.edu.unq.epers.aterrizar.domain.redsocial.LikeAdmin
+import ar.edu.unq.epers.aterrizar.domain.redsocial.Visibility
+import ar.edu.unq.epers.aterrizar.domain.redsocial.Private
+import ar.edu.unq.epers.aterrizar.domain.redsocial.Perfil
 
 @Accessors
-class Post {
+class DestinoPost {
 	
 	List<Comment> comments
 	LikeAdmin likesAdmin

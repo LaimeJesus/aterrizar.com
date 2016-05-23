@@ -109,4 +109,10 @@ class ServicioDeRegistroDeUsuarios {
 //		servicioDeAmigos.eliminarMailsDeUsuario(u)
 	}
 	
+	def isRegistrado(Usuario usuario) {
+		if(!contieneUsuarioPorNickname(usuario.nickname)){
+			repositorio.objectNotFoundError()
+		}
+	}
+	
 }

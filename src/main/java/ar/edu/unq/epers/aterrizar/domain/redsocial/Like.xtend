@@ -1,9 +1,12 @@
 package ar.edu.unq.epers.aterrizar.domain.redsocial
 
+import org.eclipse.xtend.lib.annotations.Accessors
 
+@Accessors
 class Like {
 	
 //	Perfil perfil
+	int idLike
 	String nickname
 	
 	new(Perfil p){

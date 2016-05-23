@@ -49,4 +49,8 @@ class Home<T> {
 	def getMongoCollection() {
 		return mongoCollection;
 	}
+	
+	def update(String id, T objec){
+		mongoCollection.updateById(id, objec)
+	}
 }
