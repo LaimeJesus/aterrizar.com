@@ -4,6 +4,7 @@ import java.util.List
 import org.mongojack.DBQuery.Query
 import org.mongojack.JacksonDBCollection
 import org.mongojack.MapReduce
+import org.mongojack.DBQuery
 
 class Home<T> {
 	private JacksonDBCollection<T, String> mongoCollection;
@@ -63,5 +64,9 @@ class Home<T> {
 	}
 	def find(String id){
 		mongoCollection.findOneById(id)
+	}
+	
+	def find(String property, String value){
+		mongoCollection.findOne(DBQuery.is(property, value));
 	}
 }
