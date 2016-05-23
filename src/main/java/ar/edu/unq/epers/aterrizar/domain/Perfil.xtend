@@ -11,7 +11,7 @@ class Perfil {
 	
 	List<DestinoPost> posts
 	@ObjectId
-	@JsonProperty("_idPerfil")
+	@JsonProperty("_id")
 	String idPerfil
 	String nickname
 
