@@ -14,20 +14,11 @@ class ServicioDePerfilesTest {
 	ServicioDeAmigos service
 	
 	
+	
 	@Before
 	def setUp(){
 		
 	}
-	
-	@Test
-	def test(){
+
 		
-		
-	}
-	
-	@After
-	def borrarPerfiles(){
-		
-		
-	}
 }
