@@ -8,7 +8,9 @@ import org.mongojack.DBQuery
 import ar.edu.unq.epers.aterrizar.domain.Comment
 import ar.edu.unq.epers.aterrizar.exceptions.NoPuedeAgregarPostException
 import ar.edu.unq.epers.aterrizar.domain.DestinoPost
+import org.eclipse.xtend.lib.annotations.Accessors
 
+@Accessors
 class ServicioDePerfiles {
 
 	Home<Perfil> repositorioDePerfiles
@@ -28,12 +30,13 @@ class ServicioDePerfiles {
 	def agregarPost(Usuario u, DestinoPost p) {
 		servicioDeUsuarios.isRegistrado(u)
 
-		if(servicioDeBusqueda.viajeA(u, p.destino)) {
-			val perfil = getPerfil(u)
-			perfil.addPost(p)
-			updatePerfil(perfil)
+		if(!servicioDeBusqueda.viajeA(u, p.destino)) {
+			throw new NoPuedeAgregarPostException("Nunca me visitaste")
 		}
-		throw new NoPuedeAgregarPostException("Nunca me visitaste")
+		val perfil = getPerfil(u)
+		perfil.addPost(p)
+		updatePerfil(perfil)
+
 	}
 
 	//    Como usuario quiero a cada destino poder hacerle comentarios, establecer “Me Gusta” o “No me gusta”
@@ -140,18 +143,18 @@ class ServicioDePerfiles {
 	def insertPerfil(Perfil perfil) {
 		repositorioDePerfiles.insert(perfil)
 	}
-	
+
 	def crearPerfil(Usuario usuario) {
 		var p = new Perfil(usuario.nickname)
 		repositorioDePerfiles.insert(p)
 	}
-	
+
 	def eliminarPerfil(Usuario usuario) {
 		var perfil = repositorioDePerfiles.find("username", usuario.nickname)
 		repositorioDePerfiles.delete(perfil.idPerfil)
 	}
-	
-	def eliminarTodosLosPerfiles(){
+
+	def eliminarTodosLosPerfiles() {
 		repositorioDePerfiles.deleteAll()
 	}
 
