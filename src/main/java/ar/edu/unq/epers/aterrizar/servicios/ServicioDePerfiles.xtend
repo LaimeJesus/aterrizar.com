@@ -147,7 +147,7 @@ class ServicioDePerfiles {
 	}
 	
 	def eliminarPerfil(Usuario usuario) {
-		var perfil = repositorioDePerfiles.find(usuario.perfil.idPerfil)
+		var perfil = repositorioDePerfiles.find("username", usuario.nickname)
 		repositorioDePerfiles.delete(perfil.idPerfil)
 	}
 	
