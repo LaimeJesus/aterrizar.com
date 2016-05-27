@@ -72,7 +72,8 @@ class Perfil {
 	def getPost(DestinoPost p) {
 		for (post : posts) {
 			System.out.println(post.id)
-			if(post.id == p.id) {
+			System.out.println(post.destino)
+			if(post.destino == p.destino) {
 				return post
 			}
 		}

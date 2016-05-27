@@ -16,6 +16,7 @@ import ar.edu.unq.epers.aterrizar.domain.vuelos.Aerolinea
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDeReservaDeVuelos
 import ar.edu.unq.epers.aterrizar.domain.redsocial.Comment
 import ar.edu.unq.epers.aterrizar.exceptions.NoExistePostException
+import ar.edu.unq.epers.aterrizar.exceptions.NoPuedesVotarException
 
 class ServicioDePerfilesTest {
 
@@ -72,6 +73,8 @@ class ServicioDePerfilesTest {
 		commentForPostBrazil = new Comment("1", "BEST TRIP EVER")
 
 		sut.comentarPost(pepe, postBrazil, commentForPostBrazil)
+		sut.meGusta(pepe, postBrazil)
+
 	}
 
 	@Test
@@ -112,11 +115,16 @@ class ServicioDePerfilesTest {
 
 	@Test
 	def void testAgregarMeGustaAUnPostAumentaLaCantidadDeLikesEnUno() {
-		sut.meGusta(pepe, postBrazil)
 
+		System.out.println(postBrazil)
 		var p = sut.getPerfil(pepe)
 		var cantidadDeMegusta = p.cantidadDeMeGusta(postBrazil)
 		Assert.assertEquals(1, cantidadDeMegusta)
+	}
+
+	@Test(expected=NoPuedesVotarException)
+	def void testAgregarMeGustaAUnPostQueYaLikeeArrojaUnaExceptcion() {
+		sut.meGusta(pepe, postBrazil)
 	}
 
 	@After
@@ -125,6 +133,7 @@ class ServicioDePerfilesTest {
 		flightService.eliminarAerolinea(aa)
 		userService.borrarDeAmigos(pepe)
 		userService.borrarDePerfiles(pepe)
+		sut.repositorioDePerfiles.deleteAll
 
 	}
 }

@@ -19,42 +19,41 @@ class LikeAdmin {
 
 	//modificar el contains o el equals de los likes o usar uno que no necesite el perfil dentro de un like
 	def boolean puedeVotar(Perfil p, List<Like> likes) {
-		!likes.contains(p)
+		for (like : likes) {
+			if(like.id == p.idPerfil) {
+				return false
+			}
+		}
+		true
 	}
 
 	//que se rompa si no puede agregar
 	def void agregarMeGusta(Perfil p) {
-		validarVotoMeGusta(p)
+		validarVoto(p)
 		agregarLike(p, meGusta)
 	}
 
-	def void validarVotoMeGusta(Perfil p) {
-		if(puedeVotar(p, meGusta) && !puedeVotar(p, noMeGusta)) {
-			throw new NoPuedesVotarException("No puedes agregar tu meGusta o noMeGusta")
-		}
-	}
-
-	def void validarVotoNoMeGusta(Perfil p) {
-		if(!puedeVotar(p, meGusta) && puedeVotar(p, noMeGusta)) {
+	def void validarVoto(Perfil p) {
+		if(!(puedeVotar(p, meGusta) && puedeVotar(p, noMeGusta))) {
 			throw new NoPuedesVotarException("No puedes agregar tu meGusta o noMeGusta")
 		}
 	}
 
 	def void agregarNoMeGusta(Perfil p) {
-		validarVotoNoMeGusta(p)
+		validarVoto(p)
 		agregarLike(p, noMeGusta)
 	}
 
 	def void agregarLike(Perfil perfil, List<Like> likes) {
 		likes.add(new Like(perfil))
 	}
-	
+
 	def cantidadDeMeGusta() {
 		meGusta.length
 	}
-	
+
 	def cantidadDeNoMeGusta() {
 		noMeGusta.length
 	}
-	
+
 }

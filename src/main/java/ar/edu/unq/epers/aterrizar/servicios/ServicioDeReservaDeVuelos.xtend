@@ -36,9 +36,6 @@ class ServicioDeReservaDeVuelos {
 			repositorioDeAerolineas.actualizar(aero)
 			null
 		]
-		System.out.println(usuario.idUsuario)
-		System.out.println(unAsiento.reservadoPorUsuario.nickname)
-		System.out.println(unAsiento.idAsiento)
 		unAsiento
 	}
 

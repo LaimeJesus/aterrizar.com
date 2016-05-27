@@ -47,7 +47,6 @@ abstract class RepositorioHibernate<T> {
 	
 	def void deleteAll(){
 		var stringQuery = "delete from " + this.getTable()
-		System.out.println(stringQuery)
 		var query = getSession().createQuery(stringQuery)
 		query.executeUpdate()
 	}
