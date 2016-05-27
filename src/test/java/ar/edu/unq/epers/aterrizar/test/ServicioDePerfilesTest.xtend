@@ -1,20 +1,21 @@
 package ar.edu.unq.epers.aterrizar.test
 
-import org.junit.Before
-import org.junit.Test
+import ar.edu.unq.epers.aterrizar.domain.Usuario
+import ar.edu.unq.epers.aterrizar.domain.redsocial.Comment
+import ar.edu.unq.epers.aterrizar.domain.redsocial.DestinoPost
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDePerfiles
 import ar.edu.unq.epers.aterrizar.servicios.ServicioRegistroUsuarioConHibernate
-import ar.edu.unq.epers.aterrizar.domain.Usuario
 import org.junit.Assert
 import org.junit.After
-import ar.edu.unq.epers.aterrizar.servicios.ServicioDeReservaDeVuelos
 import ar.edu.unq.epers.aterrizar.exceptions.NoPuedeAgregarPostException
-import ar.edu.unq.epers.aterrizar.domain.DestinoPost
-import ar.edu.unq.epers.aterrizar.domain.Aerolinea
-import ar.edu.unq.epers.aterrizar.domain.Vuelo
-import ar.edu.unq.epers.aterrizar.domain.Tramo
-import ar.edu.unq.epers.aterrizar.domain.Asiento
 import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
+import org.junit.Before
+import org.junit.Test
+import ar.edu.unq.epers.aterrizar.domain.vuelos.Asiento
+import ar.edu.unq.epers.aterrizar.domain.vuelos.Tramo
+import ar.edu.unq.epers.aterrizar.domain.vuelos.Vuelo
+import ar.edu.unq.epers.aterrizar.domain.vuelos.Aerolinea
+import ar.edu.unq.epers.aterrizar.servicios.ServicioDeReservaDeVuelos
 
 class ServicioDePerfilesTest {
 
@@ -34,6 +35,10 @@ class ServicioDePerfilesTest {
 
 	Asiento asientolibre
 
+	Usuario jose
+	
+	DestinoPost salidaALaPlaza
+	
 	@Before
 	def void setUp() {
 
@@ -42,8 +47,14 @@ class ServicioDePerfilesTest {
 		pepe = new Usuario()
 		pepe.nickname = "pepe"
 
+		jose = new Usuario()
+		jose.nickname = "jose"
+		
+		salidaALaPlaza = new DestinoPost("dia en el parque")
+		
 		userService = new ServicioRegistroUsuarioConHibernate()
 		userService.registrarUsuario(pepe)
+		userService.registrarUsuario(jose)
 		sut = userService.servicioDePerfiles
 		sut.servicioDeBusqueda.repositorioAerolineas = flightService.repositorioDeAerolineas
 
@@ -58,6 +69,9 @@ class ServicioDePerfilesTest {
 		flightService.agregarAerolinea(aa)
 		flightService.reservar(pepe, aa, v1, argentinabrasil, asientolibre)
 
+		
+		userService.servicioDeAmigos.agregarAmigo(pepe,jose) // amigos
+		sut.agregarPost(pepe, salidaALaPlaza)
 	}
 
 	@Test
@@ -82,6 +96,16 @@ class ServicioDePerfilesTest {
 	}
 
 	@After
+	def void testAgregarUnComentarioAUnPostPropio(){
+		
+		val commit = new Comment("hermoso dia soleado")
+		sut.comentarPost(pepe, salidaALaPlaza, commit)
+		
+		Assert.assertTrue("un solo post", !sut.getPerfil(pepe).getPost(salidaALaPlaza).comments.empty)
+		
+	}
+	
+	@Test
 	def void borrarDatosCreadosEnSetUp() {
 		
 	//	userService.eliminarUsuario(pepe)

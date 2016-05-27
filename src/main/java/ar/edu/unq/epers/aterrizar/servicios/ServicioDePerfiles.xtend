@@ -1,14 +1,14 @@
 package ar.edu.unq.epers.aterrizar.servicios
 
-import ar.edu.unq.epers.aterrizar.persistence.mongodb.Home
-import ar.edu.unq.epers.aterrizar.domain.Perfil
-import ar.edu.unq.epers.aterrizar.persistence.mongodb.SistemDB
 import ar.edu.unq.epers.aterrizar.domain.Usuario
-import org.mongojack.DBQuery
-import ar.edu.unq.epers.aterrizar.domain.Comment
+import ar.edu.unq.epers.aterrizar.domain.redsocial.Comment
+import ar.edu.unq.epers.aterrizar.domain.redsocial.DestinoPost
+import ar.edu.unq.epers.aterrizar.domain.redsocial.Perfil
 import ar.edu.unq.epers.aterrizar.exceptions.NoPuedeAgregarPostException
-import ar.edu.unq.epers.aterrizar.domain.DestinoPost
 import org.eclipse.xtend.lib.annotations.Accessors
+import ar.edu.unq.epers.aterrizar.persistence.mongodb.Home
+import ar.edu.unq.epers.aterrizar.persistence.mongodb.SistemDB
+import org.mongojack.DBQuery
 
 @Accessors
 class ServicioDePerfiles {

@@ -1,8 +1,10 @@
-package ar.edu.unq.epers.aterrizar.domain
+package ar.edu.unq.epers.aterrizar.domain.redsocial
 
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.ArrayList
+import ar.edu.unq.epers.aterrizar.domain.redsocial.LikeAdmin
+import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
 
 @Accessors
 class DestinoPost {
@@ -10,7 +12,7 @@ class DestinoPost {
 	String id
 	List<Comment> comments
 	LikeAdmin likesAdmin
-//	Visibility visibility
+	Visibility visibility
 	
 	String destino
 	
@@ -20,7 +22,7 @@ class DestinoPost {
 		destino = msg
 		comments = new ArrayList<Comment>()
 		likesAdmin = new LikeAdmin()
-//		visibility = new Private()
+		visibility = Visibility.PRIVATE
 	}
 	
 	def addComment(Comment c){
@@ -42,9 +44,8 @@ class DestinoPost {
 		likesAdmin.agregarNoMeGusta(p)
 	}
 	
-	def puedeVer(Perfil preguntado, Perfil preguntando) {
-//		visibility.puedeVer(preguntado, preguntando)
-		true
+	def boolean puedeVer(Perfil preguntado, Perfil preguntando) {
+		visibility.puedeVer(preguntado, preguntando)
 	}
 	
 	def void filtrarComentarios(Perfil preguntado, Perfil preguntando) {

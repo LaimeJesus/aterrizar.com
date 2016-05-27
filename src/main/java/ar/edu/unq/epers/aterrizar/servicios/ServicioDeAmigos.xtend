@@ -5,9 +5,9 @@ import ar.edu.unq.epers.aterrizar.persistence.neo4j.RepositorioAmigos
 import org.neo4j.graphdb.GraphDatabaseService
 import ar.edu.unq.epers.aterrizar.persistence.neo4j.GraphServiceRunner
 import java.util.List
-import ar.edu.unq.epers.aterrizar.domain.Mail
 import ar.edu.unq.epers.aterrizar.persistence.neo4j.RepositorioMensajesEntreAmigos
 import org.eclipse.xtend.lib.annotations.Accessors
+import ar.edu.unq.epers.aterrizar.domain.mensajes.Mail
 
 @Accessors
 class ServicioDeAmigos {
@@ -111,7 +111,7 @@ class ServicioDeAmigos {
 			null
 		]
 	}
-
+	
 	////////////////////////////////////////////////////////
 	//mails
 	////////////////////////////////////////////////////////	

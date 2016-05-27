@@ -18,7 +18,16 @@ class RepositorioAmigos extends RepositorioNeo4j<Usuario>{
 		val recibiendo = getNodo(user2)
 		
 		relacionar(enviando, recibiendo, TipoDeRelacion.AMIGO)
-	}	
+		relacionar(recibiendo, enviando, TipoDeRelacion.AMIGO)
+	}
+	
+	def desrelacionarAmistad(Usuario usuario, Usuario usuario2) {
+		
+		val amigoA = getNodo(usuario)	// --->
+		val amigoB = getNodo(usuario2)	// <---
+		
+		
+	}
 	
 	//todos mis amigos
 	

@@ -5,9 +5,9 @@ import org.neo4j.graphdb.DynamicLabel
 import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.domain.Usuario
 import ar.edu.unq.epers.aterrizar.domain.relaciones.TipoDeMensajes
-import ar.edu.unq.epers.aterrizar.domain.Mail
 import org.neo4j.graphdb.Direction
 import ar.edu.unq.epers.aterrizar.domain.relaciones.TipoDeRelacion
+import ar.edu.unq.epers.aterrizar.domain.mensajes.Mail
 
 //no se puede usar junto con repoamigos, no entiendo xq no pueden compartir el mismo graph
 @Accessors

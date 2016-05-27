@@ -1,7 +1,6 @@
 package ar.edu.unq.epers.aterrizar.servicios
 
 import org.eclipse.xtend.lib.annotations.Accessors
-import ar.edu.unq.epers.aterrizar.domain.Vuelo
 import java.util.List
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorCostoDeVuelo
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorEscalas
@@ -13,6 +12,7 @@ import ar.edu.unq.epers.aterrizar.persistence.hibernate.SessionManager
 import ar.edu.unq.epers.aterrizar.domain.Usuario
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorVueloReservado
 import java.util.ArrayList
+import ar.edu.unq.epers.aterrizar.domain.vuelos.Vuelo
 
 @Accessors
 class ServicioDeBusquedaDeVuelos {

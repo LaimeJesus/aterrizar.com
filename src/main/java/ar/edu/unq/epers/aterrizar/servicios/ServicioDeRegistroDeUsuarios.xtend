@@ -3,11 +3,11 @@ package ar.edu.unq.epers.aterrizar.servicios
 import ar.edu.unq.epers.aterrizar.exceptions.RegistrationException
 import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.domain.Usuario
-import ar.edu.unq.epers.aterrizar.domain.CreadorDeCodigos
-import ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails
-import ar.edu.unq.epers.aterrizar.domain.CreadorDeMails
 import ar.edu.unq.epers.aterrizar.persistence.jdbc.Repositorio
 import ar.edu.unq.epers.aterrizar.persistence.jdbc.RepositorioUsuario
+import ar.edu.unq.epers.aterrizar.domain.mensajes.CreadorDeCodigos
+import ar.edu.unq.epers.aterrizar.domain.mensajes.EnviadorDeMails
+import ar.edu.unq.epers.aterrizar.domain.mensajes.CreadorDeMails
 
 @Accessors
 class ServicioDeRegistroDeUsuarios {

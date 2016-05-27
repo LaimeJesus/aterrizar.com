@@ -1,4 +1,6 @@
-package ar.edu.unq.epers.aterrizar.domain
+package ar.edu.unq.epers.aterrizar.domain.mensajes
+
+import ar.edu.unq.epers.aterrizar.domain.Usuario
 
 class CreadorDeMails {
 	

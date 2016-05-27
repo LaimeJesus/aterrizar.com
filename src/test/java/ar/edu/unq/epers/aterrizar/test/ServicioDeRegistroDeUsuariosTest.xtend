@@ -1,6 +1,5 @@
 package ar.edu.unq.epers.aterrizar.test
 
-import ar.edu.unq.epers.aterrizar.domain.Mail
 import org.junit.Test
 
 import static org.junit.Assert.*
@@ -8,14 +7,15 @@ import org.mockito.Mockito
 import org.junit.Before
 import ar.edu.unq.epers.aterrizar.domain.Usuario
 import java.sql.Date
-import ar.edu.unq.epers.aterrizar.domain.CreadorDeCodigos
-import ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails
-import ar.edu.unq.epers.aterrizar.domain.CreadorDeMails
 import org.junit.After
 import ar.edu.unq.epers.aterrizar.exceptions.RegistrationException
 import ar.edu.unq.epers.aterrizar.exceptions.MyValidateException
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDeRegistroDeUsuarios
 import ar.edu.unq.epers.aterrizar.exceptions.UsuarioNoExisteException
+import ar.edu.unq.epers.aterrizar.domain.mensajes.CreadorDeCodigos
+import ar.edu.unq.epers.aterrizar.domain.mensajes.EnviadorDeMails
+import ar.edu.unq.epers.aterrizar.domain.mensajes.CreadorDeMails
+import ar.edu.unq.epers.aterrizar.domain.mensajes.Mail
 
 class RecorderServiceTest{
 	

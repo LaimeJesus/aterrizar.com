@@ -1,8 +1,9 @@
-package ar.edu.unq.epers.aterrizar.domain
+package ar.edu.unq.epers.aterrizar.domain.vuelos
 
 import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
 import ar.edu.unq.epers.aterrizar.exceptions.AsientoReservadoException
+import ar.edu.unq.epers.aterrizar.domain.Usuario
 
 @Accessors
 

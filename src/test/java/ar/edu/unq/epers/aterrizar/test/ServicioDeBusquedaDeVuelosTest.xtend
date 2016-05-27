@@ -5,9 +5,6 @@ import org.junit.Before
 import ar.edu.unq.epers.aterrizar.domain.buscador.Busqueda
 import org.junit.Assert
 import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
-import ar.edu.unq.epers.aterrizar.domain.Tramo
-import ar.edu.unq.epers.aterrizar.domain.Vuelo
-import ar.edu.unq.epers.aterrizar.domain.Aerolinea
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorDuracion
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorCostoDeVuelo
 import ar.edu.unq.epers.aterrizar.domain.buscador.ordenes.OrdenPorEscalas
@@ -22,6 +19,9 @@ import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorCategoria
 import ar.edu.unq.epers.aterrizar.persistence.hibernate.RepositorioAerolinea
 import ar.edu.unq.epers.aterrizar.persistence.hibernate.SessionManager
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDeBusquedaDeVuelos
+import ar.edu.unq.epers.aterrizar.domain.vuelos.Aerolinea
+import ar.edu.unq.epers.aterrizar.domain.vuelos.Vuelo
+import ar.edu.unq.epers.aterrizar.domain.vuelos.Tramo
 
 /*
  * Esta clase esta para testear al buscador de vuelos integrado con busquedas, estas tienen criterios y ordenes.

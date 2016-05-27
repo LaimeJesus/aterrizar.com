@@ -3,14 +3,14 @@ package ar.edu.unq.epers.aterrizar.test
 import org.junit.Before
 import org.junit.After
 import org.junit.Test
-import ar.edu.unq.epers.aterrizar.domain.Aerolinea
 import org.junit.Assert
-import ar.edu.unq.epers.aterrizar.domain.Vuelo
-import ar.edu.unq.epers.aterrizar.domain.Tramo
 import ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDeReservaDeVuelos
-import ar.edu.unq.epers.aterrizar.domain.Asiento
 import ar.edu.unq.epers.aterrizar.domain.Usuario
+import ar.edu.unq.epers.aterrizar.domain.vuelos.Aerolinea
+import ar.edu.unq.epers.aterrizar.domain.vuelos.Tramo
+import ar.edu.unq.epers.aterrizar.domain.vuelos.Vuelo
+import ar.edu.unq.epers.aterrizar.domain.vuelos.Asiento
 
 /*
  * Esta clase esta para testear al servicio de reserva de asientos. Es decir integra los repositorios de Aerolinea y Busqueda.

@@ -1,14 +1,14 @@
 package ar.edu.unq.epers.aterrizar.servicios
 
-import ar.edu.unq.epers.aterrizar.domain.Aerolinea
-import ar.edu.unq.epers.aterrizar.domain.Asiento
-import ar.edu.unq.epers.aterrizar.domain.Tramo
-import ar.edu.unq.epers.aterrizar.domain.Usuario
-import ar.edu.unq.epers.aterrizar.domain.Vuelo
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.persistence.hibernate.RepositorioAerolinea
 import ar.edu.unq.epers.aterrizar.persistence.hibernate.SessionManager
+import ar.edu.unq.epers.aterrizar.domain.vuelos.Asiento
+import ar.edu.unq.epers.aterrizar.domain.Usuario
+import ar.edu.unq.epers.aterrizar.domain.vuelos.Aerolinea
+import ar.edu.unq.epers.aterrizar.domain.vuelos.Vuelo
+import ar.edu.unq.epers.aterrizar.domain.vuelos.Tramo
 
 @Accessors
 class ServicioDeReservaDeVuelos {

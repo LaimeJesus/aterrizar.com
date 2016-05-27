@@ -1,10 +1,11 @@
-package ar.edu.unq.epers.aterrizar.domain
+package ar.edu.unq.epers.aterrizar.domain.redsocial
 
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.mongojack.ObjectId
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.ArrayList
+import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility;
 
 @Accessors
 class Perfil {
@@ -29,13 +30,13 @@ class Perfil {
 	///////////////////////////////////////
 
 	def configVisibilityIntoPublic(DestinoPost p){
-//		p.visibility = new Public
+		p.visibility = Visibility.PUBLIC
 	}
 	def configVisibilityIntoPublic(DestinoPost p, Comment c){
-//		p.getComment(c).visibility = new Public
+		p.getComment(c).visibility = Visibility.PUBLIC
 	}
 	def configVisibilityIntoPrivate(DestinoPost p){
-//		p.visibility = new Private
+		p.visibility = Visibility.PRIVATE
 	}
 	def addPost(DestinoPost p){
 		posts.add(p)
@@ -48,20 +49,20 @@ class Perfil {
 	//COMMENTS
 	///////////////////////////////////////
 	def configVisibilityIntoPrivate(DestinoPost p, Comment c){
-//		p.getComment(c).visibility = new Private
+		p.getComment(c).visibility = Visibility.PRIVATE
 	}
 	def configVisibilityIntoJustFriends(DestinoPost p){
-//		p.visibility = new JustFriends
+		p.visibility = Visibility.JUSTFRIENDS
 	}
 	def configVisibilityIntoJustFriends(DestinoPost p, Comment c){
-//		p.getComment(c).visibility = new JustFriends
+		p.getComment(c).visibility = Visibility.JUSTFRIENDS
 	}
 	
 	def void commentToPost(DestinoPost post, Comment comment) {
 		getPost(post).addComment(comment)
 	}
 	
-	def DestinoPost getPost(DestinoPost p) {
+	def getPost(DestinoPost p) {
 		posts.get(posts.indexOf(p))
 	}
 	def void agregarMeGusta(DestinoPost p){

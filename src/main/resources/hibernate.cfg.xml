@@ -21,7 +21,7 @@
 		-->
 		
         <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password">jstrike1234</property>
+        <property name="hibernate.connection.password">root</property>
 
 		<!-- no se toca -->
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>

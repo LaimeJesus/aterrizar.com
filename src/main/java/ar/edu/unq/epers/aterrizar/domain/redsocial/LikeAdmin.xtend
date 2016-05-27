@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.aterrizar.domain
+package ar.edu.unq.epers.aterrizar.domain.redsocial
 
 import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.List
@@ -18,35 +18,34 @@ class LikeAdmin {
 	}
 
 	//modificar el contains o el equals de los likes o usar uno que no necesite el perfil dentro de un like
-	def puedeVotar(Perfil p, List<Like> likes) {
+	def boolean puedeVotar(Perfil p, List<Like> likes) {
 		!likes.contains(p)
 	}
 
 	//que se rompa si no puede agregar
-	def agregarMeGusta(Perfil p) {
+	def void agregarMeGusta(Perfil p) {
 		validarVotoMeGusta(p)
 		agregarLike(p, meGusta)
 	}
 
-	def validarVotoMeGusta(Perfil p) {
+	def void validarVotoMeGusta(Perfil p) {
 		if(puedeVotar(p, meGusta) && !puedeVotar(p, noMeGusta)) {
 			throw new NoPuedesVotarException("No puedes agregar tu meGusta o noMeGusta")
 		}
 	}
 
-	def validarVotoNoMeGusta(Perfil p) {
+	def void validarVotoNoMeGusta(Perfil p) {
 		if(!puedeVotar(p, meGusta) && puedeVotar(p, noMeGusta)) {
 			throw new NoPuedesVotarException("No puedes agregar tu meGusta o noMeGusta")
 		}
 	}
 
-	def agregarNoMeGusta(Perfil p) {
+	def void agregarNoMeGusta(Perfil p) {
 		validarVotoNoMeGusta(p)
 		agregarLike(p, noMeGusta)
 	}
 
-	def agregarLike(Perfil perfil, List<Like> likes) {
+	def void agregarLike(Perfil perfil, List<Like> likes) {
 		likes.add(new Like(perfil))
 	}
-
 }

@@ -1,17 +1,17 @@
 package ar.edu.unq.epers.aterrizar.test
 
-import org.junit.Before
 import ar.edu.unq.epers.aterrizar.domain.Usuario
-import org.junit.Test
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDeAmigos
-import org.junit.Assert
-import org.junit.After
-import org.mockito.Mockito
-import ar.edu.unq.epers.aterrizar.domain.EnviadorDeMails
-import ar.edu.unq.epers.aterrizar.domain.CreadorDeCodigos
-import ar.edu.unq.epers.aterrizar.domain.CreadorDeMails
-import ar.edu.unq.epers.aterrizar.domain.Mail
 import ar.edu.unq.epers.aterrizar.servicios.ServicioRegistroUsuarioConHibernate
+import org.junit.After
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
+import org.mockito.Mockito
+import ar.edu.unq.epers.aterrizar.domain.mensajes.CreadorDeCodigos
+import ar.edu.unq.epers.aterrizar.domain.mensajes.EnviadorDeMails
+import ar.edu.unq.epers.aterrizar.domain.mensajes.CreadorDeMails
+import ar.edu.unq.epers.aterrizar.domain.mensajes.Mail
 
 class ServicioDeAmigosTest {
 
@@ -27,7 +27,14 @@ class ServicioDeAmigosTest {
 	
 
 	@Before
-	def void setUp() {
+	def void setUp(){
+		//usando servicio de login
+		//inicializandolo
+		//loginService = new ServicioDeRegistroDeUsuarios
+		
+		//var url = "jdbc:mysql://localhost:3306/aterrizar"
+		//var user = 'root'
+		//var pass = 'root'
 
 		loginService = new ServicioRegistroUsuarioConHibernate
 
@@ -94,6 +101,17 @@ class ServicioDeAmigosTest {
 		Assert.assertEquals(despues, 1)
 		Assert.assertEquals(recibidos, 1)
 	}
+	
+	/////////////////////////////////////////////
+	// Eliminar amistades, mensajes
+	/////////////////////////////////////////////
+	
+//	@Test
+//	def void testEliminarLaRelacionDeAmistad(){
+//		
+//		var cantAmigos = sut.eliminarAmistadEntre(pepe, jose)
+//	}
+	
 
 	@Test
 	def void testRelacionDeAmigosGrande() {
