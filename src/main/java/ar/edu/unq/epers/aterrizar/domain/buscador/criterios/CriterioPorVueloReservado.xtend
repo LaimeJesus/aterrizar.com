@@ -13,6 +13,6 @@ class CriterioPorVueloReservado extends Criterio{
 	}
 	
 	override getCondicion() {
-		return "asientos.reservadoPorUsuario.nickname = nickname"
+		return "usuarios.nickname = '" + nickname + "'"
 	}
 }

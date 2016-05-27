@@ -5,7 +5,7 @@ import java.sql.Date
 import ar.edu.unq.epers.aterrizar.exceptions.MyValidateException
 
 @Accessors
-class Usuario{
+class Usuario {
 	int idUsuario
 	String nombre
 	String apellido
@@ -15,42 +15,41 @@ class Usuario{
 	Date fechaDeNacimiento
 	String codigo
 	
-	new(){
-		
+	new() {
 	}
-	
-	def estaValidado(){
+
+	def estaValidado() {
 		return codigo.equals('usado')
 	}
-	
-	def usarCodigo(){
+
+	def usarCodigo() {
 		codigo = 'usado'
 	}
-	
+
 	def validarCodigo(String code) throws MyValidateException{
-		if(!this.codigo.equals(code)){
+		if(!this.codigo.equals(code)) {
 			errorUsuario('codigo incorrecto')
 		}
 	}
-	
+
 	def isValidadoCodigo() throws MyValidateException{
-		if(this.estaValidado()){
+		if(this.estaValidado()) {
 			errorUsuario('codigo de validacion usado')
 		}
 	}
-	
+
 	def validarPassword(String pass) throws MyValidateException{
-		if(!this.password.equals(pass)){
+		if(!this.password.equals(pass)) {
 			errorUsuario('password erroneo')
 		}
 	}
-	
+
 	def validarCambioPassword(String nwpass) throws MyValidateException{
-		if(password.equals(nwpass)){
+		if(password.equals(nwpass)) {
 			errorUsuario('nwpass is the same that previous password')
 		}
 	}
-	
+
 	def errorUsuario(String msg) throws MyValidateException{
 		throw new MyValidateException(msg)
 	}

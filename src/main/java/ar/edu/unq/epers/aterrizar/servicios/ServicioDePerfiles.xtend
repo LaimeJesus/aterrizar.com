@@ -23,15 +23,19 @@ class ServicioDePerfiles {
 	new(ServicioDeRegistroDeUsuarios s) {
 		servicioDeUsuarios = s
 		repositorioDePerfiles = SistemDB.instance().collection(Perfil)
-		servicioDeBusqueda = new ServicioDeBusquedaDeVuelos()
+		servicioDeBusqueda =  new ServicioDeBusquedaDeVuelos
+	}
+
+	new(ServicioDeRegistroDeUsuarios s, ServicioDeBusquedaDeVuelos sb) {
+		servicioDeUsuarios = s
+		repositorioDePerfiles = SistemDB.instance().collection(Perfil)
+		servicioDeBusqueda =sb
 	}
 
 	// en realidad es agregarDestino
 	def agregarPost(Usuario u, DestinoPost p) throws NoPuedeAgregarPostException{
 		servicioDeUsuarios.isRegistrado(u)
 
-		
-		
 //		if(!servicioDeBusqueda.viajeA(u, p.destino)) {
 //			throw new NoPuedeAgregarPostException("Nunca me visitaste")
 //		}
@@ -152,8 +156,8 @@ class ServicioDePerfiles {
 	}
 
 	def void eliminarPerfil(Usuario usuario) {
-		//repositorioDePerfiles.delete("username", usuario.nickname)
-		repositorioDePerfiles.deleteAll()
+		repositorioDePerfiles.delete("username", usuario.nickname)
+//		repositorioDePerfiles.deleteAll()
 	}
 
 	def void eliminarTodosLosPerfiles() {

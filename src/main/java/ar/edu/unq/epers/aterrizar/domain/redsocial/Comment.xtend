@@ -11,8 +11,11 @@ class Comment {
 	LikeAdmin likesAdmin
 	Visibility visibility
 	String comment
-
-	new(String msg) {
+	new(){
+		
+	}
+	new(String actualId, String msg) {
+		id = actualId
 		visibility = Visibility.PRIVATE
 		likesAdmin = new LikeAdmin()
 		comment = msg

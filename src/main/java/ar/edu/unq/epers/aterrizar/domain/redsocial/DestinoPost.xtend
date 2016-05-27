@@ -5,6 +5,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.ArrayList
 import ar.edu.unq.epers.aterrizar.domain.redsocial.LikeAdmin
 import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
+import ar.edu.unq.epers.aterrizar.exceptions.NoExisteEseComentarioException
 
 @Accessors
 class DestinoPost {
@@ -18,8 +19,9 @@ class DestinoPost {
 	
 	new(){}
 	
-	new(String msg){
-		destino = msg
+	new(String actualId, String destination){
+		id = actualId
+		destino = destination
 		comments = new ArrayList<Comment>()
 		likesAdmin = new LikeAdmin()
 		visibility = Visibility.PRIVATE
@@ -34,7 +36,12 @@ class DestinoPost {
 	}
 	
 	def getComment(Comment c){
-		comments.get(comments.indexOf(c))
+		for(comment : comments){
+			if(comment.id == c.id){
+				return comment
+			}		
+		}
+		throw new NoExisteEseComentarioException("No Existe " + c.id)
 	}
 	
 	def void meGusta(Perfil p){
@@ -51,5 +58,14 @@ class DestinoPost {
 	def void filtrarComentarios(Perfil preguntado, Perfil preguntando) {
 		this.comments = comments.filter[it.puedeVer(preguntado, preguntando)].toList
 	}
+	
+	def cantidadMeGusta() {
+		likesAdmin.cantidadDeMeGusta()
+	}
+
+	def cantidadNoMeGusta() {
+		likesAdmin.cantidadDeNoMeGusta()
+	}
+
 	
 }

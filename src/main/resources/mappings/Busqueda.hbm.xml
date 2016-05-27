@@ -9,7 +9,10 @@
 			<column name="idBusqueda"/>
 			<generator class="native"/>
 		</id>
-
+		<property name="query" type="string">
+		<!-- unique deberia ser true -->
+			<column name="query" length="300" not-null="false" unique="false" />
+		</property>
 		
         <many-to-one name="filtro" 
         column="idCriterio"

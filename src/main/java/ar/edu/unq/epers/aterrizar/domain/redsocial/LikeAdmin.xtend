@@ -48,4 +48,13 @@ class LikeAdmin {
 	def void agregarLike(Perfil perfil, List<Like> likes) {
 		likes.add(new Like(perfil))
 	}
+	
+	def cantidadDeMeGusta() {
+		meGusta.length
+	}
+	
+	def cantidadDeNoMeGusta() {
+		noMeGusta.length
+	}
+	
 }

@@ -45,10 +45,11 @@ abstract class RepositorioHibernate<T> {
 		query.list as List<T>
 	}
 	
-	def deleteAll(){
-		var stringQuery = "DELETE FROM " + table
-		var query = session.createQuery(stringQuery);
-		query.executeUpdate();
+	def void deleteAll(){
+		var stringQuery = "delete from " + this.getTable()
+		System.out.println(stringQuery)
+		var query = getSession().createQuery(stringQuery)
+		query.executeUpdate()
 	}
 
 	def boolean contiene(String field, String value) {
@@ -56,6 +57,6 @@ abstract class RepositorioHibernate<T> {
 	}
 
 	def getStmtBase(){
-		"from " + table + " as t"
+		"from " + this.getTable() + " as t"
 	}
 }

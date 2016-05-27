@@ -177,7 +177,7 @@ class ServicioDeBusquedaDeVuelosTest {
 		ordenPorDuracion.porMenorOrden
 		busqueda.ordenarPor(ordenPorDuracion)
 
-		var vuelos = sudo.buscarVuelos(busqueda)
+		var vuelos = sudo.buscarNormal(busqueda)
 		var vueloConMenorDuracion = vuelos.head.nroVuelo
 		
 		Assert.assertEquals(1, vueloConMenorDuracion)
@@ -187,7 +187,7 @@ class ServicioDeBusquedaDeVuelosTest {
 		ordenPorDuracion.porMayorOrden
 		busqueda.ordenarPor(ordenPorDuracion)
 
-		var vuelos = sudo.buscarVuelos(busqueda)
+		var vuelos = sudo.buscarNormal(busqueda)
 		var vueloConMayorDuracion = vuelos.head.nroVuelo
 		
 		Assert.assertEquals(3, vueloConMayorDuracion)
@@ -201,7 +201,7 @@ class ServicioDeBusquedaDeVuelosTest {
 		ordenPorCosto.porMenorOrden
 		busqueda.ordenarPor(ordenPorCosto)
 
-		var vuelos = sudo.buscarVuelos(busqueda)
+		var vuelos = sudo.buscarNormal(busqueda)
 		var vueloConMenorCosto = vuelos.head.nroVuelo
 		
 		Assert.assertEquals(2, vueloConMenorCosto)
@@ -212,7 +212,7 @@ class ServicioDeBusquedaDeVuelosTest {
 		ordenPorCosto.porMayorOrden
 		busqueda.ordenarPor(ordenPorCosto)
 
-		var vuelos = sudo.buscarVuelos(busqueda)
+		var vuelos = sudo.buscarNormal(busqueda)
 		var vueloConMayorCosto = vuelos.head.nroVuelo
 		
 		Assert.assertEquals(3, vueloConMayorCosto)
@@ -230,7 +230,7 @@ class ServicioDeBusquedaDeVuelosTest {
 
 		busqueda.ordenarPor(ordenPorEscala)
 
-		var vuelos = sudo.buscarVuelos(busqueda)
+		var vuelos = sudo.buscarNormal(busqueda)
 		var vueloConMenorEscala = vuelos.head.nroVuelo
 		
 		
@@ -242,7 +242,7 @@ class ServicioDeBusquedaDeVuelosTest {
 		ordenPorEscala.porMayorOrden
 		busqueda.ordenarPor(ordenPorEscala)
 
-		var vuelos = sudo.buscarVuelos(busqueda)
+		var vuelos = sudo.buscarNormal(busqueda)
 		var vueloConMayorEscala = vuelos.head.nroVuelo
 		
 		Assert.assertEquals(3, vueloConMayorEscala)		
@@ -255,7 +255,7 @@ class ServicioDeBusquedaDeVuelosTest {
 		ordenCompuesto.porMayorOrden
 		busqueda.orden = ordenCompuesto
 		
-		var vuelos = sudo.buscarVuelos(busqueda)
+		var vuelos = sudo.buscarNormal(busqueda)
 		var vueloConMayorEscalaYMayorDuracion = vuelos.head.nroVuelo
 		
 		Assert.assertEquals(3, vueloConMayorEscalaYMayorDuracion)
@@ -272,7 +272,7 @@ class ServicioDeBusquedaDeVuelosTest {
 
 		busqueda.orden = ordenCompuesto
 		
-		var vuelos = sudo.buscarVuelos(busqueda)
+		var vuelos = sudo.buscarNormal(busqueda)
 		var vueloConMayorEscalaYMayorDuracion = vuelos.head.nroVuelo
 		
 		Assert.assertEquals(3, vueloConMayorEscalaYMayorDuracion)
@@ -283,7 +283,7 @@ class ServicioDeBusquedaDeVuelosTest {
 	@Test
 	def void testFiltrarPorOrigenArgentina(){
 		busqueda.filtrarPor(origenArgentina)
-		var resultados = sudo.buscarVuelos(busqueda)
+		var resultados = sudo.buscarNormal(busqueda)
 
 		Assert.assertEquals(resultados.length, 3)		
 	}
@@ -291,7 +291,7 @@ class ServicioDeBusquedaDeVuelosTest {
 	@Test
 	def void testFiltrarPorDestinoJapon(){
 		busqueda.filtrarPor(destinoJapon)
-		var resultados = sudo.buscarVuelos(busqueda)
+		var resultados = sudo.buscarNormal(busqueda)
 		
 		Assert.assertEquals(resultados.length, 1)
 	} 
@@ -299,14 +299,14 @@ class ServicioDeBusquedaDeVuelosTest {
 	@Test
 	def void testFiltrarPorNombreAerolinea(){
 		busqueda.filtrarPor(nombreAerolineas)
-		var resultados = sudo.buscarVuelos(busqueda)
+		var resultados = sudo.buscarNormal(busqueda)
 		Assert.assertEquals(resultados.length, 3)
 	}
 	
 	@Test
 	def void testFiltrarPorVueloDisponible(){
 		busqueda.filtrarPor(vueloDisponible)
-		var resultados = sudo.buscarVuelos(busqueda)
+		var resultados = sudo.buscarNormal(busqueda)
 		Assert.assertEquals(resultados.length, 3)
 	}
 	
@@ -314,7 +314,7 @@ class ServicioDeBusquedaDeVuelosTest {
 	def void testFiltrarPorOrigenArgentinaYDestinoJapon(){
 		var criterio = origenArgentina.and(destinoJapon)
 		busqueda = new Busqueda(criterio)
-		var resultados = sudo.buscarVuelos(busqueda)
+		var resultados = sudo.buscarNormal(busqueda)
 		
 		Assert.assertEquals(resultados.length, 0)
 	}
@@ -322,7 +322,7 @@ class ServicioDeBusquedaDeVuelosTest {
 	def void testFiltrarPorOrigenArgentinaODestinoJapon(){
 		var criterio = origenArgentina.or(destinoJapon)
 		busqueda = new Busqueda(criterio)
-		var resultados = sudo.buscarVuelos(busqueda)
+		var resultados = sudo.buscarNormal(busqueda)
 		
 		Assert.assertEquals(resultados.length, 3)
 	}
@@ -331,7 +331,7 @@ class ServicioDeBusquedaDeVuelosTest {
 	def void testFiltrarPorFechaDeLlegada(){
 		
 		busqueda.filtrarPor(llegada2016520)
-		var resultados = sudo.buscarVuelos(busqueda)
+		var resultados = sudo.buscarNormal(busqueda)
 		
 		Assert.assertEquals(1, resultados.length)
 	}	
@@ -339,14 +339,14 @@ class ServicioDeBusquedaDeVuelosTest {
 	@Test
 	def void testFiltrarPorFechaDeSalida(){
 		busqueda.filtrarPor(salida2016512)
-		var resultados = sudo.buscarVuelos(busqueda)
+		var resultados = sudo.buscarNormal(busqueda)
 		
 		Assert.assertEquals(resultados.length, 3)
 	}	
 	@Test
 	def void testFiltrarPorCategoriaTurista(){
 		busqueda.filtrarPor(categoriaTurista)
-		var resultados = sudo.buscarVuelos(busqueda)
+		var resultados = sudo.buscarNormal(busqueda)
 		
 		Assert.assertEquals(resultados.length, 3)
 	}

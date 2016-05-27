@@ -12,7 +12,6 @@ class Asiento {
 	int idAsiento
 	Usuario reservadoPorUsuario
 	int nroAsiento
-	
 	new(){
 		
 	}

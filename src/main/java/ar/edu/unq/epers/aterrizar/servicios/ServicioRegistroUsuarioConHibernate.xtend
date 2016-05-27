@@ -80,11 +80,18 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios {
 
 	override eliminarUsuario(Usuario u) {
 
-		this.servicioDeAmigos.eliminarUsuarioDeAmigos(u)
-		this.servicioDePerfiles.eliminarPerfil(u)
+		this.borrarDeAmigos(u)
+		this.borrarDePerfiles(u)
 		delete(u)
 	}
+	
+	def void borrarDePerfiles(Usuario usuario) {
+		servicioDePerfiles.eliminarPerfil(usuario)
+	}
 
+	def void borrarDeAmigos(Usuario usuario) {
+		servicioDeAmigos.eliminarUsuarioDeAmigos(usuario)
+	}
 
 	def contain(String nick) {
 		SessionManager.runInSession(
@@ -133,6 +140,7 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios {
 		SessionManager.runInSession(
 			[
 				repoHibernate.deleteAll()
+				null
 			]
 		)
 	}

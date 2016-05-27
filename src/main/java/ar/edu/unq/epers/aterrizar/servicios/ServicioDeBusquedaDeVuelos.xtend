@@ -16,53 +16,41 @@ import ar.edu.unq.epers.aterrizar.domain.vuelos.Vuelo
 
 @Accessors
 class ServicioDeBusquedaDeVuelos {
-	
+
 	RepositorioBusquedas repositorioDeBusquedas
 	RepositorioAerolinea repositorioAerolineas
-	
-	new(){
+
+	new() {
 		repositorioDeBusquedas = new RepositorioBusquedas
 	}
-	
-	new(RepositorioAerolinea repoAerolinea){
+
+	new(RepositorioAerolinea repoAerolinea) {
 		repositorioDeBusquedas = new RepositorioBusquedas
 		repositorioAerolineas = repoAerolinea
 	}
-
 	
-	def buscarVuelos(Busqueda b){
-		var res = SessionManager.runInSession
-		[|
+	
+	def buscarNormal(Busqueda b){
+		b.armarQueryNormal
+		buscarVuelos(b)
+	}
+	def buscarPorUsuarios(Busqueda b){
+		b.armarQueryConUsuarios()
+		buscarVuelos(b)
+	}
+
+	def buscarVuelos(Busqueda b) {
+		var res = SessionManager.runInSession [|
 			var sesion = repositorioAerolineas.getSession()
 			var query = b.getQuery()
 			var queryResultado = sesion.createQuery(query)
-			
 			queryResultado.list() as List<Vuelo>
-			
 		]
 		guardar(b)
 		return res
 	}
-	
-	//caso de uso extra ver reservas realizadas por un usuario
-	def verLugaresVisitados(Usuario u){
-		var v = getVuelosReservados(u)
-		val visitados = new ArrayList<String>()
-		v.forEach[
-			visitados.addAll(it.verDestinos())
-		]
-		visitados
-	}
-	def getVuelosReservados(Usuario u){
-		var c = new CriterioPorVueloReservado(u)
-		var b = new Busqueda(c)
-		var vuelos = buscarVuelos(b)
-		System.out.println(vuelos.length)
-		vuelos
-	}
 
-
-//caso de uso ordenar una busqueda por algun orden
+	//caso de uso ordenar una busqueda por algun orden
 	def Busqueda ordenarPorMenorCosto(Busqueda b) {
 		var menorCosto = new OrdenPorCostoDeVuelo
 		menorCosto.porMenorOrden
@@ -70,7 +58,7 @@ class ServicioDeBusquedaDeVuelos {
 		return b
 	}
 
-//caso de uso ordenar una busqueda por algun orden
+	//caso de uso ordenar una busqueda por algun orden
 	def Busqueda ordenarPorMenorEscala(Busqueda b) {
 		var menorTrayecto = new OrdenPorEscalas
 		menorTrayecto.porMenorOrden
@@ -79,7 +67,7 @@ class ServicioDeBusquedaDeVuelos {
 		return b
 	}
 
-//caso de uso ordenar una busqueda por algun orden
+	//caso de uso ordenar una busqueda por algun orden
 	def Busqueda ordenarPorMenorDuracion(Busqueda b) {
 		var menorDuracion = new OrdenPorDuracion
 		menorDuracion.porMenorOrden
@@ -88,8 +76,7 @@ class ServicioDeBusquedaDeVuelos {
 		return b
 	}
 
-
-//caso de uso conseguir la ultima busqueda ejecutada
+	//caso de uso conseguir la ultima busqueda ejecutada
 	def Busqueda getUltimaBusqueda() {
 		var resultado = SessionManager.runInSession(
 			[
@@ -98,7 +85,7 @@ class ServicioDeBusquedaDeVuelos {
 		return resultado
 	}
 
-//caso de uso guardar una busqueda para volver a utilizarla luego
+	//caso de uso guardar una busqueda para volver a utilizarla luego
 	def void guardar(Busqueda b) {
 		SessionManager.runInSession(
 			[
@@ -106,26 +93,51 @@ class ServicioDeBusquedaDeVuelos {
 				null
 			])
 	}
-	def getBusquedas(){
-		SessionManager.runInSession [| repositorioDeBusquedas.traerBusquedas ] 
+
+	def getBusquedas() {
+		SessionManager.runInSession[|repositorioDeBusquedas.traerBusquedas]
 	}
 
 	def eliminarBusquedas() {
-		
+
 		val busquedas = getBusquedas()
-		if(!busquedas.isEmpty){
-		SessionManager.runInSession [|
-			for(Busqueda busqueda : busquedas){
-				repositorioDeBusquedas.borrar(busqueda)
-			}
-				
-			null
-		]
+		if(!busquedas.isEmpty) {
+			SessionManager.runInSession [|
+				for (Busqueda busqueda : busquedas) {
+					repositorioDeBusquedas.borrar(busqueda)
+				}
+				null
+			]
 		}
 	}
-	
+
 	def viajeA(Usuario usuario, String destino) {
-		verLugaresVisitados(usuario).contains(destino)
+		
+		var vuelos = getVuelosReservados(usuario)
+		for(vuelo : vuelos){
+			for(tramo : vuelo.tramos){
+				if(tramo.destino == destino){
+					return true
+				}
+			}
+		}
+		false
+	}
+	//caso de uso extra ver reservas realizadas por un usuario
+	def verLugaresVisitados(Usuario u) {
+		var v = getVuelosReservados(u)
+		val visitados = new ArrayList<String>()
+		v.forEach [
+			visitados.addAll(it.verDestinos())
+		]
+		visitados
 	}
 
+	def getVuelosReservados(Usuario u) {
+		var c = new CriterioPorVueloReservado(u)
+		var b = new Busqueda(c)
+		b.armarQueryConUsuarios
+		var vuelos = buscarVuelos(b)
+		vuelos
+	}
 }

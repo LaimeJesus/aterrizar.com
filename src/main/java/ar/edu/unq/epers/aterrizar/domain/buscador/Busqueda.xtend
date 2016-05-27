@@ -10,6 +10,7 @@ class Busqueda {
 	Integer idBusqueda
 	Criterio filtro
 	Orden orden
+	String query
 	
 	new(){
 		filtro = null
@@ -31,12 +32,19 @@ class Busqueda {
 		return "select distinct vuelos from Aerolinea as aerolinea join aerolinea.vuelos as vuelos join vuelos.tramos as tramos join tramos.asientos as asientos"
 	}
 	
-	def getQuery(){
+	def queryUsuarios(){
+		"join asientos.reservadoPorUsuario as usuarios"
+	}	
+	
+	def void armarQueryNormal(){
 		var query = getQueryBase()
 		var condicion = armarCondicion()
 		var ordenado = armarOrden()
 		var queryAEjecutar = query + condicion + ordenado
- 		return queryAEjecutar
+ 		this.query = queryAEjecutar
+	}
+	def void armarQueryConUsuarios(){
+		this.query = queryBase + " " + queryUsuarios + " " + armarCondicion + " " + armarOrden
 	}
 	
 	def armarOrden() {

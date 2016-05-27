@@ -2,26 +2,25 @@
 <!DOCTYPE hibernate-mapping PUBLIC 
 "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
- 
+
 <hibernate-mapping>
-	<class name="ar.edu.unq.epers.aterrizar.domain.vuelos.Asiento" table="Asiento">
+	<class name="ar.edu.unq.epers.aterrizar.domain.vuelos.Asiento"
+		table="Asiento">
 		<id name="idAsiento" type="java.lang.Integer">
-			<column name="idAsiento"/>
-			<generator class="native"/>
+			<column name="idAsiento" />
+			<generator class="native" />
 		</id>
 		<property name="nroAsiento" type="java.lang.Integer">
-			<column name="nroAsiento" not-null="false" unique="false"/>
+			<column name="nroAsiento" not-null="false" unique="false" />
 		</property>
-		  
+
 		<property name="categoria" column="categoria" not-null="false">
 			<type name="org.hibernate.type.EnumType">
 				<param name="enumClass">ar.edu.unq.epers.aterrizar.domain.categorias.TipoDeCategoria</param>
 			</type>
 		</property>
-    	<many-to-one name="reservadoPorUsuario" 
-        column="idUsuario"
-        not-null="false"
-        cascade="all"/>
-
+		<many-to-one name="reservadoPorUsuario"
+			class="ar.edu.unq.epers.aterrizar.domain.Usuario" column="idUsuario"
+			not-null="false" cascade="all" fetch="join" />
 	</class>
 </hibernate-mapping>
