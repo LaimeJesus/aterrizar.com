@@ -4,7 +4,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
-	<class name="ar.edu.unq.epers.aterrizar.domain.Vuelo" table="Vuelo">
+	<class name="ar.edu.unq.epers.aterrizar.domain.vuelos.Vuelo" table="Vuelo">
 		<id name="idVuelo" type="java.lang.Integer">
 			<column name="idVuelo"/>
 			<generator class="native"/>
@@ -15,7 +15,7 @@
       
       <bag name="tramos" cascade="all" lazy="false" inverse="false">
          <key column="idVuelo"/>
-         <one-to-many class="ar.edu.unq.epers.aterrizar.domain.Tramo"/>
+         <one-to-many class="ar.edu.unq.epers.aterrizar.domain.vuelos.Tramo"/>
       </bag>
       
       <property name="duracionDeVuelo" type="java.lang.Long">

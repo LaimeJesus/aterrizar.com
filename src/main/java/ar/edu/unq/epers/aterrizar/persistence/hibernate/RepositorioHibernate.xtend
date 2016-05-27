@@ -44,12 +44,18 @@ abstract class RepositorioHibernate<T> {
 		var query = session.createQuery(stmt)		
 		query.list as List<T>
 	}
+	
+	def deleteAll(){
+		var stringQuery = "DELETE FROM " + table
+		var query = session.createQuery(stringQuery);
+		query.executeUpdate();
+	}
 
 	def boolean contiene(String field, String value) {
 		traer(field, value) != null
 	}
 
 	def getStmtBase(){
-		"from " + getTable() + " as t"
+		"from " + table + " as t"
 	}
 }

@@ -7,10 +7,6 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
-import ar.edu.unq.epers.aterrizar.domain.mensajes.CreadorDeCodigos
-import ar.edu.unq.epers.aterrizar.domain.mensajes.EnviadorDeMails
-import ar.edu.unq.epers.aterrizar.domain.mensajes.CreadorDeMails
 import ar.edu.unq.epers.aterrizar.domain.mensajes.Mail
 
 class ServicioDeAmigosTest {
@@ -20,31 +16,12 @@ class ServicioDeAmigosTest {
 	ServicioDeAmigos sut
 	Usuario tito
 	Usuario nico
-	CreadorDeCodigos creadorDeCodigosMock
-	EnviadorDeMails enviadorDeMailsMock
-	CreadorDeMails creadorDeMailsMock
 	ServicioRegistroUsuarioConHibernate loginService
 	
 
 	@Before
 	def void setUp(){
-		//usando servicio de login
-		//inicializandolo
-		//loginService = new ServicioDeRegistroDeUsuarios
-		
-		//var url = "jdbc:mysql://localhost:3306/aterrizar"
-		//var user = 'root'
-		//var pass = 'root'
-
 		loginService = new ServicioRegistroUsuarioConHibernate
-
-		creadorDeCodigosMock = Mockito.mock(CreadorDeCodigos)
-		enviadorDeMailsMock = Mockito.mock(EnviadorDeMails)
-		creadorDeMailsMock = Mockito.mock(CreadorDeMails)
-
-		loginService.creadorDeCodigos = creadorDeCodigosMock
-		loginService.enviadorDeMails = enviadorDeMailsMock
-		loginService.creadorDeMails = creadorDeMailsMock
 
 		///////////////////////////
 		sut = loginService.servicioDeAmigos
@@ -102,17 +79,6 @@ class ServicioDeAmigosTest {
 		Assert.assertEquals(recibidos, 1)
 	}
 	
-	/////////////////////////////////////////////
-	// Eliminar amistades, mensajes
-	/////////////////////////////////////////////
-	
-//	@Test
-//	def void testEliminarLaRelacionDeAmistad(){
-//		
-//		var cantAmigos = sut.eliminarAmistadEntre(pepe, jose)
-//	}
-	
-
 	@Test
 	def void testRelacionDeAmigosGrande() {
 
@@ -217,6 +183,7 @@ class ServicioDeAmigosTest {
 		///////////////////////////////////////////
 		//after
 		///////////////////////////////////////////
+		
 		loginService.eliminarUsuario(marcelo)
 		loginService.eliminarUsuario(lucas)
 		loginService.eliminarUsuario(gaston)
@@ -286,6 +253,6 @@ class ServicioDeAmigosTest {
 		loginService.eliminarUsuario(jose)
 		loginService.eliminarUsuario(tito)
 		loginService.eliminarUsuario(nico)
-
+		loginService.deleteAll()
 	}
 }

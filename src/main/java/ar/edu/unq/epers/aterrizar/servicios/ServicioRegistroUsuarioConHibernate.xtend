@@ -6,21 +6,23 @@ import ar.edu.unq.epers.aterrizar.persistence.hibernate.RepositorioUsuarioHibern
 import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
-class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios{
-	
+class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios {
+
 	RepositorioUsuarioHibernate repoHibernate
 	ServicioDeAmigos servicioDeAmigos
 	ServicioDePerfiles servicioDePerfiles
-	
+
 	new() {
-		servicioDeAmigos = new ServicioDeAmigos(this)
-		servicioDePerfiles = new ServicioDePerfiles(this)		
-		repoHibernate = new RepositorioUsuarioHibernate
+		this.servicioDeAmigos = new ServicioDeAmigos(this)
+		this.servicioDePerfiles = new ServicioDePerfiles(this)
+		this.repoHibernate = new RepositorioUsuarioHibernate
 	}
 
-	override registrarUsuario(Usuario usr) throws Exception{
+	override registrarUsuario(Usuario usuario) throws Exception{
 
-		this.nuevoUsuarioEnElSistema(usr)
+		persist(usuario)
+		this.servicioDeAmigos.crearUsuarioDeAmigos(usuario)
+		this.servicioDePerfiles.crearPerfil(usuario)
 	}
 
 	override validar(Usuario usr, String codigo) throws Exception{
@@ -34,7 +36,8 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios{
 
 	override login(String nickname, String password) throws Exception{
 		val usuarioFromRepo = getUsuario(nickname)
-		usuarioFromRepo.validarCodigo(this.codigoUsado())
+
+		//		usuarioFromRepo.validarCodigo(this.codigoUsado())
 		usuarioFromRepo.validarPassword(password)
 		usuarioFromRepo
 	}
@@ -51,12 +54,22 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios{
 	////////////////////////////////////////////
 	override traerUsuarioDelRepositorio(String field, String value) throws Exception{
 		val usuarioATraer = getUsuario(value)
-		if(usuarioATraer == null){
-			repoHibernate.objectDoesnotExist
+		if(usuarioATraer == null) {
+			this.repoHibernate.objectDoesnotExist
 		}
 		usuarioATraer
 	}
-	
+
+	override nuevoUsuarioEnElSistema(Usuario usuario) {
+		persist(usuario)
+		this.servicioDeAmigos.crearUsuarioDeAmigos(usuario)
+		this.servicioDePerfiles.crearPerfil(usuario)
+	}
+
+	override actualizarUsuarioPorNickname(Usuario usuario) {
+		update(usuario)
+	}
+
 	override contieneUsuarioPorNickname(String nickname) {
 		contain(nickname)
 	}
@@ -65,27 +78,13 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios{
 		getUsuario(nickname)
 	}
 
-	override nuevoUsuarioEnElSistema(Usuario usuario) {
-		persist(usuario)
-		servicioDeAmigos.crearUsuarioDeAmigos(usuario)
-		servicioDePerfiles.crearPerfil(usuario)
-		this.avisarNuevoUsuarioRegistrado(usuario)
-	}
-	//no les envio mas mails a estos usuarios
-	override avisarNuevoUsuarioRegistrado(Usuario u){
-		
-	}
-
-	override actualizarUsuarioPorNickname(Usuario usuario) {
-		update(usuario)
-	}
-
 	override eliminarUsuario(Usuario u) {
 
+		this.servicioDeAmigos.eliminarUsuarioDeAmigos(u)
+		this.servicioDePerfiles.eliminarPerfil(u)
 		delete(u)
-		servicioDeAmigos.eliminarUsuarioDeAmigos(u)
-		servicioDePerfiles.eliminarPerfil(u)
 	}
+
 
 	def contain(String nick) {
 		SessionManager.runInSession(
@@ -120,15 +119,22 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios{
 			]
 		)
 	}
-	def persist(Usuario u){
+
+	def persist(Usuario u) {
 		SessionManager.runInSession(
 			[
 				repoHibernate.persistir(u)
 				null
 			]
-		)		
+		)
 	}
 
+	def deleteAll() {
+		SessionManager.runInSession(
+			[
+				repoHibernate.deleteAll()
+			]
+		)
+	}
 
-	
 }

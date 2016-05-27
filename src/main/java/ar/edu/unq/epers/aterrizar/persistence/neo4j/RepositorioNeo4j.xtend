@@ -28,7 +28,8 @@ abstract class RepositorioNeo4j<T> {
 	}
 	def void eliminarNodo(T obj){
 		val nodo = getNodo(obj)
-		borrarRelaciones(nodo)
+		nodo.relationships.forEach[delete]
+		nodo.delete
 	}
 	
 	def abstract void agregarPropiedades(Node node, T obj)
@@ -54,7 +55,6 @@ abstract class RepositorioNeo4j<T> {
 		return n != null
 	}
 
-	//no estoy seguro cual de las 2 formas es la que funciona voy a probar las 2
 	def todosLosRelacionados(Node n, RelationshipType r, Direction d){
 		val traveler = graph.traversalDescription()
             .depthFirst()
@@ -62,12 +62,6 @@ abstract class RepositorioNeo4j<T> {
             .evaluator(Evaluators.excludeStartPosition)
             .uniqueness(Uniqueness.NODE_GLOBAL);
 
-    	val nodesInComponent = traveler.traverse(n).nodes();
-    	return nodesInComponent
-
+    	return traveler.traverse(n).nodes();
 	}
-	def void borrarRelaciones(Node nodo){
-		nodo.relationships.forEach[delete]
-		nodo.delete
-	}	
 }

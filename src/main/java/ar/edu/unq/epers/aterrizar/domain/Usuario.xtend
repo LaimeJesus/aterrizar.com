@@ -5,7 +5,7 @@ import java.sql.Date
 import ar.edu.unq.epers.aterrizar.exceptions.MyValidateException
 
 @Accessors
-class Usuario {
+class Usuario{
 	int idUsuario
 	String nombre
 	String apellido
@@ -54,5 +54,5 @@ class Usuario {
 	def errorUsuario(String msg) throws MyValidateException{
 		throw new MyValidateException(msg)
 	}
-	
+
 }

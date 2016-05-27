@@ -152,7 +152,8 @@ class ServicioDePerfiles {
 	}
 
 	def void eliminarPerfil(Usuario usuario) {
-		repositorioDePerfiles.delete("username", usuario.nickname)
+		//repositorioDePerfiles.delete("username", usuario.nickname)
+		repositorioDePerfiles.deleteAll()
 	}
 
 	def void eliminarTodosLosPerfiles() {
