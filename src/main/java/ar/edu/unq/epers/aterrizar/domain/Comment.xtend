@@ -5,12 +5,13 @@ import org.eclipse.xtend.lib.annotations.Accessors
 @Accessors
 class Comment {
 	
+	String id
 	LikeAdmin likesAdmin
-	Visibility visibility
+//	Visibility visibility
 	String comment
 
 	new (String msg){
-		visibility = new Private()
+//		visibility = new Private()
 		likesAdmin = new LikeAdmin()
 		comment = msg
 	}
@@ -21,6 +22,7 @@ class Comment {
 		likesAdmin.agregarNoMeGusta(p)
 	}
 	def puedeVer(Perfil preguntado, Perfil preguntando){
-		visibility.puedeVer(preguntado, preguntando)
+//		visibility.puedeVer(preguntado, preguntando)
+	true
 	}
 }

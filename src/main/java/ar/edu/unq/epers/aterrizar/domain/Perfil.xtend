@@ -29,13 +29,13 @@ class Perfil {
 	///////////////////////////////////////
 
 	def configVisibilityIntoPublic(DestinoPost p){
-		p.visibility = new Public
+//		p.visibility = new Public
 	}
 	def configVisibilityIntoPublic(DestinoPost p, Comment c){
-		p.getComment(c).visibility = new Public
+//		p.getComment(c).visibility = new Public
 	}
 	def configVisibilityIntoPrivate(DestinoPost p){
-		p.visibility = new Private
+//		p.visibility = new Private
 	}
 	def addPost(DestinoPost p){
 		posts.add(p)
@@ -48,20 +48,20 @@ class Perfil {
 	//COMMENTS
 	///////////////////////////////////////
 	def configVisibilityIntoPrivate(DestinoPost p, Comment c){
-		p.getComment(c).visibility = new Private
+//		p.getComment(c).visibility = new Private
 	}
 	def configVisibilityIntoJustFriends(DestinoPost p){
-		p.visibility = new JustFriends
+//		p.visibility = new JustFriends
 	}
 	def configVisibilityIntoJustFriends(DestinoPost p, Comment c){
-		p.getComment(c).visibility = new JustFriends
+//		p.getComment(c).visibility = new JustFriends
 	}
 	
 	def void commentToPost(DestinoPost post, Comment comment) {
 		getPost(post).addComment(comment)
 	}
 	
-	def getPost(DestinoPost p) {
+	def DestinoPost getPost(DestinoPost p) {
 		posts.get(posts.indexOf(p))
 	}
 	def void agregarMeGusta(DestinoPost p){

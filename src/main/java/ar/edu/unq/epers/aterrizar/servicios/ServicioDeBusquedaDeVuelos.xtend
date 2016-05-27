@@ -17,14 +17,15 @@ import java.util.ArrayList
 @Accessors
 class ServicioDeBusquedaDeVuelos {
 	
-	RepositorioBusquedas repositorioDeBusquedas = new RepositorioBusquedas
+	RepositorioBusquedas repositorioDeBusquedas
 	RepositorioAerolinea repositorioAerolineas
 	
 	new(){
-		
+		repositorioDeBusquedas = new RepositorioBusquedas
 	}
 	
 	new(RepositorioAerolinea repoAerolinea){
+		repositorioDeBusquedas = new RepositorioBusquedas
 		repositorioAerolineas = repoAerolinea
 	}
 
@@ -55,8 +56,9 @@ class ServicioDeBusquedaDeVuelos {
 	def getVuelosReservados(Usuario u){
 		var c = new CriterioPorVueloReservado(u)
 		var b = new Busqueda(c)
-		buscarVuelos(b)
-		
+		var vuelos = buscarVuelos(b)
+		System.out.println(vuelos.length)
+		vuelos
 	}
 
 

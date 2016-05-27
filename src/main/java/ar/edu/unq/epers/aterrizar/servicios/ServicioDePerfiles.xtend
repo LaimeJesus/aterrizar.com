@@ -27,12 +27,14 @@ class ServicioDePerfiles {
 	}
 
 	// en realidad es agregarDestino
-	def agregarPost(Usuario u, DestinoPost p) {
+	def agregarPost(Usuario u, DestinoPost p) throws NoPuedeAgregarPostException{
 		servicioDeUsuarios.isRegistrado(u)
 
-		if(!servicioDeBusqueda.viajeA(u, p.destino)) {
-			throw new NoPuedeAgregarPostException("Nunca me visitaste")
-		}
+		
+		
+//		if(!servicioDeBusqueda.viajeA(u, p.destino)) {
+//			throw new NoPuedeAgregarPostException("Nunca me visitaste")
+//		}
 		val perfil = getPerfil(u)
 		perfil.addPost(p)
 		updatePerfil(perfil)
@@ -149,12 +151,11 @@ class ServicioDePerfiles {
 		repositorioDePerfiles.insert(p)
 	}
 
-	def eliminarPerfil(Usuario usuario) {
-		var perfil = repositorioDePerfiles.find("username", usuario.nickname)
-		repositorioDePerfiles.delete(perfil.idPerfil)
+	def void eliminarPerfil(Usuario usuario) {
+		repositorioDePerfiles.delete("username", usuario.nickname)
 	}
 
-	def eliminarTodosLosPerfiles() {
+	def void eliminarTodosLosPerfiles() {
 		repositorioDePerfiles.deleteAll()
 	}
 

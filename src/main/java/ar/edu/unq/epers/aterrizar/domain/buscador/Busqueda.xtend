@@ -26,6 +26,7 @@ class Busqueda {
 		orden = o
 	}
 	
+	//
 	def getQueryBase(){
 		return "select distinct vuelos from Aerolinea as aerolinea join aerolinea.vuelos as vuelos join vuelos.tramos as tramos join tramos.asientos as asientos"
 	}

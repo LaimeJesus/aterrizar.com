@@ -7,9 +7,10 @@ import java.util.ArrayList
 @Accessors
 class DestinoPost {
 	
+	String id
 	List<Comment> comments
 	LikeAdmin likesAdmin
-	Visibility visibility
+//	Visibility visibility
 	
 	String destino
 	
@@ -19,7 +20,7 @@ class DestinoPost {
 		destino = msg
 		comments = new ArrayList<Comment>()
 		likesAdmin = new LikeAdmin()
-		visibility = new Private()
+//		visibility = new Private()
 	}
 	
 	def addComment(Comment c){
@@ -42,7 +43,8 @@ class DestinoPost {
 	}
 	
 	def puedeVer(Perfil preguntado, Perfil preguntando) {
-		visibility.puedeVer(preguntado, preguntando)
+//		visibility.puedeVer(preguntado, preguntando)
+		true
 	}
 	
 	def void filtrarComentarios(Perfil preguntado, Perfil preguntando) {

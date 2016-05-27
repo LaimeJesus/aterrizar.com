@@ -3,16 +3,19 @@ package ar.edu.unq.epers.aterrizar.servicios
 import ar.edu.unq.epers.aterrizar.domain.Usuario
 import ar.edu.unq.epers.aterrizar.persistence.hibernate.SessionManager
 import ar.edu.unq.epers.aterrizar.persistence.hibernate.RepositorioUsuarioHibernate
+import org.eclipse.xtend.lib.annotations.Accessors
 
+@Accessors
 class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios{
 	
-	RepositorioUsuarioHibernate repositorio
+	RepositorioUsuarioHibernate repoHibernate
 	ServicioDeAmigos servicioDeAmigos
+	ServicioDePerfiles servicioDePerfiles
 	
 	new() {
 		servicioDeAmigos = new ServicioDeAmigos(this)
 		servicioDePerfiles = new ServicioDePerfiles(this)		
-		repositorio = new RepositorioUsuarioHibernate
+		repoHibernate = new RepositorioUsuarioHibernate
 	}
 
 	override registrarUsuario(Usuario usr) throws Exception{
@@ -49,7 +52,7 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios{
 	override traerUsuarioDelRepositorio(String field, String value) throws Exception{
 		val usuarioATraer = getUsuario(value)
 		if(usuarioATraer == null){
-			repositorio.objectDoesnotExist
+			repoHibernate.objectDoesnotExist
 		}
 		usuarioATraer
 	}
@@ -87,7 +90,7 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios{
 	def contain(String nick) {
 		SessionManager.runInSession(
 			[
-				repositorio.contiene("nickname", nick)
+				repoHibernate.contiene("nickname", nick)
 			]
 		)
 	}
@@ -95,7 +98,7 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios{
 	def update(Usuario u) {
 		SessionManager.runInSession(
 			[
-				repositorio.actualizar(u)
+				repoHibernate.actualizar(u)
 				null
 			]
 		)
@@ -104,7 +107,7 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios{
 	def delete(Usuario u) {
 		SessionManager.runInSession(
 			[
-				repositorio.borrar(u)
+				repoHibernate.borrar(u)
 				null
 			]
 		)
@@ -113,14 +116,14 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios{
 	def getUsuario(String nick) {
 		SessionManager.runInSession(
 			[
-				repositorio.traer("nickname", nick)
+				repoHibernate.traer("nickname", nick)
 			]
 		)
 	}
 	def persist(Usuario u){
 		SessionManager.runInSession(
 			[
-				repositorio.persistir(u)
+				repoHibernate.persistir(u)
 				null
 			]
 		)		

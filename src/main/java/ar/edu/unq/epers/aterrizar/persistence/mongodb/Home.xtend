@@ -59,6 +59,10 @@ class Home<T> {
 		mongoCollection.removeById(id)
 	}
 	
+	def delete(String property, String value){
+		mongoCollection.remove(DBQuery.is(property, value))
+	}
+	
 	def deleteAll() {
 		mongoCollection.drop()
 	}
@@ -68,5 +72,6 @@ class Home<T> {
 	
 	def find(String property, String value){
 		mongoCollection.findOne(DBQuery.is(property, value));
+		
 	}
 }
