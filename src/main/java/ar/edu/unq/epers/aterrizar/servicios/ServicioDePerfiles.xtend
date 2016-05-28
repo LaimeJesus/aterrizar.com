@@ -35,10 +35,12 @@ class ServicioDePerfiles {
 	// en realidad es agregarDestino
 	def agregarPost(Usuario u, DestinoPost p) throws NoPuedeAgregarPostException{
 		servicioDeUsuarios.isRegistrado(u)
-
-		//		if(!servicioDeBusqueda.viajeA(u, p.destino)) {
-		//			throw new NoPuedeAgregarPostException("Nunca me visitaste")
-		//		}
+		
+		var isVisitado = servicioDeBusqueda.viajeA(u, p.destino)
+		System.out.println(isVisitado)
+//		if(!isVisitado) {
+//			throw new NoPuedeAgregarPostException("Nunca me visitaste")
+//		}
 		val perfil = getPerfil(u)
 		perfil.addPost(p)
 		updatePerfil(perfil)
@@ -93,7 +95,7 @@ class ServicioDePerfiles {
 	def cambiarAPublico(Usuario u, DestinoPost p) {
 		servicioDeUsuarios.isRegistrado(u)
 		val perfil = getPerfil(u)
-		
+
 		perfil.configVisibilityIntoPublic(p)
 
 		updatePerfil(perfil)

@@ -11,6 +11,7 @@ import ar.edu.unq.epers.aterrizar.domain.vuelos.Aerolinea
 import ar.edu.unq.epers.aterrizar.domain.vuelos.Tramo
 import ar.edu.unq.epers.aterrizar.domain.vuelos.Vuelo
 import ar.edu.unq.epers.aterrizar.domain.vuelos.Asiento
+import ar.edu.unq.epers.aterrizar.servicios.ServicioRegistroUsuarioConHibernate
 
 /*
  * Esta clase esta para testear al servicio de reserva de asientos. Es decir integra los repositorios de Aerolinea y Busqueda.
@@ -32,11 +33,14 @@ class ServicioDeReservaDeVuelosTest {
 	
 	Tramo tramoMexicoEstadosUnidos
 	
+	ServicioRegistroUsuarioConHibernate servicioDeUsuarios
+	
 	@Before
 	def void setUp(){
 		
 		//nuestro system under 
-		sudo = new ServicioDeReservaDeVuelos
+		servicioDeUsuarios = new ServicioRegistroUsuarioConHibernate()
+		sudo = new ServicioDeReservaDeVuelos(servicioDeUsuarios)
 		
 ///////////////////////////////////////////////////////////////
 // Creacion de dos aerolineas con sus vuelos que tienen tramos que tienen asientos
@@ -188,7 +192,7 @@ class ServicioDeReservaDeVuelosTest {
 		
 		usuario = new Usuario
 		usuario.nickname = "Pepe"
-		
+		servicioDeUsuarios.registrarUsuario(usuario)
 	}
 	
 	@Test
@@ -221,7 +225,7 @@ class ServicioDeReservaDeVuelosTest {
 //	no me deja esperar esa excepcion en el test
 //	@Test(expected=AsientoReservadoException)
 	@Test(expected=Exception)
-	def void testReservarUnAsientoExceptionPorUnUsuario(){
+	def void testReservarUnAsientoOcupadoArrojaUnaExceptionPorUnUsuario(){
 
 		var pepe = usuario
 	

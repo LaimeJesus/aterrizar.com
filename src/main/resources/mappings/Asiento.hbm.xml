@@ -21,6 +21,6 @@
 		</property>
 		<many-to-one name="reservadoPorUsuario"
 			class="ar.edu.unq.epers.aterrizar.domain.Usuario" column="idUsuario"
-			not-null="false" cascade="all" fetch="join" />
+			not-null="false" cascade="all" fetch="join"/>
 	</class>
 </hibernate-mapping>

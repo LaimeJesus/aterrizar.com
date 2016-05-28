@@ -18,6 +18,7 @@ import ar.edu.unq.epers.aterrizar.domain.redsocial.Comment
 import ar.edu.unq.epers.aterrizar.exceptions.NoExistePostException
 import ar.edu.unq.epers.aterrizar.exceptions.NoPuedesVotarException
 import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
+import ar.edu.unq.epers.aterrizar.exceptions.NoPuedeAgregarPostException
 
 class ServicioDePerfilesTest {
 
@@ -48,7 +49,7 @@ class ServicioDePerfilesTest {
 	@Before
 	def void setUp() {
 
-		flightService = new ServicioDeReservaDeVuelos()
+
 
 		/////////////////////////////////////////////////////////
 		//registrar usuario
@@ -66,7 +67,7 @@ class ServicioDePerfilesTest {
 		//iniciando sut
 		/////////////////////////////////////////////////////////
 		sut = userService.servicioDePerfiles
-
+		flightService = new ServicioDeReservaDeVuelos(userService)
 		sut.servicioDeBusqueda.repositorioAerolineas = flightService.repositorioDeAerolineas
 
 		/////////////////////////////////////////////////////////
@@ -106,12 +107,13 @@ class ServicioDePerfilesTest {
 		Assert.assertTrue(perfilPepe.nickname.equals("pepe"))
 	}
 
-	//al no poder chequear los vuelos este test no funciona, por el momento
-	//	@Test(expected=NoPuedeAgregarPostException)
-	//	def void testCrearUnDestinoPostDeUnLugarQueNoFuiTiraUnaExcepcion() {
-	//		var post = new DestinoPost("1", "lugar desconocido")
-	//		sut.agregarPost(pepe, post)
-	//	}
+	//	al no poder chequear los vuelos este test no funciona, por el momento
+//	@Test(expected=NoPuedeAgregarPostException)
+//	def void testCrearUnDestinoPostDeUnLugarQueNoFuiTiraUnaExcepcion() {
+//		var post = new DestinoPost("1", "lugar desconocido")
+//		sut.agregarPost(pepe, post)
+//	}
+
 	//asiento no guarda el id del usuario que reserva el vuelo asi que no puedo ver los vuelos reservados por un usuario
 	////////////////////////////////////////////////////////
 	//postear y comentar
@@ -234,9 +236,8 @@ class ServicioDePerfilesTest {
 		flightService.eliminarAerolinea(aa)
 		userService.borrarDeAmigos(pepe)
 		userService.borrarDePerfiles(pepe)
-		userService.borrarDeAmigos(jose)
-		userService.borrarDePerfiles(jose)
+		userService.eliminarUsuario(jose)
 		sut.repositorioDePerfiles.deleteAll
-
+		sut.servicioDeBusqueda.eliminarBusquedas
 	}
 }

@@ -7,7 +7,7 @@ import ar.edu.unq.epers.aterrizar.domain.Usuario
 class CriterioPorVueloReservado extends Criterio{
 	
 	String nickname
-	
+	new(){}
 	new(Usuario u){
 		nickname = u.nickname
 	}
