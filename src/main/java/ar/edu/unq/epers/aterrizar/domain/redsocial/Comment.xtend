@@ -11,9 +11,10 @@ class Comment {
 	LikeAdmin likesAdmin
 	Visibility visibility
 	String comment
-	new(){
-		
+
+	new() {
 	}
+
 	new(String actualId, String msg) {
 		id = actualId
 		visibility = Visibility.PRIVATE
@@ -31,5 +32,13 @@ class Comment {
 
 	def boolean puedeVer(Perfil preguntado, Perfil preguntando) {
 		visibility.puedeVer(preguntado, preguntando)
+	}
+
+	def cantidadMeGusta() {
+		likesAdmin.cantidadDeMeGusta()
+	}
+
+	def cantidadNoMeGusta() {
+		likesAdmin.cantidadDeNoMeGusta()
 	}
 }

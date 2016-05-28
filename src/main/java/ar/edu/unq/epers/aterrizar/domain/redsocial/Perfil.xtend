@@ -18,6 +18,7 @@ class Perfil {
 	String nickname
 
 	new() {
+		posts = new ArrayList<DestinoPost>()
 	}
 
 	new(String nick) {
@@ -28,16 +29,17 @@ class Perfil {
 	///////////////////////////////////////
 	//POSTS
 	///////////////////////////////////////
-	def configVisibilityIntoPublic(DestinoPost p) {
-		p.visibility = Visibility.PUBLIC
+	def void configVisibilityIntoPublic(DestinoPost p) {
+
+		Visibility.changeToPublic(getPost(p))
 	}
 
-	def configVisibilityIntoPublic(DestinoPost p, Comment c) {
-		p.getComment(c).visibility = Visibility.PUBLIC
+	def void configVisibilityIntoPrivate(DestinoPost p) {
+		Visibility.changeToPrivate(getPost(p))
 	}
 
-	def configVisibilityIntoPrivate(DestinoPost p) {
-		p.visibility = Visibility.PRIVATE
+	def void configVisibilityIntoJustFriends(DestinoPost p) {
+		Visibility.changeToJustFriend(getPost(p))
 	}
 
 	def addPost(DestinoPost p) {
@@ -48,31 +50,8 @@ class Perfil {
 		posts.remove(p)
 	}
 
-	///////////////////////////////////////
-	//COMMENTS
-	///////////////////////////////////////
-	def configVisibilityIntoPrivate(DestinoPost p, Comment c) {
-		p.getComment(c).visibility = Visibility.PRIVATE
-	}
-
-	def configVisibilityIntoJustFriends(DestinoPost p) {
-		p.visibility = Visibility.JUSTFRIENDS
-	}
-
-	def configVisibilityIntoJustFriends(DestinoPost p, Comment c) {
-		p.getComment(c).visibility = Visibility.JUSTFRIENDS
-	}
-
-	def void commentToPost(DestinoPost post, Comment comment) {
-
-		var p = getPost(post)
-		p.addComment(comment)
-	}
-
 	def getPost(DestinoPost p) {
 		for (post : posts) {
-			System.out.println(post.id)
-			System.out.println(post.destino)
 			if(post.destino == p.destino) {
 				return post
 			}
@@ -80,26 +59,50 @@ class Perfil {
 		throw new NoExistePostException("No existe " + p.id)
 	}
 
-	def void agregarMeGusta(DestinoPost p) {
-		getPost(p).meGusta(this)
+	///////////////////////////////////////
+	//COMMENTS
+	///////////////////////////////////////
+	def void configVisibilityIntoPrivate(DestinoPost p, Comment c) {
+		Visibility.changeToPrivate(p.getComment(c))
 	}
 
-	def void agregarNoMeGusta(DestinoPost p) {
-		getPost(p).noMeGusta(this)
+	def void configVisibilityIntoPublic(DestinoPost p, Comment c) {
+		Visibility.changeToPublic(p.getComment(c))
 	}
 
-	def void agregarMeGusta(DestinoPost p, Comment c) {
-		getPost(p).getComment(c).meGusta(this)
+	def void configVisibilityIntoJustFriends(DestinoPost p, Comment c) {
+		Visibility.changeToJustFriend(p.getComment(c))
 	}
 
-	def void agregarNoMeGusta(DestinoPost p, Comment c) {
-		getPost(p).getComment(c).noMeGusta(this)
+	def void commentToPost(DestinoPost post, Comment comment) {
+
+		getPost(post).addComment(comment)
+	}
+
+	///////////////////////////////////////
+	//likes
+	///////////////////////////////////////
+	def void agregarMeGusta(Perfil perfil, DestinoPost post) {
+		getPost(post).meGusta(perfil)
+	}
+
+	def void agregarNoMeGusta(Perfil perfil, DestinoPost post) {
+		getPost(post).noMeGusta(perfil)
+	}
+
+	def void agregarMeGusta(Perfil per, DestinoPost p, Comment c) {
+		getPost(p).getComment(c).meGusta(per)
+	}
+
+	def void agregarNoMeGusta(Perfil per, DestinoPost p, Comment c) {
+		getPost(p).getComment(c).noMeGusta(per)
 	}
 
 	//ver perfil
 	def getContents(Perfil preguntando) {
 		var res = new Perfil()
-		var ps = posts.filter[it.puedeVer(this, preguntando)].toList
+
+		var ps = this.posts.filter[it.puedeVer(this, preguntando)].toList
 		ps.forEach[it.filtrarComentarios(this, preguntando)]
 		res.posts = ps
 		res
@@ -108,7 +111,19 @@ class Perfil {
 	def getComments(DestinoPost post) {
 		getPost(post).comments
 	}
-	def cantidadDeMeGusta(DestinoPost post){
+
+	def cantidadDeMeGusta(DestinoPost post) {
 		getPost(post).cantidadMeGusta()
+	}
+
+	def cantidadDeMeGusta(DestinoPost post, Comment c) {
+		getPost(post).getComment(c).cantidadMeGusta()
+	}
+
+	def cantidadDeNoMeGusta(DestinoPost p) {
+		getPost(p).cantidadNoMeGusta()
+	}
+	def cantidadDeNoMeGusta(DestinoPost post, Comment c) {
+		getPost(post).getComment(c).cantidadNoMeGusta()
 	}
 }

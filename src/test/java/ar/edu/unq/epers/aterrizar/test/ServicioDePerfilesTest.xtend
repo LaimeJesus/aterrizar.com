@@ -17,6 +17,7 @@ import ar.edu.unq.epers.aterrizar.servicios.ServicioDeReservaDeVuelos
 import ar.edu.unq.epers.aterrizar.domain.redsocial.Comment
 import ar.edu.unq.epers.aterrizar.exceptions.NoExistePostException
 import ar.edu.unq.epers.aterrizar.exceptions.NoPuedesVotarException
+import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
 
 class ServicioDePerfilesTest {
 
@@ -42,21 +43,35 @@ class ServicioDePerfilesTest {
 
 	Comment commentForPostBrazil
 
+	Usuario jose
+
 	@Before
 	def void setUp() {
 
 		flightService = new ServicioDeReservaDeVuelos()
 
+		/////////////////////////////////////////////////////////
+		//registrar usuario
+		/////////////////////////////////////////////////////////
 		pepe = new Usuario()
 		pepe.nickname = "pepe"
+		jose = new Usuario()
+		jose.nickname = "jose"
 
 		userService = new ServicioRegistroUsuarioConHibernate()
 		userService.registrarUsuario(pepe)
+		userService.registrarUsuario(jose)
 
+		/////////////////////////////////////////////////////////
+		//iniciando sut
+		/////////////////////////////////////////////////////////
 		sut = userService.servicioDePerfiles
 
 		sut.servicioDeBusqueda.repositorioAerolineas = flightService.repositorioDeAerolineas
 
+		/////////////////////////////////////////////////////////
+		//aerolinea para reservar un asiento
+		/////////////////////////////////////////////////////////
 		aa = new Aerolinea("AerolineasArgentinas")
 
 		v1 = new Vuelo(1)
@@ -68,13 +83,20 @@ class ServicioDePerfilesTest {
 		flightService.agregarAerolinea(aa)
 
 		nuevoAsiento = flightService.reservar(pepe, aa, v1, argentinabrasil, asientolibre)
+
+		/////////////////////////////////////////////////////////
+		//perfiles
+		/////////////////////////////////////////////////////////
 		postBrazil = new DestinoPost("1", "Brazil")
 		sut.agregarPost(pepe, postBrazil)
+
 		commentForPostBrazil = new Comment("1", "BEST TRIP EVER")
 
 		sut.comentarPost(pepe, postBrazil, commentForPostBrazil)
-		sut.meGusta(pepe, postBrazil)
-
+		sut.meGusta(pepe, pepe, postBrazil)
+		sut.noMeGusta(pepe, jose, postBrazil)
+		sut.meGusta(pepe, pepe, postBrazil, commentForPostBrazil)
+		sut.noMeGusta(pepe, jose, postBrazil, commentForPostBrazil)
 	}
 
 	@Test
@@ -91,6 +113,9 @@ class ServicioDePerfilesTest {
 	//		sut.agregarPost(pepe, post)
 	//	}
 	//asiento no guarda el id del usuario que reserva el vuelo asi que no puedo ver los vuelos reservados por un usuario
+	////////////////////////////////////////////////////////
+	//postear y comentar
+	////////////////////////////////////////////////////////
 	@Test
 	def void testCrearUnDestinoPostDeUnLugarQueFuiMeAgregaUnPost() {
 
@@ -113,10 +138,12 @@ class ServicioDePerfilesTest {
 
 	}
 
+	////////////////////////////////////////////////////////
+	//agregar me gusta y no me gusta a posts y cometnarios
+	////////////////////////////////////////////////////////
 	@Test
-	def void testAgregarMeGustaAUnPostAumentaLaCantidadDeLikesEnUno() {
+	def void testAgregarMeGustaAUnPostAumentaLaCantidadDeMeGustaEnUno() {
 
-		System.out.println(postBrazil)
 		var p = sut.getPerfil(pepe)
 		var cantidadDeMegusta = p.cantidadDeMeGusta(postBrazil)
 		Assert.assertEquals(1, cantidadDeMegusta)
@@ -124,7 +151,81 @@ class ServicioDePerfilesTest {
 
 	@Test(expected=NoPuedesVotarException)
 	def void testAgregarMeGustaAUnPostQueYaLikeeArrojaUnaExceptcion() {
-		sut.meGusta(pepe, postBrazil)
+		sut.meGusta(pepe, pepe, postBrazil)
+	}
+
+	@Test(expected=NoPuedesVotarException)
+	def void testAgregarNoMeGustaAUnPostQueYaLePuseMeGustaArrojaUnaExcepcion() {
+
+		sut.noMeGusta(pepe, pepe, postBrazil)
+	}
+
+	@Test
+	def void testAgregarNoMeGustaAUnPostAumentaLaCantidadDeNoMeGustaEnUno() {
+		var p = sut.getPerfil(pepe)
+		var cantidadDeNoMeGusta = p.cantidadDeNoMeGusta(postBrazil)
+		Assert.assertEquals(1, cantidadDeNoMeGusta)
+	}
+
+	@Test(expected=NoPuedesVotarException)
+	def void testAgregarNoMeGustaAUnPostQueYaLikeeArrojaUnaExceptcion() {
+		sut.noMeGusta(pepe, jose, postBrazil)
+	}
+
+	@Test(expected=NoPuedesVotarException)
+	def void testAgregarMeGustaAUnPostQueYaLePuseNoMeGustaArrojaUnaExcepcion() {
+
+		sut.meGusta(pepe, jose, postBrazil)
+	}
+
+	@Test
+	def void testAgregarMeGustaAUnComentarioSumaSuCantidadEnUno() {
+
+		var perfilPepe = sut.getPerfil(pepe)
+		var cantidad = perfilPepe.cantidadDeMeGusta(postBrazil, commentForPostBrazil)
+		Assert.assertEquals(1, cantidad)
+	}
+
+	@Test
+	def void testAgregarNoMeGustaAUnComentarioSumaSuCantidadEnUno() {
+
+		var perfilPepe = sut.getPerfil(pepe)
+		var cantidad = perfilPepe.cantidadDeNoMeGusta(postBrazil, commentForPostBrazil)
+		Assert.assertEquals(1, cantidad)
+
+	}
+
+	////////////////////////////////////////////////////////
+	//configurar perfil
+	////////////////////////////////////////////////////////
+	@Test
+	def void testCambiarPostAPublicDejaQueCualquieraVeaEsePost() {
+		sut.cambiarAPublico(pepe, postBrazil)
+		var perfilPepe = sut.verPerfil(pepe, jose)
+
+		Assert.assertEquals(Visibility.PUBLIC, perfilPepe.getPost(postBrazil).visibility)
+		Assert.assertTrue(perfilPepe.getPost(postBrazil).destino == "Brazil")
+	}
+
+	@Test(expected=NoExistePostException)
+	def void testNoPuedoVerUnPostPrivadoDeUnPerfil() {
+		sut.cambiarAPrivado(pepe, postBrazil)
+		var perfilPepe = sut.verPerfil(pepe, jose)
+		Assert.assertEquals(Visibility.PRIVATE, perfilPepe.getPost(postBrazil).visibility)
+	}
+
+	@Test
+	def void testCambiarPostAPrivateDejaQueSoloYoVeaEsePost() {
+		sut.cambiarAPrivado(pepe, postBrazil)
+		var perfilPepe = sut.verPerfil(pepe, pepe)
+		Assert.assertEquals(Visibility.PRIVATE, perfilPepe.getPost(postBrazil).visibility)
+	}
+
+	@Test
+	def void testCambiarPostAJustFriendDejaQueSoloMisAmigosVeanEsePost() {
+		sut.cambiarASoloAmigos(pepe, postBrazil)
+		var perfilPepe = sut.verPerfil(pepe, jose)
+		Assert.assertEquals(Visibility.JUSTFRIENDS, perfilPepe.getPost(postBrazil).visibility)
 	}
 
 	@After
@@ -133,6 +234,8 @@ class ServicioDePerfilesTest {
 		flightService.eliminarAerolinea(aa)
 		userService.borrarDeAmigos(pepe)
 		userService.borrarDePerfiles(pepe)
+		userService.borrarDeAmigos(jose)
+		userService.borrarDePerfiles(jose)
 		sut.repositorioDePerfiles.deleteAll
 
 	}

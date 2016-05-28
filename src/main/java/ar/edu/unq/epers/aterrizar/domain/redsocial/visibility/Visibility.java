@@ -1,12 +1,14 @@
 package ar.edu.unq.epers.aterrizar.domain.redsocial.visibility;
 
+import ar.edu.unq.epers.aterrizar.domain.redsocial.Comment;
+import ar.edu.unq.epers.aterrizar.domain.redsocial.DestinoPost;
 import ar.edu.unq.epers.aterrizar.domain.redsocial.Perfil;
 
 public enum Visibility {
 	JUSTFRIENDS {
 
 		public boolean puedeVer(Perfil p1, Perfil p2) {
-			return false;
+			return true;
 		}
 	},
 	PUBLIC {
@@ -21,4 +23,23 @@ public enum Visibility {
 	};
 
 	public abstract boolean puedeVer(Perfil p1, Perfil p2);
+
+	public static void changeToPublic(DestinoPost p){
+		p.setVisibility(PUBLIC);
+	}
+	public static void changeToPublic(Comment c){
+		c.setVisibility(PUBLIC);
+	}
+	public static void changeToPrivate(DestinoPost p){
+		p.setVisibility(PRIVATE);
+	}
+	public static void changeToPrivate(Comment c){
+		c.setVisibility(PRIVATE);
+	}	
+	public static void changeToJustFriend(DestinoPost p){
+		p.setVisibility(JUSTFRIENDS);
+	}
+	public static void changeToJustFriend(Comment c){
+		c.setVisibility(JUSTFRIENDS);
+	}	
 }

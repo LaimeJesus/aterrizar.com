@@ -66,6 +66,5 @@ class DestinoPost {
 	def cantidadNoMeGusta() {
 		likesAdmin.cantidadDeNoMeGusta()
 	}
-
 	
 }
