@@ -17,6 +17,9 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios {
 		this.servicioDePerfiles = new ServicioDePerfiles(this)
 		this.repoHibernate = new RepositorioUsuarioHibernate
 	}
+	new(ServicioDeReservaDeVuelos srv, ServicioDeBusquedaDeVuelos sbv){
+		
+	}
 
 	override registrarUsuario(Usuario usuario) throws Exception{
 

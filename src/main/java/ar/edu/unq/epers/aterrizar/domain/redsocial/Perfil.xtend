@@ -51,27 +51,27 @@ class Perfil {
 	}
 
 	def getPost(DestinoPost p) {
-		for (post : posts) {
+		for (post : this.posts) {
 			if(post.destino == p.destino) {
 				return post
 			}
 		}
-		throw new NoExistePostException("No existe " + p.id)
+		throw new NoExistePostException("No existe post con destino a: " + p.destino)
 	}
 
 	///////////////////////////////////////
 	//COMMENTS
 	///////////////////////////////////////
 	def void configVisibilityIntoPrivate(DestinoPost p, Comment c) {
-		Visibility.changeToPrivate(p.getComment(c))
+		getPost(p).cambiarAPrivado(c)
 	}
 
 	def void configVisibilityIntoPublic(DestinoPost p, Comment c) {
-		Visibility.changeToPublic(p.getComment(c))
+		getPost(p).cambiarAPublico(c)
 	}
 
 	def void configVisibilityIntoJustFriends(DestinoPost p, Comment c) {
-		Visibility.changeToJustFriend(p.getComment(c))
+		getPost(p).cambiarASoloAmigos(c)
 	}
 
 	def void commentToPost(DestinoPost post, Comment comment) {

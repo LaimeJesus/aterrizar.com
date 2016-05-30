@@ -18,7 +18,7 @@ import ar.edu.unq.epers.aterrizar.domain.redsocial.Comment
 import ar.edu.unq.epers.aterrizar.exceptions.NoExistePostException
 import ar.edu.unq.epers.aterrizar.exceptions.NoPuedesVotarException
 import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
-import ar.edu.unq.epers.aterrizar.exceptions.NoPuedeAgregarPostException
+import ar.edu.unq.epers.aterrizar.exceptions.NoExisteEseComentarioException
 
 class ServicioDePerfilesTest {
 
@@ -30,14 +30,6 @@ class ServicioDePerfilesTest {
 
 	ServicioDeReservaDeVuelos flightService
 
-	Aerolinea aa
-
-	Vuelo v1
-
-	Tramo argentinabrasil
-
-	Asiento asientolibre
-
 	Asiento nuevoAsiento
 
 	DestinoPost postBrazil
@@ -46,10 +38,12 @@ class ServicioDePerfilesTest {
 
 	Usuario jose
 
+	Aerolinea aa
+
 	@Before
 	def void setUp() {
 
-
+		inicializarServicioPerfil()
 
 		/////////////////////////////////////////////////////////
 		//registrar usuario
@@ -59,30 +53,26 @@ class ServicioDePerfilesTest {
 		jose = new Usuario()
 		jose.nickname = "jose"
 
-		userService = new ServicioRegistroUsuarioConHibernate()
-		userService.registrarUsuario(pepe)
-		userService.registrarUsuario(jose)
-
-		/////////////////////////////////////////////////////////
-		//iniciando sut
-		/////////////////////////////////////////////////////////
-		sut = userService.servicioDePerfiles
-		flightService = new ServicioDeReservaDeVuelos(userService)
-		sut.servicioDeBusqueda.repositorioAerolineas = flightService.repositorioDeAerolineas
-
 		/////////////////////////////////////////////////////////
 		//aerolinea para reservar un asiento
 		/////////////////////////////////////////////////////////
 		aa = new Aerolinea("AerolineasArgentinas")
 
-		v1 = new Vuelo(1)
+		var v1 = new Vuelo(1)
 		aa.agregarVuelo(v1)
-		argentinabrasil = new Tramo("Argentina", "Brazil", 100, "2016-5-10", "2016-5-11", 1)
+		var argentinabrasil = new Tramo("Argentina", "Brazil", 100, "2016-5-10", "2016-5-11", 1)
 		v1.agregarTramo(argentinabrasil)
-		asientolibre = new Asiento(TipoDeCategoria.PRIMERA, 50, 1)
+		var asientolibre = new Asiento(TipoDeCategoria.PRIMERA, 50, 1)
 		argentinabrasil.agregarAsiento(asientolibre)
+
 		flightService.agregarAerolinea(aa)
 
+		userService.registrarUsuario(pepe)
+		userService.registrarUsuario(jose)
+
+		/////////////////////////////////////////////////////////
+		//reservar
+		/////////////////////////////////////////////////////////
 		nuevoAsiento = flightService.reservar(pepe, aa, v1, argentinabrasil, asientolibre)
 
 		/////////////////////////////////////////////////////////
@@ -100,20 +90,30 @@ class ServicioDePerfilesTest {
 		sut.noMeGusta(pepe, jose, postBrazil, commentForPostBrazil)
 	}
 
+	/////////////////////////////////////////////////////////
+	//iniciando sut
+	/////////////////////////////////////////////////////////
+	def inicializarServicioPerfil() {
+		userService = new ServicioRegistroUsuarioConHibernate
+		flightService = new ServicioDeReservaDeVuelos(userService)
+		sut = userService.servicioDePerfiles
+		sut.servicioDeBusqueda.repositorioAerolineas = flightService.repositorioDeAerolineas
+	}
+
 	@Test
 	def void testUnUsuarioRegistradoTieneUnPerfilSinNada() {
 
-		var perfilPepe = sut.getPerfil(pepe)
-		Assert.assertTrue(perfilPepe.nickname.equals("pepe"))
+		var perfilVacio = sut.getPerfil(jose)
+		Assert.assertTrue(perfilVacio.nickname.equals("jose"))
+		Assert.assertEquals(0, perfilVacio.posts.length)
 	}
 
 	//	al no poder chequear los vuelos este test no funciona, por el momento
-//	@Test(expected=NoPuedeAgregarPostException)
-//	def void testCrearUnDestinoPostDeUnLugarQueNoFuiTiraUnaExcepcion() {
-//		var post = new DestinoPost("1", "lugar desconocido")
-//		sut.agregarPost(pepe, post)
-//	}
-
+	//	@Test(expected=NoPuedeAgregarPostException)
+	//	def void testCrearUnDestinoPostDeUnLugarQueNoFuiTiraUnaExcepcion() {
+	//		var post = new DestinoPost("1", "lugar desconocido")
+	//		sut.agregarPost(pepe, post)
+	//	}
 	//asiento no guarda el id del usuario que reserva el vuelo asi que no puedo ver los vuelos reservados por un usuario
 	////////////////////////////////////////////////////////
 	//postear y comentar
@@ -230,10 +230,44 @@ class ServicioDePerfilesTest {
 		Assert.assertEquals(Visibility.JUSTFRIENDS, perfilPepe.getPost(postBrazil).visibility)
 	}
 
+	@Test
+	def void testCambiarUnComentarioDeUnPostPublicoAPublicDejaQueCualquieraLoVea() {
+
+		sut.cambiarAPublico(pepe, postBrazil)
+		sut.cambiarAPublico(pepe, postBrazil, commentForPostBrazil)
+		var perfilPepe = sut.verPerfil(pepe, jose)
+
+		Assert.assertEquals(Visibility.PUBLIC,
+			perfilPepe.getPost(postBrazil).getComment(commentForPostBrazil).visibility)
+	}
+
+	@Test(expected=NoExisteEseComentarioException)
+	def void testOtroUsuarioQuiereVerUnComentarioConVisibilidadPrivadaArrojaUnaExcepcion() {
+
+		sut.cambiarAPublico(pepe, postBrazil)
+		sut.cambiarAPrivado(pepe, postBrazil, commentForPostBrazil)
+		var perfilPepe = sut.verPerfil(pepe, jose)
+		
+		//la excepcion es cuando pido ver el comment
+		perfilPepe.getPost(postBrazil).getComment(commentForPostBrazil)
+	}
+
+	@Test
+	def void testCambiarUnComentarioDeUnPostPublicoAPrivadoDejaQueSoloYoLoVea() {
+
+		sut.cambiarAPublico(pepe, postBrazil)
+		sut.cambiarAPrivado(pepe, postBrazil, commentForPostBrazil)
+		var perfilPepe = sut.verPerfil(pepe, pepe)
+
+		Assert.assertEquals(Visibility.PRIVATE,
+			perfilPepe.getPost(postBrazil).getComment(commentForPostBrazil).visibility)
+	}
+
 	@After
 	def void borrarDatosCreadosEnSetUp() {
 
 		flightService.eliminarAerolinea(aa)
+
 		userService.borrarDeAmigos(pepe)
 		userService.borrarDePerfiles(pepe)
 		userService.eliminarUsuario(jose)

@@ -41,7 +41,7 @@ class DestinoPost {
 				return comment
 			}		
 		}
-		throw new NoExisteEseComentarioException("No Existe " + c.id)
+		throw new NoExisteEseComentarioException("No Existe el comentario: " + c.comment)
 	}
 	
 	def void meGusta(Perfil p){
@@ -56,7 +56,7 @@ class DestinoPost {
 	}
 	
 	def void filtrarComentarios(Perfil preguntado, Perfil preguntando) {
-		this.comments = comments.filter[it.puedeVer(preguntado, preguntando)].toList
+		this.comments = this.comments.filter[it.puedeVer(preguntado, preguntando)].toList
 	}
 	
 	def cantidadMeGusta() {
@@ -65,6 +65,18 @@ class DestinoPost {
 
 	def cantidadNoMeGusta() {
 		likesAdmin.cantidadDeNoMeGusta()
+	}
+	
+	def cambiarAPublico(Comment comment) {
+		Visibility.changeToPublic(this.getComment(comment))
+	}
+	
+	def cambiarAPrivado(Comment comment) {
+		Visibility.changeToPrivate(this.getComment(comment))
+	}
+	
+	def cambiarASoloAmigos(Comment comment) {
+		Visibility.changeToJustFriend(this.getComment(comment))
 	}
 	
 }

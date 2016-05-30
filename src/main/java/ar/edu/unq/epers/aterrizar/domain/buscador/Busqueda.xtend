@@ -44,7 +44,7 @@ class Busqueda {
  		this.query = queryAEjecutar
 	}
 	def void armarQueryConUsuarios(){
-		this.query = queryBase + " " + queryUsuarios + " " + armarCondicion + " " + armarOrden
+		this.query = queryBase + " " + queryUsuarios + armarCondicion + armarOrden
 	}
 	
 	def armarOrden() {

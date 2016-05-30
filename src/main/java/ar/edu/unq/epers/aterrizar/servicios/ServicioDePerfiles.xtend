@@ -26,18 +26,17 @@ class ServicioDePerfiles {
 		servicioDeBusqueda = new ServicioDeBusquedaDeVuelos
 	}
 
-	new(ServicioDeRegistroDeUsuarios s, ServicioDeBusquedaDeVuelos sb) {
+	new(ServicioDeRegistroDeUsuarios s, ServicioDeBusquedaDeVuelos serviciobusqueda) {
 		servicioDeUsuarios = s
 		repositorioDePerfiles = SistemDB.instance().collection(Perfil)
-		servicioDeBusqueda = sb
+		servicioDeBusqueda = serviciobusqueda
 	}
 
 	// en realidad es agregarDestino
 	def agregarPost(Usuario u, DestinoPost p) throws NoPuedeAgregarPostException{
 		servicioDeUsuarios.isRegistrado(u)
 		
-		var isVisitado = servicioDeBusqueda.viajeA(u, p.destino)
-		System.out.println(isVisitado)
+//		var isVisitado = servicioDeBusqueda.viajeA(u, p.destino)
 //		if(!isVisitado) {
 //			throw new NoPuedeAgregarPostException("Nunca me visitaste")
 //		}
