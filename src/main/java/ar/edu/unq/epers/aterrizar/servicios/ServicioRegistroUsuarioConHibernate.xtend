@@ -88,6 +88,8 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios {
 		delete(u)
 	}
 	
+	
+	
 	def void borrarDePerfiles(Usuario usuario) {
 		servicioDePerfiles.eliminarPerfil(usuario)
 	}
@@ -95,7 +97,7 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios {
 	def void borrarDeAmigos(Usuario usuario) {
 		servicioDeAmigos.eliminarUsuarioDeAmigos(usuario)
 	}
-
+	
 	def contain(String nick) {
 		SessionManager.runInSession(
 			[

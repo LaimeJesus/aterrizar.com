@@ -36,10 +36,10 @@ class ServicioDePerfiles {
 	def agregarPost(Usuario u, DestinoPost p) throws NoPuedeAgregarPostException{
 		servicioDeUsuarios.isRegistrado(u)
 		
-//		var isVisitado = servicioDeBusqueda.viajeA(u, p.destino)
-//		if(!isVisitado) {
-//			throw new NoPuedeAgregarPostException("Nunca me visitaste")
-//		}
+		var isVisitado = servicioDeBusqueda.viajeA(u, p.destino)
+		if(!isVisitado) {
+			throw new NoPuedeAgregarPostException("Nunca me visitaste")
+		}
 		val perfil = getPerfil(u)
 		perfil.addPost(p)
 		updatePerfil(perfil)

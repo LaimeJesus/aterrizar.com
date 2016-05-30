@@ -16,7 +16,7 @@ abstract class RepositorioHibernate<T> {
 	}
 	
 	def void actualizar(T object) {
-		session.merge(object)
+		session.update(object)
 	}
 	
 	def void borrar(T object) {

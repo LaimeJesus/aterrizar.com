@@ -21,26 +21,40 @@ class ServicioDeReservaDeVuelos {
 	new() {
 		repositorioDeAerolineas = new RepositorioAerolinea
 	}
-	new(ServicioDeRegistroDeUsuarios sru){
+
+	new(ServicioDeRegistroDeUsuarios sru) {
 		servicioDeRegistroDeUsuarios = sru
 		repositorioDeAerolineas = new RepositorioAerolinea
 	}
-	//caso de uso un usuario quiere reservar un asiento de un tramo de un vuelo de una Aerolinea
-	def Asiento reservar(Usuario usuario, Aerolinea unaAerolinea, Vuelo unVuelo, Tramo unTramo, Asiento unAsiento) throws Exception{
 
-		//no entiendo xq pero no me deja usar estos tres metodos para realizar la reserva. asi que lo hago todo en una session
-		
-		servicioDeRegistroDeUsuarios.isRegistrado(usuario)
-		isRegistrado(unaAerolinea)
-		var aero = traerAerolinea(unaAerolinea)
-		aero.validarReserva(unVuelo, unTramo, unAsiento)
-		reservarAsiento(aero, unAsiento, usuario)
-		actualizarAerolinea(aero)
-		unAsiento
+	//caso de uso un usuario quiere reservar un asiento de un tramo de un vuelo de una Aerolinea
+	def Asiento reservar(Usuario usuario, Aerolinea aero, Vuelo unVuelo, Tramo unTramo, Asiento unAsiento) throws Exception{
+
+//ahora el problema es que estoy teniendo problemas en hacer que reservar sea atomico en realidad lo unico que tiene que
+//ser atomico es updatear luego reservar el asiento 
+				
+				servicioDeRegistroDeUsuarios.isRegistrado(usuario)
+				isRegistrado(aero)
+				aero.validarReserva(unVuelo, unTramo, unAsiento)
+				reservarAsiento(aero, unAsiento, usuario)
+				actualizarAerolinea(aero)
+				unAsiento
+//		this.servicioDeRegistroDeUsuarios.isRegistrado(usuario)
+//		SessionManager.runInSession [|
+//			val a = this.repositorioDeAerolineas.contiene("nombreAerolinea", aero.nombreAerolinea)
+//			if(!a) {
+//				throw new Exception("No existe la aerolinea o usuario no es registrado")
+//			}
+//			aero.validarReserva(unVuelo, unTramo, unAsiento)
+//			unAsiento.reservar(usuario)
+//			repositorioDeAerolineas.actualizar(aero)
+//			unAsiento
+//		]
+
 	}
-	
+
 	def isRegistrado(Aerolinea aerolinea) throws AerolineaNoExisteException{
-		if(!existeAerolinea(aerolinea)){
+		if(!existeAerolinea(aerolinea)) {
 			throw new AerolineaNoExisteException("No existe " + aerolinea.nombreAerolinea)
 		}
 	}
