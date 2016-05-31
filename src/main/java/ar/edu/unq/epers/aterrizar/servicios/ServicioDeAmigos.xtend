@@ -22,22 +22,18 @@ class ServicioDeAmigos {
 	def void agregarAmigo(Usuario usuario, Usuario amigo) {
 		servicioDeUsuarios.isRegistrado(usuario)
 		servicioDeUsuarios.isRegistrado(amigo)
-
-		val u = servicioDeUsuarios.traerUsuarioPorNickname(usuario.nickname)
-		val a = servicioDeUsuarios.traerUsuarioPorNickname(amigo.nickname)
-
+		
 		GraphServiceRunner::run [
-			createHome(it).relacionarAmistad(u, a)
+			createHome(it).relacionarAmistad(usuario, amigo)
 			null
 		]
 	}
 
 	def List<Usuario> consultarAmigos(Usuario u) {
 		servicioDeUsuarios.isRegistrado(u)
-		val usuario = servicioDeUsuarios.traerUsuarioPorNickname(u.nickname)
 
 		GraphServiceRunner::run [
-			val amigos = createHome(it).getAmigos(usuario)
+			val amigos = createHome(it).getAmigos(u)
 			amigos.toList
 		]
 	}
@@ -73,10 +69,9 @@ class ServicioDeAmigos {
 	//funciona
 	def List<Usuario> consultarMisConocidos(Usuario u) {
 		servicioDeUsuarios.isRegistrado(u)
-		val usuario = servicioDeUsuarios.traerUsuarioPorNickname(u.nickname)
 
 		GraphServiceRunner::run [
-			val todosMisConocidos = createHome(it).getAmigosDeAmigos(usuario)
+			val todosMisConocidos = createHome(it).getAmigosDeAmigos(u)
 			todosMisConocidos.toList
 		]
 	}
@@ -126,6 +121,14 @@ class ServicioDeAmigos {
 		GraphServiceRunner::run [
 			crearRepoMails(it).eliminarMensajesDeUsuario(usuario)
 			null
+		]
+	}
+	
+	def sonAmigos(Usuario usuario, Usuario usuario2) {
+		servicioDeUsuarios.isRegistrado(usuario)
+		servicioDeUsuarios.isRegistrado(usuario2)
+		GraphServiceRunner::run[
+			createHome(it).sonAmigos(usuario, usuario2)
 		]
 	}
 

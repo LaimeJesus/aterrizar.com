@@ -18,6 +18,8 @@ class ServicioDePerfiles {
 	ServicioDeRegistroDeUsuarios servicioDeUsuarios
 
 	ServicioDeBusquedaDeVuelos servicioDeBusqueda
+	
+	ServicioDeAmigos servicioDeAmigos
 
 	//    Como usuario quiero poder agregar destinos a los que fui.
 	new(ServicioDeRegistroDeUsuarios s) {
@@ -26,10 +28,11 @@ class ServicioDePerfiles {
 		servicioDeBusqueda = new ServicioDeBusquedaDeVuelos
 	}
 
-	new(ServicioDeRegistroDeUsuarios s, ServicioDeBusquedaDeVuelos serviciobusqueda) {
+	new(ServicioDeRegistroDeUsuarios s, ServicioDeBusquedaDeVuelos serviciobusqueda, ServicioDeAmigos svA) {
 		servicioDeUsuarios = s
 		repositorioDePerfiles = SistemDB.instance().collection(Perfil)
 		servicioDeBusqueda = serviciobusqueda
+		servicioDeAmigos = svA
 	}
 
 	// en realidad es agregarDestino
@@ -137,13 +140,22 @@ class ServicioDePerfiles {
 		updatePerfil(perfil)
 	}
 
+
+	// no pude hacer la query para traer el perfil filtrado
 	//    Como usuario quiero poder ver el perfil público de otro usuario, viendo lo que me corresponde según si soy amigo o no.
+	
 	def Perfil verPerfil(Usuario aVer, Usuario viendo) {
 		servicioDeUsuarios.isRegistrado(aVer)
 		servicioDeUsuarios.isRegistrado(viendo)
 		val perfilAVer = getPerfil(aVer)
 		val perfilViendo = getPerfil(viendo)
 		perfilAVer.getContents(perfilViendo)
+		
+//		val amigos = servicioDeAmigos.sonAmigos(aVer, viendo)
+//		val priv = aVer.nickname == viendo.nickname
+//		
+//		repositorioDePerfiles.getContents(aVer, viendo, amigos, priv)
+		
 	}
 
 	////////////////////////////////////////////////////////////////////////////////

@@ -6,6 +6,10 @@ import org.mongojack.JacksonDBCollection
 import org.mongojack.MapReduce
 import org.mongojack.DBQuery
 import com.mongodb.BasicDBObject
+import ar.edu.unq.epers.aterrizar.domain.Usuario
+import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
+import com.mongodb.BasicDBList
+import ar.edu.unq.epers.aterrizar.domain.redsocial.Perfil
 
 class Home<T> {
 	private JacksonDBCollection<T, String> mongoCollection;
@@ -55,10 +59,11 @@ class Home<T> {
 	def update(String id, T object) {
 		mongoCollection.updateById(id, object)
 	}
-	
+
 	def void actualizar(String id, T obj) {
 		mongoCollection.updateById(id, obj)
 	}
+
 	def delete(String property, String value) {
 		var query = new BasicDBObject()
 		query.append(property, value)
@@ -77,4 +82,37 @@ class Home<T> {
 		mongoCollection.findOne(DBQuery.is(property, value));
 
 	}
+
+	def getContents(Usuario usuario, Usuario usuario2, boolean sonAmigos, boolean esElMismo) {
+
+		var queryUserNickname = DBQuery.is("nickname", usuario.nickname)
+		var visibilityPostPublic = DBQuery.is("posts.visibility", Visibility.PUBLIC)
+
+		var visibilityPostJustFriends = DBQuery.is("posts.visibility", Visibility.JUSTFRIENDS)
+
+		var visibilityPostPrivate = DBQuery.is("posts.visibility", Visibility.PRIVATE)
+
+		var visibilityCommentPublic = DBQuery.is("posts.comments.visibility", Visibility.PUBLIC)
+
+		var visibilityCommentJustFriends = DBQuery.is("posts.comments.visibility", Visibility.JUSTFRIENDS)
+
+		var visibilityCommentPrivate = DBQuery.is("posts.comments.visibility", Visibility.PRIVATE)
+
+		var or = DBQuery.or(visibilityPostPublic, visibilityCommentPublic)
+		if(esElMismo) {
+			or = DBQuery.or(visibilityPostPrivate)
+		}
+		if(sonAmigos) {
+			or = DBQuery.or(visibilityPostJustFriends)
+		}
+		var query = DBQuery.and(queryUserNickname, or)
+		var perf = mongoCollection.findOne(query)
+		var perfil = perf as Perfil
+		perfil.posts.forEach [
+			System.out.println(it.destino)
+		]
+
+		return perf
+	}
+
 }

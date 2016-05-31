@@ -19,6 +19,7 @@ import ar.edu.unq.epers.aterrizar.exceptions.NoExistePostException
 import ar.edu.unq.epers.aterrizar.exceptions.NoPuedesVotarException
 import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
 import ar.edu.unq.epers.aterrizar.exceptions.NoExisteEseComentarioException
+import ar.edu.unq.epers.aterrizar.servicios.ServicioDeAmigos
 
 class ServicioDePerfilesTest {
 
@@ -79,6 +80,9 @@ class ServicioDePerfilesTest {
 		//perfiles
 		/////////////////////////////////////////////////////////
 		postBrazil = new DestinoPost("1", "Brazil")
+		
+		sut = userService.servicioDePerfiles
+		sut.servicioDeAmigos = new ServicioDeAmigos(userService)
 		sut.agregarPost(pepe, postBrazil)
 
 		commentForPostBrazil = new Comment("1", "BEST TRIP EVER")
@@ -204,7 +208,7 @@ class ServicioDePerfilesTest {
 	def void testCambiarPostAPublicDejaQueCualquieraVeaEsePost() {
 		sut.cambiarAPublico(pepe, postBrazil)
 		var perfilPepe = sut.verPerfil(pepe, jose)
-
+		
 		Assert.assertEquals(Visibility.PUBLIC, perfilPepe.getPost(postBrazil).visibility)
 		Assert.assertTrue(perfilPepe.getPost(postBrazil).destino == "Brazil")
 	}
@@ -213,7 +217,7 @@ class ServicioDePerfilesTest {
 	def void testNoPuedoVerUnPostPrivadoDeUnPerfil() {
 		sut.cambiarAPrivado(pepe, postBrazil)
 		var perfilPepe = sut.verPerfil(pepe, jose)
-		Assert.assertEquals(Visibility.PRIVATE, perfilPepe.getPost(postBrazil).visibility)
+		perfilPepe.getPost(postBrazil)
 	}
 
 	@Test
@@ -223,6 +227,7 @@ class ServicioDePerfilesTest {
 		Assert.assertEquals(Visibility.PRIVATE, perfilPepe.getPost(postBrazil).visibility)
 	}
 
+	//parece que funciona falta agregar amigos al servicio de amigos
 	@Test
 	def void testCambiarPostAJustFriendDejaQueSoloMisAmigosVeanEsePost() {
 		sut.cambiarASoloAmigos(pepe, postBrazil)

@@ -12,6 +12,13 @@ import ar.edu.unq.epers.aterrizar.exceptions.NoExisteObjectTException
 class RepositorioAmigos extends RepositorioNeo4j<Usuario> {
 
 	// relacionar usuarios por la relacion amigo
+	
+	def sonAmigos(Usuario u1, Usuario u2){
+		val nodo1 = getNodo(u1)
+		val nodo2 = getNodo(u2)
+		isRelacionados(nodo1, nodo2, TipoDeRelacion.AMIGO)
+	}
+	
 	def relacionarAmistad(Usuario user1, Usuario user2) {
 		val enviando = getNodo(user1)
 		val recibiendo = getNodo(user2)
