@@ -30,10 +30,6 @@ class Comment {
 		likesAdmin.agregarNoMeGusta(p)
 	}
 
-	def boolean puedeVer(Perfil preguntado, Perfil preguntando) {
-		visibility.puedeVer(preguntado, preguntando)
-	}
-
 	def cantidadMeGusta() {
 		likesAdmin.cantidadDeMeGusta()
 	}

@@ -51,14 +51,6 @@ class DestinoPost {
 		likesAdmin.agregarNoMeGusta(p)
 	}
 	
-	def boolean puedeVer(Perfil preguntado, Perfil preguntando) {
-		visibility.puedeVer(preguntado, preguntando)
-	}
-	
-	def void filtrarComentarios(Perfil preguntado, Perfil preguntando) {
-		this.comments = this.comments.filter[it.puedeVer(preguntado, preguntando)].toList
-	}
-	
 	def cantidadMeGusta() {
 		likesAdmin.cantidadDeMeGusta()
 	}

@@ -98,16 +98,6 @@ class Perfil {
 		getPost(p).getComment(c).noMeGusta(per)
 	}
 
-	//ver perfil
-	def getContents(Perfil preguntando) {
-		var res = new Perfil()
-
-		var ps = this.posts.filter[it.puedeVer(this, preguntando)].toList
-		ps.forEach[it.filtrarComentarios(this, preguntando)]
-		res.posts = ps
-		res
-	}
-
 	def getComments(DestinoPost post) {
 		getPost(post).comments
 	}
@@ -123,6 +113,7 @@ class Perfil {
 	def cantidadDeNoMeGusta(DestinoPost p) {
 		getPost(p).cantidadNoMeGusta()
 	}
+
 	def cantidadDeNoMeGusta(DestinoPost post, Comment c) {
 		getPost(post).getComment(c).cantidadNoMeGusta()
 	}
