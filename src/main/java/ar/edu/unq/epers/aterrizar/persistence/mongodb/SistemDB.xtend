@@ -29,7 +29,7 @@ class SistemDB {
 	
 	def <T> Home<T> collection(Class<T> entityType){
 		val dbCollection = db.getCollection(entityType.getSimpleName());
-		new Home<T>(JacksonDBCollection.wrap(dbCollection, entityType, String));
+		new Home<T>(JacksonDBCollection.wrap(dbCollection, entityType, String), entityType);
 	}
 
 }

@@ -6,16 +6,24 @@ import org.mongojack.JacksonDBCollection
 import org.mongojack.MapReduce
 import org.mongojack.DBQuery
 import com.mongodb.BasicDBObject
-import ar.edu.unq.epers.aterrizar.domain.Usuario
 import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
-import com.mongodb.BasicDBList
 import ar.edu.unq.epers.aterrizar.domain.redsocial.Perfil
+import org.mongojack.AggregationResult
+import org.eclipse.xtend.lib.annotations.Accessors
 
+@Accessors
 class Home<T> {
 	private JacksonDBCollection<T, String> mongoCollection;
 
+	Class<T> entityType
+
 	new(JacksonDBCollection<T, String> collection) {
 		this.mongoCollection = collection
+	}
+
+	new(JacksonDBCollection<T, String> collection, Class<T> entity) {
+		this.mongoCollection = collection
+		this.entityType = entity
 	}
 
 	def insert(T object) {
@@ -56,12 +64,11 @@ class Home<T> {
 		return mongoCollection;
 	}
 
+	//////////////////////////////////////////////////////////////
+	//metodos creados para servicio
+	//////////////////////////////////////////////////////////////
 	def update(String id, T object) {
 		mongoCollection.updateById(id, object)
-	}
-
-	def void actualizar(String id, T obj) {
-		mongoCollection.updateById(id, obj)
 	}
 
 	def delete(String property, String value) {
@@ -83,36 +90,54 @@ class Home<T> {
 
 	}
 
-	def getContents(Usuario usuario, Usuario usuario2, boolean sonAmigos, boolean esElMismo) {
+	def List<T> find(Aggregation<T> aggregation) {
+		new AggregationResult<T>(
+			mongoCollection,
+			mongoCollection.dbCollection.aggregate(aggregation.build),
+			entityType
+		).results
+	}
 
-		var queryUserNickname = DBQuery.is("nickname", usuario.nickname)
-		var visibilityPostPublic = DBQuery.is("posts.visibility", Visibility.PUBLIC)
+	def Perfil getContents(String nick, List<Visibility> visibilities) {
 
-		var visibilityPostJustFriends = DBQuery.is("posts.visibility", Visibility.JUSTFRIENDS)
+		var agg = this.aggregate
+		var matchNick = agg.match("nickname", nick)
+		var projFilterNickYPosts = matchNick.project.rtn("nickname").rtn("posts")
+		var postFiltrados = projFilterNickYPosts.filter("posts")
 
-		var visibilityPostPrivate = DBQuery.is("posts.visibility", Visibility.PRIVATE)
+		var aggFiltrado = getListFilter(postFiltrados, visibilities, visibilities.size)
 
-		var visibilityCommentPublic = DBQuery.is("posts.comments.visibility", Visibility.PUBLIC)
+		//		var commProject = aggFiltrado.project.rtn("posts.comments")
+		//		var projFilterComments = getListFilter(commProject, visibilities, visibilities.size)
+		var lsres = aggFiltrado.execute
 
-		var visibilityCommentJustFriends = DBQuery.is("posts.comments.visibility", Visibility.JUSTFRIENDS)
+		//		var lsres = projFilterComments.execute
+		var t = lsres.head as Perfil
+		t
+	}
 
-		var visibilityCommentPrivate = DBQuery.is("posts.comments.visibility", Visibility.PRIVATE)
+	def Aggregation<T> getListFilter(Filter<T> filter, List<Visibility> visibilities, int s) {
 
-		var or = DBQuery.or(visibilityPostPublic, visibilityCommentPublic)
-		if(esElMismo) {
-			or = DBQuery.or(visibilityPostPrivate)
+		if(s == 3) {
+			return filter.or(
+				#[
+					[it.eq("visibility", visibilities.get(0).toString)],
+					[it.eq("visibility", visibilities.get(1).toString)],
+					[it.eq("visibility", visibilities.get(2).toString)]
+				])
 		}
-		if(sonAmigos) {
-			or = DBQuery.or(visibilityPostJustFriends)
+		if(s == 2) {
+			return filter.or(
+				#[[it.eq("visibility", visibilities.get(0).toString)],
+					[it.eq("visibility", visibilities.get(1).toString)]])
 		}
-		var query = DBQuery.and(queryUserNickname, or)
-		var perf = mongoCollection.findOne(query)
-		var perfil = perf as Perfil
-		perfil.posts.forEach [
-			System.out.println(it.destino)
-		]
+		return filter.or(#[[it.eq("visibility", visibilities.get(0).toString)]])
 
-		return perf
+	}
+
+	def aggregate() {
+		new Aggregation(this)
+
 	}
 
 }
