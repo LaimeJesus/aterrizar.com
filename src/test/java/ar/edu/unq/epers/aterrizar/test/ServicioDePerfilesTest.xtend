@@ -19,6 +19,7 @@ import ar.edu.unq.epers.aterrizar.exceptions.NoExistePostException
 import ar.edu.unq.epers.aterrizar.exceptions.NoPuedesVotarException
 import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDeAmigos
+import ar.edu.unq.epers.aterrizar.exceptions.NoPuedeAgregarPostException
 
 class ServicioDePerfilesTest {
 
@@ -87,17 +88,28 @@ class ServicioDePerfilesTest {
 		/////////////////////////////////////////////////////////
 		postBrazil = new DestinoPost("1", "Brazil")
 
+		//seteando system under test
 		sut = userService.servicioDePerfiles
+
+		//servicio de amigos
 		friendsService = userService.servicioDeAmigos
+
+		//seteando mismo servicio de amigos para sut y userService
 		sut.servicioDeAmigos = friendsService
 
+		//agregando amigo
 		friendsService.agregarAmigo(pepe, jose)
 
+		//agregando post a perfil de pepe
 		sut.agregarPost(pepe, postBrazil)
 
+		//comentario
 		commentForPostBrazil = new Comment("1", "BEST TRIP EVER")
 
+		//agregando commentario
 		sut.comentarPost(pepe, postBrazil, commentForPostBrazil)
+
+		//agregando me gusta o no megusta
 		sut.meGusta(pepe, pepe, postBrazil)
 		sut.noMeGusta(pepe, jose, postBrazil)
 		sut.meGusta(pepe, pepe, postBrazil, commentForPostBrazil)
@@ -122,12 +134,13 @@ class ServicioDePerfilesTest {
 		Assert.assertEquals(0, perfilVacio.posts.length)
 	}
 
-	//	al no poder chequear los vuelos este test no funciona, por el momento
-	//	@Test(expected=NoPuedeAgregarPostException)
-	//	def void testCrearUnDestinoPostDeUnLugarQueNoFuiTiraUnaExcepcion() {
-	//		var post = new DestinoPost("1", "lugar desconocido")
-	//		sut.agregarPost(pepe, post)
-	//	}
+	//al no poder chequear los vuelos este test no funciona, por el momento
+	@Test(expected=NoPuedeAgregarPostException)
+	def void testCrearUnDestinoPostDeUnLugarQueNoFuiTiraUnaExcepcion() {
+		var post = new DestinoPost("1", "lugar desconocido")
+		sut.agregarPost(pepe, post)
+	}
+
 	//asiento no guarda el id del usuario que reserva el vuelo asi que no puedo ver los vuelos reservados por un usuario
 	////////////////////////////////////////////////////////
 	//postear y comentar
@@ -258,7 +271,6 @@ class ServicioDePerfilesTest {
 	}
 
 	//comentarios
-	
 	//public
 	@Test
 	def void testCambiarUnComentarioDeUnPostPublicoAPublicDejaQueCualquieraLoVea() {
@@ -271,7 +283,7 @@ class ServicioDePerfilesTest {
 			perfilPepe.getPost(postBrazil).getComment(commentForPostBrazil).visibility)
 	}
 
-//	@Test(expected=NoExisteEseComentarioException)
+	//	@Test(expected=NoExisteEseComentarioException)
 	@Test
 	def void testOtroUsuarioQuiereVerUnComentarioConVisibilidadPrivadaArrojaUnaExcepcion() {
 
@@ -299,13 +311,15 @@ class ServicioDePerfilesTest {
 	def void borrarDatosCreadosEnSetUp() {
 
 		flightService.eliminarAerolinea(aa)
-
+		
+		//elimino de esta manera a usuario porque eliminar aerolinea tmb elimina a los usuarios que reservaron un asiento
+		//deberia haber cambiado el cascade para asiento pero lo olvide
 		userService.borrarDeAmigos(pepe)
-
 		userService.borrarDePerfiles(pepe)
+		//estos al no tener asientos los puedo eliminar de esta manera
 		userService.eliminarUsuario(jose)
 		userService.eliminarUsuario(juan)
-
+		//busquedas
 		sut.servicioDeBusqueda.eliminarBusquedas
 	}
 }
