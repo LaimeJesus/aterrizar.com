@@ -9,6 +9,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.persistence.mongodb.Home
 import ar.edu.unq.epers.aterrizar.persistence.mongodb.SistemDB
 import org.mongojack.DBQuery
+import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
 
 @Accessors
 class ServicioDePerfiles {
@@ -18,7 +19,7 @@ class ServicioDePerfiles {
 	ServicioDeRegistroDeUsuarios servicioDeUsuarios
 
 	ServicioDeBusquedaDeVuelos servicioDeBusqueda
-	
+
 	ServicioDeAmigos servicioDeAmigos
 
 	//    Como usuario quiero poder agregar destinos a los que fui.
@@ -38,7 +39,7 @@ class ServicioDePerfiles {
 	// en realidad es agregarDestino
 	def agregarPost(Usuario u, DestinoPost p) throws NoPuedeAgregarPostException{
 		servicioDeUsuarios.isRegistrado(u)
-		
+
 		var isVisitado = servicioDeBusqueda.viajeA(u, p.destino)
 		if(!isVisitado) {
 			throw new NoPuedeAgregarPostException("Nunca me visitaste")
@@ -140,22 +141,30 @@ class ServicioDePerfiles {
 		updatePerfil(perfil)
 	}
 
+	//no pude hacer el filtrado de comentarios basicamente porque no me deja hacer un project dentro de otro o al menos eso entendi
 
-	// no pude hacer la query para traer el perfil filtrado
 	//    Como usuario quiero poder ver el perfil público de otro usuario, viendo lo que me corresponde según si soy amigo o no.
-	
 	def Perfil verPerfil(Usuario aVer, Usuario viendo) {
 		servicioDeUsuarios.isRegistrado(aVer)
 		servicioDeUsuarios.isRegistrado(viendo)
-		val perfilAVer = getPerfil(aVer)
-		val perfilViendo = getPerfil(viendo)
-		perfilAVer.getContents(perfilViendo)
-		
-//		val amigos = servicioDeAmigos.sonAmigos(aVer, viendo)
-//		val priv = aVer.nickname == viendo.nickname
-//		
-//		repositorioDePerfiles.getContents(aVer, viendo, amigos, priv)
-		
+
+		val amigos = servicioDeAmigos.sonAmigos(aVer, viendo)
+		val esElMismo = aVer.nickname.equals(viendo.nickname)
+
+		var visibilities = getVisibilities(amigos, esElMismo)
+
+		repositorioDePerfiles.getContents(aVer.nickname, visibilities)
+
+	}
+
+	def getVisibilities(Boolean amigos, Boolean esElMismo) {
+		if(esElMismo) {
+			return #[Visibility.PUBLIC, Visibility.PRIVATE, Visibility.JUSTFRIENDS]
+		}
+		if(amigos) {
+			return #[Visibility.PUBLIC, Visibility.JUSTFRIENDS]
+		}
+		return #[Visibility.PUBLIC]
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -166,7 +175,7 @@ class ServicioDePerfiles {
 	}
 
 	def void updatePerfil(Perfil perfil) {
-		repositorioDePerfiles.actualizar(perfil.idPerfil, perfil)
+		repositorioDePerfiles.update(perfil.idPerfil, perfil)
 
 	}
 
@@ -180,7 +189,7 @@ class ServicioDePerfiles {
 	}
 
 	def void eliminarPerfil(Usuario usuario) {
-		repositorioDePerfiles.delete("username", usuario.nickname)
+		repositorioDePerfiles.delete("nickname", usuario.nickname)
 	}
 
 	def void eliminarTodosLosPerfiles() {
