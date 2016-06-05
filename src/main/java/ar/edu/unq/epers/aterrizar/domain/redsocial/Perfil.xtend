@@ -31,15 +31,15 @@ class Perfil {
 	///////////////////////////////////////
 	def void configVisibilityIntoPublic(DestinoPost p) {
 
-		Visibility.changeToPublic(getPost(p))
+		Visibility.PUBLIC.changeTo(getPost(p))
 	}
 
 	def void configVisibilityIntoPrivate(DestinoPost p) {
-		Visibility.changeToPrivate(getPost(p))
+		Visibility.PRIVATE.changeTo(getPost(p))
 	}
 
 	def void configVisibilityIntoJustFriends(DestinoPost p) {
-		Visibility.changeToJustFriend(getPost(p))
+		Visibility.JUSTFRIENDS.changeTo(getPost(p))
 	}
 
 	def addPost(DestinoPost p) {

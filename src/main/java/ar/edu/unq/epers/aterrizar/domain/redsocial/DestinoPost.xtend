@@ -60,15 +60,15 @@ class DestinoPost {
 	}
 	
 	def cambiarAPublico(Comment comment) {
-		Visibility.changeToPublic(this.getComment(comment))
+		Visibility.PUBLIC.changeTo(this.getComment(comment))
 	}
 	
 	def cambiarAPrivado(Comment comment) {
-		Visibility.changeToPrivate(this.getComment(comment))
+		Visibility.PRIVATE.changeTo(this.getComment(comment))
 	}
 	
 	def cambiarASoloAmigos(Comment comment) {
-		Visibility.changeToJustFriend(this.getComment(comment))
+		Visibility.JUSTFRIENDS.changeTo(this.getComment(comment))
 	}
 	
 }
