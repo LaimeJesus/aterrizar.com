@@ -13,6 +13,7 @@ import ar.edu.unq.epers.aterrizar.domain.Usuario
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorVueloReservado
 import java.util.ArrayList
 import ar.edu.unq.epers.aterrizar.domain.vuelos.Vuelo
+import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorDestino
 
 @Accessors
 class ServicioDeBusquedaDeVuelos {
@@ -28,13 +29,13 @@ class ServicioDeBusquedaDeVuelos {
 		repositorioDeBusquedas = new RepositorioBusquedas
 		repositorioAerolineas = repoAerolinea
 	}
-	
-	
-	def buscarNormal(Busqueda b){
+
+	def buscarNormal(Busqueda b) {
 		b.armarQueryNormal
 		buscarVuelos(b)
 	}
-	def buscarPorUsuarios(Busqueda b){
+
+	def buscarPorUsuarios(Busqueda b) {
 		b.armarQueryConUsuarios()
 		buscarVuelos(b)
 	}
@@ -112,32 +113,25 @@ class ServicioDeBusquedaDeVuelos {
 	}
 
 	def viajeA(Usuario usuario, String destino) {
-		
-		var vuelos = getVuelosReservados(usuario)
-		for(vuelo : vuelos){
-			for(tramo : vuelo.tramos){
-				if(tramo.destino == destino){
-					return true
-				}
-			}
-		}
-		false
-	}
-	//caso de uso extra ver reservas realizadas por un usuario
-	def verLugaresVisitados(Usuario u) {
-		var v = getVuelosReservados(u)
-		val visitados = new ArrayList<String>()
-		v.forEach [
-			visitados.addAll(it.verDestinos())
-		]
-		visitados
+
+		var busqueda = getBusquedaDestinosVisitados(usuario, destino)
+		var vuelos = buscarPorUsuarios(busqueda)
+
+		vuelos.length > 0
 	}
 
-	def getVuelosReservados(Usuario u) {
-		var c = new CriterioPorVueloReservado(u)
-		var b = new Busqueda(c)
-		b.armarQueryConUsuarios
-		var vuelos = buscarVuelos(b)
-		vuelos
+	def getBusquedaVuelosReservados(Usuario u) {
+		var asientosReservados = new CriterioPorVueloReservado(u)
+		var b = new Busqueda(asientosReservados)
+		b
 	}
+	def getBusquedaDestinosVisitados(Usuario u, String destino){
+		var asientosReservados = new CriterioPorVueloReservado(u)
+		var destinos = new CriterioPorDestino(destino)
+		var condicion = asientosReservados.and(destinos)
+		var b = new Busqueda(condicion)
+		b
+		
+	}
+
 }
