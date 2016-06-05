@@ -9,22 +9,12 @@ public enum Visibility{
 	
 	JUSTFRIENDS, PUBLIC, PRIVATE;
 	
-	public static void changeToPublic(DestinoPost p){
-		p.setVisibility(PUBLIC);
+	public void changeTo(DestinoPost p){
+		p.setVisibility(this);
 	}
-	public static void changeToPublic(Comment c){
-		c.setVisibility(PUBLIC);
+	
+	public void changeTo(Comment c){
+		c.setVisibility(this);
 	}
-	public static void changeToPrivate(DestinoPost p){
-		p.setVisibility(PRIVATE);
-	}
-	public static void changeToPrivate(Comment c){
-		c.setVisibility(PRIVATE);
-	}	
-	public static void changeToJustFriend(DestinoPost p){
-		p.setVisibility(JUSTFRIENDS);
-	}
-	public static void changeToJustFriend(Comment c){
-		c.setVisibility(JUSTFRIENDS);
-	}
+	
 }
