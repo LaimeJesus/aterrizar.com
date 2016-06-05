@@ -117,22 +117,7 @@ class Home<T> {
 	}
 
 	def Aggregation<T> getListFilter(Filter<T> filter, List<Visibility> visibilities, int s) {
-
-		if(s == 3) {
-			return filter.or(
-				#[
-					[it.eq("visibility", visibilities.get(0).toString)],
-					[it.eq("visibility", visibilities.get(1).toString)],
-					[it.eq("visibility", visibilities.get(2).toString)]
-				])
-		}
-		if(s == 2) {
-			return filter.or(
-				#[[it.eq("visibility", visibilities.get(0).toString)],
-					[it.eq("visibility", visibilities.get(1).toString)]])
-		}
-		return filter.or(#[[it.eq("visibility", visibilities.get(0).toString)]])
-
+		filter.or(visibilities.map[v|[Filter<T> f| f.eq("visibility", v.toString)]])
 	}
 
 	def aggregate() {
