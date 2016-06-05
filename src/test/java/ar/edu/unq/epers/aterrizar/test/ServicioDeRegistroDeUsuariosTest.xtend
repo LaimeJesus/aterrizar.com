@@ -17,7 +17,7 @@ import ar.edu.unq.epers.aterrizar.domain.mensajes.EnviadorDeMails
 import ar.edu.unq.epers.aterrizar.domain.mensajes.CreadorDeMails
 import ar.edu.unq.epers.aterrizar.domain.mensajes.Mail
 
-class RecorderServiceTest{
+class ServicioDeRegistroDeUsuariosTest{
 	
 	CreadorDeCodigos creadorDeCodigosMock
 	EnviadorDeMails enviadorDeMailsMock
@@ -69,7 +69,7 @@ class RecorderServiceTest{
 		
 		var url = "jdbc:mysql://localhost:3306/aterrizar"
 		var user = 'root'
-		var pass = 'jstrike1234'
+		var pass = 'root'
 		sudo.repositorio.conectarABDConMySql(url, user, pass)
 		
 		codigoFromMock = 'nousado'
