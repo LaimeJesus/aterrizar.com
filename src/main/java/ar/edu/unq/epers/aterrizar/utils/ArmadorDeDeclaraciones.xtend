@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.aterrizar.utils
 
 import java.util.List
+import java.util.ArrayList
 
 /*
  * este objecto fue creado para armar los mensajes sql que se necesitan para comunicarse con la base de datos mysql, pero solo
@@ -8,6 +9,12 @@ import java.util.List
  */
 class ArmadorDeDeclaraciones {
 
+
+	def createTable(String table, List<String> campos){
+		var query = "CREATE TABLE " + table + " (" + separar(campos, ",") + ";"
+		query
+	}
+	
 	/*
 	 * devuelve un string que utiliza la sintaxis de SQL para la declaracion INSERT. 
 	 */
@@ -48,9 +55,10 @@ class ArmadorDeDeclaraciones {
 		select(this.separar(campos, ','), tabla, field, value)
 	}
 
-	def armarSelect(String tabla, String field, String value){
+	def armarSelect(String tabla, String field, String value) {
 		select('*', tabla, field, value)
 	}
+
 	/*
 	 * devuelve un string que utiliza la sintaxis de sql para una declaracion UPDATE
 	 */
@@ -59,16 +67,35 @@ class ArmadorDeDeclaraciones {
 		update(tabla, resCampos, field, '?')
 	}
 
-	def armarUpdate(String tabla, List<String> campos, String field, String value) {
-		var resCampos = separar(campos, ',')
-		update(tabla, resCampos, field, value)
+	/*
+	 * precondicion campos.length == values.length
+	 */
+	def armarUpdate(String tabla, List<String> campos, List<String> values, String field, String value) {
+		var res = zip(campos, values)
+		var newRes = separar(res, ',')
+		update(tabla, newRes, field, value)
+	}
+
+	def zipWith(List<String> campos, List<String> values, String sep){
+		var res = new ArrayList<String>
+		for (var i = 0; i < campos.length; i++) {
+			var c = campos.get(i)
+			var v = values.get(i)
+			var concat = c.concat(sep).concat(v)
+			res.add(concat)
+		}
+		res
+	}
+
+	def zip(List<String> campos, List<String> values) {
+		zipWith(campos, values, '=')
 	}
 
 	///////////////////////////////////////////////
 	//metodos privados
 	///////////////////////////////////////////////
 	def insert(String tabla, String campos, String values) {
-		return 'INSERT INTO ' + tabla + ' ' + campos + ' VALUES' + values
+		return 'INSERT INTO ' + tabla + ' ' + campos + ' VALUES ' + values
 	}
 
 	def select(String campos, String tabla, String field, String value) {
@@ -91,7 +118,7 @@ class ArmadorDeDeclaraciones {
 	}
 
 	/*
-	 * es un split de lista de strings,
+	 * @return: devuelve un string resultado de haber separado cada campo en campos por separador
 	 */
 	def separar(List<String> campos, String separador) {
 		var res = ''
@@ -111,7 +138,6 @@ class ArmadorDeDeclaraciones {
 			fields = fields + '?,'
 		}
 		fields = fields.substring(0, fields.length() - 1)
-		fields = '(' + fields + ')'
 		fields
 	}
 

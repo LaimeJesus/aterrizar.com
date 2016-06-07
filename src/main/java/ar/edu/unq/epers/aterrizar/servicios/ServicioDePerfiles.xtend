@@ -3,13 +3,13 @@ package ar.edu.unq.epers.aterrizar.servicios
 import ar.edu.unq.epers.aterrizar.domain.Usuario
 import ar.edu.unq.epers.aterrizar.domain.redsocial.Comment
 import ar.edu.unq.epers.aterrizar.domain.redsocial.DestinoPost
-import ar.edu.unq.epers.aterrizar.domain.redsocial.Perfil
 import ar.edu.unq.epers.aterrizar.exceptions.NoPuedeAgregarPostException
 import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.persistence.mongodb.Home
 import ar.edu.unq.epers.aterrizar.persistence.mongodb.SistemDB
 import org.mongojack.DBQuery
 import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
+import ar.edu.unq.epers.aterrizar.domain.redsocial.Perfil
 
 @Accessors
 class ServicioDePerfiles {
@@ -22,11 +22,16 @@ class ServicioDePerfiles {
 
 	ServicioDeAmigos servicioDeAmigos
 
+	ServicioDeCacheDePerfiles cacheDePerfiles
+
 	//    Como usuario quiero poder agregar destinos a los que fui.
 	new(ServicioDeRegistroDeUsuarios s) {
 		servicioDeUsuarios = s
+
+		servicioDeBusqueda = new ServicioDeBusquedaDeVuelos()
+
 		repositorioDePerfiles = SistemDB.instance().collection(Perfil)
-		servicioDeBusqueda = new ServicioDeBusquedaDeVuelos
+		cacheDePerfiles = new ServicioDeCacheDePerfiles()
 	}
 
 	new(ServicioDeRegistroDeUsuarios s, ServicioDeBusquedaDeVuelos serviciobusqueda, ServicioDeAmigos svA) {
@@ -34,6 +39,7 @@ class ServicioDePerfiles {
 		repositorioDePerfiles = SistemDB.instance().collection(Perfil)
 		servicioDeBusqueda = serviciobusqueda
 		servicioDeAmigos = svA
+		cacheDePerfiles = new ServicioDeCacheDePerfiles()
 	}
 
 	// en realidad es agregarDestino
@@ -62,6 +68,8 @@ class ServicioDePerfiles {
 		servicioDeUsuarios.isRegistrado(usuarioALikear)
 		servicioDeUsuarios.isRegistrado(usuarioLikeando)
 		val perfilLikeado = getPerfil(usuarioALikear)
+
+		//aca solamente deberia darle el id del usuario que esta likeando
 		val perfilLikeando = getPerfil(usuarioLikeando)
 		perfilLikeado.agregarMeGusta(perfilLikeando, p)
 		updatePerfil(perfilLikeado)
@@ -71,6 +79,8 @@ class ServicioDePerfiles {
 		servicioDeUsuarios.isRegistrado(aLikear)
 		servicioDeUsuarios.isRegistrado(likeando)
 		val perfilALikear = getPerfil(aLikear)
+
+		//aca solamente deberia darle el id del usuario que esta likeando
 		val perfilLikeando = getPerfil(likeando)
 		perfilALikear.agregarNoMeGusta(perfilLikeando, p)
 		updatePerfil(perfilALikear)
@@ -80,6 +90,8 @@ class ServicioDePerfiles {
 		servicioDeUsuarios.isRegistrado(aLikear)
 		servicioDeUsuarios.isRegistrado(likeando)
 		val perfilALikear = getPerfil(aLikear)
+
+		//aca solamente deberia darle el id del usuario que esta likeando
 		val perfilLikeando = getPerfil(likeando)
 		perfilALikear.agregarMeGusta(perfilLikeando, p, c)
 		updatePerfil(perfilALikear)
@@ -89,6 +101,8 @@ class ServicioDePerfiles {
 		servicioDeUsuarios.isRegistrado(aLikear)
 		servicioDeUsuarios.isRegistrado(likeando)
 		val perfilALikear = getPerfil(aLikear)
+
+		//aca solamente deberia darle el id del usuario que esta likeando
 		val perfilLikeando = getPerfil(likeando)
 		perfilALikear.agregarNoMeGusta(perfilLikeando, p, c)
 		updatePerfil(perfilALikear)
@@ -142,7 +156,6 @@ class ServicioDePerfiles {
 	}
 
 	//no pude hacer el filtrado de comentarios basicamente porque no me deja hacer un project dentro de otro o al menos eso entendi
-
 	//    Como usuario quiero poder ver el perfil público de otro usuario, viendo lo que me corresponde según si soy amigo o no.
 	def Perfil verPerfil(Usuario aVer, Usuario viendo) {
 		servicioDeUsuarios.isRegistrado(aVer)
@@ -151,10 +164,14 @@ class ServicioDePerfiles {
 		val amigos = servicioDeAmigos.sonAmigos(aVer, viendo)
 		val esElMismo = aVer.nickname.equals(viendo.nickname)
 
+		if(cacheDePerfiles.cached(aVer.nickname, amigos, esElMismo)) {
+			return cacheDePerfiles.get(aVer.nickname, amigos, esElMismo)
+		}
 		var visibilities = getVisibilities(amigos, esElMismo)
-
-		repositorioDePerfiles.getContents(aVer.nickname, visibilities)
-
+		
+		var perfil = repositorioDePerfiles.getContents(aVer.nickname, visibilities)
+		cacheDePerfiles.cache(perfil, amigos, esElMismo)
+		perfil
 	}
 
 	def getVisibilities(Boolean amigos, Boolean esElMismo) {
@@ -171,16 +188,28 @@ class ServicioDePerfiles {
 	//utilities
 	////////////////////////////////////////////////////////////////////////////////
 	def getPerfil(Usuario usuario) throws Exception{
-		repositorioDePerfiles.find(DBQuery.is("nickname", usuario.nickname)).get(0)
+
+		if(cacheDePerfiles.cached(usuario.nickname)) {
+			return cacheDePerfiles.get(usuario.nickname)
+		}
+
+		var p = repositorioDePerfiles.find(DBQuery.is("nickname", usuario.nickname)).get(0)
+		cacheDePerfiles.cache(p)
+		p
 	}
 
 	def void updatePerfil(Perfil perfil) {
+
 		repositorioDePerfiles.update(perfil.idPerfil, perfil)
+		if(cacheDePerfiles.cached(perfil.nickname)) {
+			cacheDePerfiles.update(perfil)
+		}
 
 	}
 
-	def insertPerfil(Perfil perfil) {
+	def void insertPerfil(Perfil perfil) {
 		repositorioDePerfiles.insert(perfil)
+
 	}
 
 	def crearPerfil(Usuario usuario) {
@@ -190,6 +219,11 @@ class ServicioDePerfiles {
 
 	def void eliminarPerfil(Usuario usuario) {
 		repositorioDePerfiles.delete("nickname", usuario.nickname)
+
+		//no hace falta el if
+		if(cacheDePerfiles.cached(usuario.nickname)) {
+			cacheDePerfiles.delete(usuario.nickname)
+		}
 	}
 
 	def void eliminarTodosLosPerfiles() {
