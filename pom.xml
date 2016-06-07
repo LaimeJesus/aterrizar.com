@@ -13,11 +13,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-<dependencyManagement>
-	<dependencies>
-	</dependencies>
-</dependencyManagement>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.eclipse.xtend</groupId>
@@ -120,11 +115,7 @@
 			<version>3.0.2</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>19.0</version>
-		</dependency>
+
 
 		<dependency>
 			<groupId>io.netty</groupId>

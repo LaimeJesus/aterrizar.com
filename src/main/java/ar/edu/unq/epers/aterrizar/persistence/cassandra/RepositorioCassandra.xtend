@@ -1,9 +1,9 @@
 package ar.edu.unq.epers.aterrizar.persistence.cassandra
 
-import com.datastax.driver.core.Cluster
 import java.util.List
 import ar.edu.unq.epers.aterrizar.utils.ArmadorDeDeclaraciones
 import org.eclipse.xtend.lib.annotations.Accessors
+import com.datastax.driver.core.Cluster
 
 @Accessors
 abstract class RepositorioCassandra<T> {
@@ -18,26 +18,32 @@ abstract class RepositorioCassandra<T> {
 	new() {
 	}
 
-	new(String keyspaceToWork) {
+	new(String ks) {
 
-		var builder = Cluster.builder()
-
-		//127.0.1.
-		//ip = newIp
-		ip = "127.0.0.1"
-
-		//agrega la dir de ip del nodo
-		builder.addContactPoint(ip)
-
-		//crea un cluster con ese builder
-		cluster = builder.build()
-
-		//creo una nueva keyspace con keyspacetowrok
-		keyspace = keyspaceToWork
-
-		createKEYSPACE(keyspaceToWork, "NetworkTopologyStrategy", "1")
-
-	}
+		//		var builder = Cluster.builder()
+		//
+		//		//127.0.1.
+		//		//ip = newIp
+		//		ip = "127.0.0.1"
+		//
+		//		//agrega la dir de ip del nodo
+		//		builder.addContactPoint(ip)
+		//
+		//		//crea un cluster con ese builder
+		//		cluster = builder.build()
+		//
+		//		//creo una nueva keyspace con keyspacetowrok
+		//		keyspace = keyspaceToWork
+		//
+		//		createKEYSPACE(keyspaceToWork, "NetworkTopologyStrategy", "1")
+		var b = Cluster.builder()
+		b.addContactPoint("127.0.0.1")
+		var c = b.build()
+		cluster = c
+		var query = "CREATE KEYSPACE " + ks + " WITH replication = {'class':'NetworkTopologyStrategy', 'replication_factor':1};"
+		cluster.connect().execute(query)
+		keyspace = ks
+		}
 
 	//devuelve una session luego de conectar el cluster
 	def session() {
@@ -60,10 +66,11 @@ abstract class RepositorioCassandra<T> {
 		var query = normalQuery(object) + ";"
 		session.execute(query)
 	}
-	def createTableWith(T object, String nameProperty, String idProperty){
+
+	def createTableWith(T object, String nameProperty, String idProperty) {
 		var query = normalQuery(object) + " WITH " + nameProperty + "=" + "'" + idProperty + "';"
 	}
-	
+
 	def normalQuery(T object) {
 		var fields = fields(object)
 		var types = types(object)
