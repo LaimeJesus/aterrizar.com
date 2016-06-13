@@ -6,51 +6,63 @@ import java.util.ArrayList
 import ar.edu.unq.epers.aterrizar.domain.redsocial.LikeAdmin
 import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
 import ar.edu.unq.epers.aterrizar.exceptions.NoExisteEseComentarioException
+import com.datastax.driver.mapping.annotations.UDT
+import com.datastax.driver.mapping.annotations.Field
+import com.datastax.driver.mapping.annotations.Frozen
 
 @Accessors
+@UDT(keyspace="aterrizar", name="destinoPost")
 class DestinoPost {
-	
-	String id
-	List<Comment> comments
-	LikeAdmin likesAdmin
-	Visibility visibility
-	
-	String destino
-	
-	new(){}
-	
-	new(String actualId, String destination){
+
+	@Field(name="id")
+	String id = ""
+	@Field(name="comments")
+	@Frozen("list<frozen <comment>>")
+	List<Comment> comments = new ArrayList<Comment>()
+	@Field(name="likesAdmin")
+	@Frozen
+	LikeAdmin likesAdmin = new LikeAdmin()
+	@Field(name="visibility")
+	Visibility visibility = Visibility.PRIVATE
+	@Field(name="destino")
+	String destino = ""
+
+	new() {
+	}
+
+	new(String actualId, String destination) {
 		id = actualId
 		destino = destination
 		comments = new ArrayList<Comment>()
 		likesAdmin = new LikeAdmin()
 		visibility = Visibility.PRIVATE
 	}
-	
-	def addComment(Comment c){
+
+	def addComment(Comment c) {
 		comments.add(c)
 	}
-	
-	def deleteComment(Comment c){
+
+	def deleteComment(Comment c) {
 		comments.remove(c)
 	}
-	
-	def getComment(Comment c){
-		for(comment : comments){
-			if(comment.id == c.id){
+
+	def getComment(Comment c) {
+		for (comment : comments) {
+			if(comment.id == c.id) {
 				return comment
-			}		
+			}
 		}
 		throw new NoExisteEseComentarioException("No Existe el comentario: " + c.comment)
 	}
-	
-	def void meGusta(Perfil p){
+
+	def void meGusta(Perfil p) {
 		likesAdmin.agregarMeGusta(p)
 	}
-	def void noMeGusta(Perfil p){
+
+	def void noMeGusta(Perfil p) {
 		likesAdmin.agregarNoMeGusta(p)
 	}
-	
+
 	def cantidadMeGusta() {
 		likesAdmin.cantidadDeMeGusta()
 	}
@@ -58,17 +70,17 @@ class DestinoPost {
 	def cantidadNoMeGusta() {
 		likesAdmin.cantidadDeNoMeGusta()
 	}
-	
+
 	def cambiarAPublico(Comment comment) {
 		Visibility.PUBLIC.changeTo(this.getComment(comment))
 	}
-	
+
 	def cambiarAPrivado(Comment comment) {
 		Visibility.PRIVATE.changeTo(this.getComment(comment))
 	}
-	
+
 	def cambiarASoloAmigos(Comment comment) {
 		Visibility.JUSTFRIENDS.changeTo(this.getComment(comment))
 	}
-	
+
 }

@@ -1,50 +1,78 @@
 package ar.edu.unq.epers.aterrizar.persistence.cassandra
 
-import ar.edu.unq.epers.aterrizar.domain.redsocial.Perfil
-import java.util.ArrayList
 import org.eclipse.xtend.lib.annotations.Accessors
+import com.datastax.driver.mapping.MappingManager
+import com.datastax.driver.mapping.Mapper
+import ar.edu.unq.epers.aterrizar.utils.ArmadorDeDeclaraciones
+import com.datastax.driver.core.Session
+import ar.edu.unq.epers.aterrizar.domain.redsocial.Perfil
+import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
+import com.datastax.driver.extras.codecs.enums.EnumNameCodec
+import ar.edu.unq.epers.aterrizar.domain.redsocial.DestinoPost
+import ar.edu.unq.epers.aterrizar.domain.redsocial.Comment
+import ar.edu.unq.epers.aterrizar.domain.redsocial.LikeAdmin
+import ar.edu.unq.epers.aterrizar.domain.redsocial.Like
 
 @Accessors
 class RepositorioPerfiles extends RepositorioCassandra<Perfil> {
 
-	new(String ks) {
-		super(ks)
-	}
-	
-	override table() {
-		"Perfil"
-	}
+	CassandraConnector connector
+	ArmadorDeDeclaraciones creator
+	Mapper<Perfil> mapper
 
-	override fields(Perfil object) {
-		var fields = new ArrayList<String>
-		fields.add("nickname")
-		fields
-	}
+	Session actualSession
 
-	override values(Perfil object) {
-		var values = new ArrayList<String>
-		values.add(object.nickname)
-		values
-	}
+	new() {
+		creator = new ArmadorDeDeclaraciones
 
-	override types(Perfil t) {
-		new ArrayList<String>
-	}
+		connector = new CassandraConnector()
+		createSimpleKEYSPACE("aterrizar", "1")
+		connector.keyspace = "aterrizar"
 
-	override createTable() {
-		
-		var fytc = " (id text, likesAdmin LikeAdmin, visibility Visibility, comment text);"
-		var comment = "CREATE TYPE DestinoPost" + fytc
-				
-		var fytdp = " (id text PRIMARY KEY, comments List<Comment>, likesAdmin LikeAdmin, visibility Visibility, destino text);"
-		var destinoPost = "CREATE TYPE DestinoPost" + fytdp
+		actualSession = connector.session
+		var enumCodec = new EnumNameCodec<Visibility>(Visibility)
+		var codecReg = connector.cluster.configuration.codecRegistry
+		codecReg.register(enumCodec)
+		createScheme()
 
-//		var fieldsAndTypes = "(nickname text PRIMARY KEY, posts List<DestinoPost>, id uuid);"
-		var fieldsAndTypes = "(nickname text PRIMARY KEY);"
-		var query = "CREATE TABLE IF NOT EXISTS " + table + fieldsAndTypes
-		
-		session.execute(query)
+//		new MappingManager(actualSession).udtCodec(Like)
+//		new MappingManager(actualSession).udtCodec(LikeAdmin)
+//		new MappingManager(actualSession).udtCodec(Comment)
+//		new MappingManager(actualSession).udtCodec(DestinoPost)
+		mapper = new MappingManager(actualSession).mapper(Perfil)
 
 	}
 
+	def createScheme() {
+
+		val fytl = "(id text, nickname text);"
+		var like = "CREATE TYPE IF NOT EXISTS aterrizar.like " + fytl
+		connector.execute(like)
+
+		val fytla = "(meGusta list<frozen <like>>, noMeGusta list<frozen<like>>);"
+		var likeadmin = "CREATE TYPE IF NOT EXISTS aterrizar.likeAdmin " + fytla
+		connector.execute(likeadmin)
+
+		//, visibility Visibility
+		var fytc = " (id text, likesAdmin frozen <likeAdmin>, comment text);"
+		var comment = "CREATE TYPE IF NOT EXISTS aterrizar.comment " + fytc
+		connector.execute(comment)
+
+		//, visibility Visibility
+		var fytdp = " (id text, comments list<frozen <comment>>, likesAdmin frozen<likeAdmin>, destino text);"
+		var destinoPost = "CREATE TYPE IF NOT EXISTS aterrizar.destinoPost " + fytdp
+		connector.execute(destinoPost)
+
+		var fieldsAndTypes = "(nickname text, idPerfil text, posts list<frozen <destinoPost>>, PRIMARY KEY(nickname));"
+		var perfil = "CREATE TABLE IF NOT EXISTS aterrizar.PerfilDTO " + fieldsAndTypes
+		connector.execute(perfil)
+	}
+
+	override persist(Perfil p) {
+		mapper.save(p)
+	}
+
+	override get(String field, String value) {
+		mapper.get(value)
+	}
 }

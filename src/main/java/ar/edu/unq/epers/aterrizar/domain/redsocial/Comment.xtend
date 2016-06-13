@@ -3,14 +3,23 @@ package ar.edu.unq.epers.aterrizar.domain.redsocial
 import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.domain.redsocial.LikeAdmin
 import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
+import com.datastax.driver.mapping.annotations.UDT
+import com.datastax.driver.mapping.annotations.Field
+import com.datastax.driver.mapping.annotations.Frozen
 
 @Accessors
+@UDT(keyspace="aterrizar", name="comment")
 class Comment {
-
-	String id
-	LikeAdmin likesAdmin
-	Visibility visibility
-	String comment
+	
+	@Field(name = "id")
+	String id = ''
+	@Field(name = "likesAdmin")
+	@Frozen
+	LikeAdmin likesAdmin = new LikeAdmin()
+	@Field(name = "visiblity")
+	Visibility visibility = Visibility.PRIVATE
+	@Field(name = "comment")
+	String comment = ''
 
 	new() {
 	}

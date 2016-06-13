@@ -1,13 +1,17 @@
 package ar.edu.unq.epers.aterrizar.domain.redsocial
 
 import org.eclipse.xtend.lib.annotations.Accessors
+import com.datastax.driver.mapping.annotations.Field
+import com.datastax.driver.mapping.annotations.UDT
 
 @Accessors
+@UDT(keyspace = "aterrizar", name="like")
 class Like {
-
-	//	Perfil perfil
-	String id
-	String nickname
+	
+	@Field(name = "id")
+	String id = ''
+	@Field(name = "nickname")
+	String nickname = ''
 	new(){
 		
 	}

@@ -4,12 +4,20 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.List
 import java.util.ArrayList
 import ar.edu.unq.epers.aterrizar.exceptions.NoPuedesVotarException
+import com.datastax.driver.mapping.annotations.UDT
+import com.datastax.driver.mapping.annotations.Field
+import com.datastax.driver.mapping.annotations.Frozen
 
 //esta clase existe para no repetir codigo en postDestino y comment
 @Accessors
+@UDT(keyspace = "aterrizar", name="likeAdmin")
 class LikeAdmin {
 
+	@Field(name = "meGusta")
+	@Frozen("list<frozen <comment>>")
 	List<Like> meGusta
+	@Field(name = "noMeGusta")
+	@Frozen("list<frozen <comment>>")
 	List<Like> noMeGusta
 
 	new() {
