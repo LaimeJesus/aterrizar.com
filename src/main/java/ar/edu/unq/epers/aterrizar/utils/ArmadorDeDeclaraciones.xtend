@@ -22,6 +22,7 @@ class ArmadorDeDeclaraciones {
 
 		var strCampos = armarCampos(campos)
 		var fields = armarValuesParametrizado(campos)
+		fields = '(' + fields + ')'
 		var declaracion = insert(tabla, strCampos, fields)
 		return declaracion
 	}

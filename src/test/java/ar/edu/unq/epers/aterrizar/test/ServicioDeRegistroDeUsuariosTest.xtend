@@ -17,6 +17,10 @@ import ar.edu.unq.epers.aterrizar.domain.mensajes.EnviadorDeMails
 import ar.edu.unq.epers.aterrizar.domain.mensajes.CreadorDeMails
 import ar.edu.unq.epers.aterrizar.domain.mensajes.Mail
 
+
+/*
+ * @note: cambiar url user y pass acorde a su configuracion de mysql en el setup
+ */
 class ServicioDeRegistroDeUsuariosTest{
 	
 	CreadorDeCodigos creadorDeCodigosMock
@@ -67,9 +71,10 @@ class ServicioDeRegistroDeUsuariosTest{
 		sudo.enviadorDeMails = enviadorDeMailsMock
 		sudo.creadorDeMails = creadorDeMailsMock
 		
+		
 		var url = "jdbc:mysql://localhost:3306/aterrizar"
 		var user = 'root'
-		var pass = 'root'
+		var pass = 'jstrike1234'
 		sudo.repositorio.conectarABDConMySql(url, user, pass)
 		
 		codigoFromMock = 'nousado'

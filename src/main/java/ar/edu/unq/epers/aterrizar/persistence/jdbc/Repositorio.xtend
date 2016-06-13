@@ -3,7 +3,6 @@ package ar.edu.unq.epers.aterrizar.persistence.jdbc
 import java.sql.DriverManager
 import java.sql.Connection
 import java.util.List
-import java.sql.ResultSet
 import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors

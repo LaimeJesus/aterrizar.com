@@ -23,6 +23,7 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 		camposSinAutoIncrementable.remove('idUsuario')
 		
 		var declaracion = armador.armarDeclaracionInsert('Usuario', camposSinAutoIncrementable)
+		println(declaracion)
 		var ps = this.setearValoresYPrepararDeclaracionSinCampoAutoIncrementable(usr, declaracion,1)
 		ps.executeUpdate()
 		ps.close()

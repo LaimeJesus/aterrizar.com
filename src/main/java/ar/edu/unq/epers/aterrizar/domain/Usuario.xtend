@@ -12,8 +12,8 @@ class Usuario {
 	String nickname
 	String password
 	String email
-	Date fechaDeNacimiento
 	String codigo
+	Date fechaDeNacimiento
 	
 	new() {
 	}
