@@ -5,41 +5,52 @@ import org.junit.Test
 import org.junit.After
 import ar.edu.unq.epers.aterrizar.persistence.cassandra.RepositorioPerfiles
 import ar.edu.unq.epers.aterrizar.domain.redsocial.Perfil
-import com.datastax.driver.mapping.MappingManager
-import ar.edu.unq.epers.aterrizar.persistence.cassandra.PerfilDTO
-import com.datastax.driver.mapping.Mapper
+import com.datastax.driver.core.Cluster
+import ar.edu.unq.epers.aterrizar.domain.redsocial.DestinoPost
 
 class ServicioDeCacheDePerfilesTest {
-	
+
 	RepositorioPerfiles repo
-	
+
 	Perfil perfil
 	
-	Mapper<PerfilDTO> mapper
-	
-	PerfilDTO pdto
-	
+	DestinoPost post
+
 	@Before
-	def void setUp(){
-		var aterrizar = "aterrizar"
-		repo = new RepositorioPerfiles(aterrizar)
-		
+	def void setUp() {
+
+		//127.0.0.1:9042
+		repo = new RepositorioPerfiles()
 		perfil = new Perfil()
 		perfil.nickname = "PEPE"
+		perfil.idPerfil = "1"
 		
-		mapper = new MappingManager(repo.session()).mapper(PerfilDTO)
-		pdto = new PerfilDTO()
-		pdto.nickname = "PIPO"
-		mapper.save(pdto)
+		post = new DestinoPost()
+		post.id = "1"
+		post.destino = "Berazategui"
+		
+		perfil.addPost(post)
+		
+		repo.persist(perfil)
 	}
+
 	@Test
-	def void testTraerUnPerfilLoAgregaALServicioDeCache(){
-		var fromRepo = mapper.get("PIPO")
+	def void testTraerUnPerfilLoAgregaALServicioDeCache() {
+		var fromRepo = repo.get("", "PEPE")
 		println(fromRepo.nickname)
 	}
-	
+
 	@After
-	def void after(){
-//		mapper.delete(pdto)
-	} 
+	def void after() {
+
+		//		mapper.delete(pdto)
+		repo.actualSession.close()
+		repo.connector.cluster.close()
+	}
+
+	def connect(String node) {
+		var cluster = Cluster.builder().addContactPoint(node).build();
+		cluster
+	}
+
 }
