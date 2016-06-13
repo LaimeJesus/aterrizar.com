@@ -14,16 +14,31 @@
 	</properties>
 
 	<dependencies>
+		<!-- dependencies for xtend -->
 		<dependency>
 			<groupId>org.eclipse.xtend</groupId>
 			<artifactId>org.eclipse.xtend.lib</artifactId>
 			<version>2.7.3</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>guava</artifactId>
+					<groupId>com.google.guava</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
 		</dependency>
+
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
@@ -35,13 +50,9 @@
 			<artifactId>javassist</artifactId>
 			<version>3.12.1.GA</version>
 		</dependency>
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
-			<version>2.2.2</version>
-		</dependency>
 
 		<!-- dependencies for neo4j -->
+
 		<dependency>
 			<groupId>org.neo4j</groupId>
 			<artifactId>neo4j</artifactId>
@@ -56,6 +67,7 @@
 		</dependency>
 
 		<!-- dependencies for hibernate -->
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
@@ -71,7 +83,9 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>3.6.7.Final</version>
 		</dependency>
+
 		<!-- dependencies for mongodb -->
+
 		<dependency>
 			<groupId>org.mongojack</groupId>
 			<artifactId>mongojack</artifactId>
@@ -89,9 +103,15 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.5</version>
+			<version>1.7.10</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.datastax.cassandra</groupId>
+			<artifactId>cassandra-driver-mapping</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<!-- cassandra -->
 		<dependency>
 			<groupId>com.datastax.cassandra</groupId>
 			<artifactId>cassandra-driver-core</artifactId>
@@ -102,21 +122,12 @@
 			<artifactId>cassandra-driver-extras</artifactId>
 			<version>3.0.0</version>
 		</dependency>
-		<dependency>
-			<groupId>com.datastax.cassandra</groupId>
-			<artifactId>cassandra-driver-mapping</artifactId>
-			<version>3.0.0</version>
-		</dependency>
-
 
 		<dependency>
 			<groupId>com.codahale.metrics</groupId>
 			<artifactId>metrics-core</artifactId>
 			<version>3.0.2</version>
 		</dependency>
-
-
-
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty</artifactId>
@@ -140,6 +151,7 @@
 				<groupId>org.eclipse.xtend</groupId>
 				<artifactId>xtend-maven-plugin</artifactId>
 				<version>2.7.3</version>
+
 				<executions>
 					<execution>
 						<goals>
