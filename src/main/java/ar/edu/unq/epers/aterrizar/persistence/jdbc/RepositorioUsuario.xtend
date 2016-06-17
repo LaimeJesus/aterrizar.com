@@ -18,19 +18,16 @@ class RepositorioUsuario extends Repositorio<Usuario>{
 	
 	//insert into tabla values (valores)
 	override def void persistir(Usuario usr) {
-		//creo los campos y le saco el campo autoincrementable
 		var camposSinAutoIncrementable = this.campos()
 		camposSinAutoIncrementable.remove('idUsuario')
 		
 		var declaracion = armador.armarDeclaracionInsert('Usuario', camposSinAutoIncrementable)
-		println(declaracion)
 		var ps = this.setearValoresYPrepararDeclaracionSinCampoAutoIncrementable(usr, declaracion,1)
 		ps.executeUpdate()
 		ps.close()
 	}
 	
 	//delete * from tabla where condicion
-	//en este metodo estoy decidiendo ya que hay una unica manera de encontrar a un usuario en la bd
 	override def void borrar(String campo, String valor) {
 		
 		var declaracion = armador.armarDeclaracionDelete('Usuario', campo)

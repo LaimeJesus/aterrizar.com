@@ -24,7 +24,7 @@ class ServicioDeReservaDeVuelos {
 
 	new(ServicioDeRegistroDeUsuarios sru) {
 		servicioDeRegistroDeUsuarios = sru
-		repositorioDeAerolineas = new RepositorioAerolinea
+		repositorioDeAerolineas = new RepositorioAerolinea()
 	}
 
 	//caso de uso un usuario quiere reservar un asiento de un tramo de un vuelo de una Aerolinea

@@ -244,7 +244,8 @@ class ServicioDeReservaDeVuelosTest {
 		
 		sudo.eliminarAerolinea(prueba)
 		sudo.eliminarAerolinea(aerolineasArgentinas)
-		
+		servicioDeUsuarios.borrarDeAmigos(usuario)
+		servicioDeUsuarios.borrarDePerfiles(usuario)
 	}
 
 }

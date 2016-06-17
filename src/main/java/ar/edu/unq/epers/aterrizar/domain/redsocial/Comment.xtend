@@ -10,15 +10,15 @@ import com.datastax.driver.mapping.annotations.Frozen
 @Accessors
 @UDT(keyspace="aterrizar", name="comment")
 class Comment {
-	
-	@Field(name = "id")
+
+	@Field(name="id")
 	String id = ''
-	@Field(name = "likesAdmin")
+	@Field(name="likesAdmin")
 	@Frozen
 	LikeAdmin likesAdmin = new LikeAdmin()
-	@Field(name = "visiblity")
+	@Field(name="visiblity")
 	Visibility visibility = Visibility.PRIVATE
-	@Field(name = "comment")
+	@Field(name="comment")
 	String comment = ''
 
 	new() {

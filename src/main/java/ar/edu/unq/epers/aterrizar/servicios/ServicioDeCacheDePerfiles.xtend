@@ -9,24 +9,20 @@ class ServicioDeCacheDePerfiles {
 
 	RepositorioPerfiles repoCacheDePerfiles
 
-	def cached(String nick) {
-		repoCacheDePerfiles.get("", nick) == null
+	new(){
+		repoCacheDePerfiles = new RepositorioPerfiles()
 	}
 
-	def cached(String nick, boolean amigos, boolean privado) {
-		false
+	def cached(String nick) {
+		repoCacheDePerfiles.contains(nick)
 	}
 
 	def Perfil get(String nick) {
-		repoCacheDePerfiles.get("nickname", nick)
+		repoCacheDePerfiles.get(nick, true, true)
 	}
 
 	def Perfil get(String nick, boolean amigos, boolean privado) {
-		null
-	}
-
-	def isUpdated(Perfil p) {
-		false
+		repoCacheDePerfiles.get(nick, amigos, privado)
 	}
 
 	def void update(Perfil perfil) {
@@ -37,11 +33,12 @@ class ServicioDeCacheDePerfiles {
 		repoCacheDePerfiles.persist(perfil)
 	}
 
-	def void cache(Perfil p, boolean amigos, boolean privado) {
-	}
-
 	def void delete(String pk) {
-		repoCacheDePerfiles.delete("", pk)
+		repoCacheDePerfiles.delete(pk)
+	}
+	
+	def disconect() {
+		repoCacheDePerfiles.actualSession.close
 	}
 
 }

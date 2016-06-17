@@ -15,14 +15,12 @@ class LikeAdmin {
 
 	@Field(name = "meGusta")
 	@Frozen("list<frozen <comment>>")
-	List<Like> meGusta
+	List<Like> meGusta = new ArrayList<Like>()
 	@Field(name = "noMeGusta")
 	@Frozen("list<frozen <comment>>")
-	List<Like> noMeGusta
+	List<Like> noMeGusta = new ArrayList<Like>()
 
 	new() {
-		meGusta = new ArrayList<Like>()
-		noMeGusta = new ArrayList<Like>()
 	}
 
 	//modificar el contains o el equals de los likes o usar uno que no necesite el perfil dentro de un like

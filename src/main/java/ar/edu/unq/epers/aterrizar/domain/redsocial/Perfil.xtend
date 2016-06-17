@@ -7,38 +7,23 @@ import java.util.ArrayList
 import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility;
 import ar.edu.unq.epers.aterrizar.exceptions.NoExistePostException
 import org.eclipse.xtend.lib.annotations.Accessors
-import com.datastax.driver.mapping.annotations.Table
-import com.datastax.driver.mapping.annotations.PartitionKey
-import com.datastax.driver.mapping.annotations.Column
-import com.datastax.driver.mapping.annotations.Frozen
 
 @Accessors
-@Table(keyspace="aterrizar", name="Perfil")
 class Perfil {
 
-	@PartitionKey(0)
-	@Column(name="nickname")
 	String nickname
-	
-	@Frozen("list<frozen <destinoPost>>")
-	@Column(name="posts")
 	List<DestinoPost> posts
 
 	@ObjectId
 	@JsonProperty("_id")
-	@Column(name="idPerfil")
 	String idPerfil
 
-	//	@PartitionKey(1)
-	//	Visibility visibility
 	new() {
 		posts = new ArrayList<DestinoPost>()
-		idPerfil = ''
 	}
 
 	new(String nick) {
 		posts = new ArrayList<DestinoPost>()
-		idPerfil = ''
 		nickname = nick
 	}
 
@@ -132,5 +117,17 @@ class Perfil {
 
 	def cantidadDeNoMeGusta(DestinoPost post, Comment c) {
 		getPost(post).getComment(c).cantidadNoMeGusta()
+	}
+
+	def List<DestinoPost> getPublicPosts() {
+		posts.filter[it.visibility == Visibility.PUBLIC].toList
+	}
+
+	def List<DestinoPost> getPrivatePosts() {
+		posts.filter[it.visibility == Visibility.PRIVATE].toList
+	}
+
+	def List<DestinoPost> getJustFriendsPosts() {
+		posts.filter[it.visibility == Visibility.JUSTFRIENDS].toList
 	}
 }

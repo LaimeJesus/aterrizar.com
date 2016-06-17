@@ -3,8 +3,7 @@ package ar.edu.unq.epers.aterrizar.domain.redsocial.visibility;
 import ar.edu.unq.epers.aterrizar.domain.redsocial.Comment;
 import ar.edu.unq.epers.aterrizar.domain.redsocial.DestinoPost;
 
-
-public enum Visibility{
+public enum Visibility {
 	
 	JUSTFRIENDS, PUBLIC, PRIVATE;
 	

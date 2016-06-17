@@ -88,28 +88,26 @@ class ServicioDePerfilesTest {
 		/////////////////////////////////////////////////////////
 		postBrazil = new DestinoPost("1", "Brazil")
 
+		//////////////////////////////////////////////////////////
 		//seteando system under test
-		sut = userService.servicioDePerfiles
-
-		//servicio de amigos
-		friendsService = userService.servicioDeAmigos
-
 		//seteando mismo servicio de amigos para sut y userService
-		sut.servicioDeAmigos = friendsService
-
 		//agregando amigo
+		//////////////////////////////////////////////////////////
+		sut = userService.servicioDePerfiles
+		friendsService = userService.servicioDeAmigos
+		sut.servicioDeAmigos = friendsService
 		friendsService.agregarAmigo(pepe, jose)
 
-		//agregando post a perfil de pepe
+		//////////////////////////////////////////////////////////
+		//agregando post a perfil de pepe y comentario
+		//////////////////////////////////////////////////////////
 		sut.agregarPost(pepe, postBrazil)
-
-		//comentario
 		commentForPostBrazil = new Comment("1", "BEST TRIP EVER")
-
-		//agregando commentario
 		sut.comentarPost(pepe, postBrazil, commentForPostBrazil)
 
+		//////////////////////////////////////////////////////////
 		//agregando me gusta o no megusta
+		//////////////////////////////////////////////////////////
 		sut.meGusta(pepe, pepe, postBrazil)
 		sut.noMeGusta(pepe, jose, postBrazil)
 		sut.meGusta(pepe, pepe, postBrazil, commentForPostBrazil)
@@ -311,14 +309,16 @@ class ServicioDePerfilesTest {
 	def void borrarDatosCreadosEnSetUp() {
 
 		flightService.eliminarAerolinea(aa)
-		
+
 		//elimino de esta manera a usuario porque eliminar aerolinea tmb elimina a los usuarios que reservaron un asiento
 		//deberia haber cambiado el cascade para asiento pero lo olvide
 		userService.borrarDeAmigos(pepe)
 		userService.borrarDePerfiles(pepe)
+
 		//estos al no tener asientos los puedo eliminar de esta manera
 		userService.eliminarUsuario(jose)
 		userService.eliminarUsuario(juan)
+
 		//busquedas
 		sut.servicioDeBusqueda.eliminarBusquedas
 	}

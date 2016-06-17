@@ -17,10 +17,14 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios {
 		this.servicioDePerfiles = new ServicioDePerfiles(this)
 		this.repoHibernate = new RepositorioUsuarioHibernate
 	}
-	new(ServicioDeReservaDeVuelos srv, ServicioDeBusquedaDeVuelos sbv){
-		
+	
+	def sinCachePerfiles(){
+		servicioDePerfiles = new ServicioDePerfiles(this)
 	}
-
+	def conCachePerfiles(){
+		servicioDePerfiles = new ServicioDePerfilesConCache(this)
+	}
+	
 	override registrarUsuario(Usuario usuario) throws Exception{
 
 		persist(usuario)
@@ -142,6 +146,7 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios {
 	}
 
 	def deleteAll() {
+		servicioDePerfiles.eliminarTodosLosPerfiles
 		SessionManager.runInSession(
 			[
 				repoHibernate.deleteAll()

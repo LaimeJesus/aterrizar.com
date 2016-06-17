@@ -8,6 +8,10 @@ import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
 import java.util.List
 import com.datastax.driver.mapping.annotations.Frozen
 import com.datastax.driver.mapping.annotations.Column
+import ar.edu.unq.epers.aterrizar.domain.redsocial.DestinoPost
+import java.util.ArrayList
+import javax.persistence.Enumerated
+import javax.persistence.EnumType
 
 /*
  * this class is designed to be used for Cassandra db.
@@ -16,17 +20,21 @@ import com.datastax.driver.mapping.annotations.Column
 @Table(keyspace="aterrizar", name="Perfil")
 class PerfilDTO {
 	@PartitionKey(0)
-	String nickname
+	@Column(name="nickname")
+	String nickname = ""
 
 	//	hay que registrar el enum
 	@PartitionKey(1)
-	Visibility visibility
-	
-	@PartitionKey(2)
-	String idPerfil
+	@Column(name="visibility")
+	@Enumerated(EnumType.STRING)
+	Visibility visibility = Visibility.PUBLIC
+
+	@Column(name="idPerfil")
+	String idPerfil = ""
+
 	@Frozen("list<frozen <destinoPost>>")
 	@Column(name="posts")
-	List<DestinoDTO> posts
+	List<DestinoPost> posts = new ArrayList<DestinoPost>()
 
 	new() {
 	}
