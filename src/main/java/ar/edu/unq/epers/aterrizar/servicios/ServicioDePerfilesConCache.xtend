@@ -20,7 +20,7 @@ class ServicioDePerfilesConCache extends ServicioDePerfiles {
 	new(ServicioRegistroUsuarioConHibernate hibernate) {
 		servicioDeUsuarios = hibernate
 	}
-	
+
 	new() {
 	}
 
@@ -39,8 +39,9 @@ class ServicioDePerfilesConCache extends ServicioDePerfiles {
 
 		var isCached = cacheDePerfiles.cached(aVer.nickname)
 		print("VIENDO SI ESTA CACHEADO LPM: ")
-		println(isCached) 
+		println(isCached)
 		if(isCached) {
+			println("ESTA CACHEADOOOOOOO")
 			return cacheDePerfiles.get(aVer.nickname, amigos, esElMismo)
 		}
 		var visibilities = getVisibilities(amigos, esElMismo)
@@ -48,7 +49,7 @@ class ServicioDePerfilesConCache extends ServicioDePerfiles {
 		var perfil = repositorioDePerfiles.getContents(aVer.nickname, visibilities)
 
 		cacheDePerfiles.cache(perfil)
-		
+
 		perfil
 	}
 
@@ -59,10 +60,11 @@ class ServicioDePerfilesConCache extends ServicioDePerfiles {
 
 		if(cacheDePerfiles.cached(usuario.nickname)) {
 			return cacheDePerfiles.get(usuario.nickname)
+		} else {
+			var p = repositorioDePerfiles.find(DBQuery.is("nickname", usuario.nickname)).get(0)
+			cacheDePerfiles.cache(p)
+			return p
 		}
-		var p = repositorioDePerfiles.find(DBQuery.is("nickname", usuario.nickname)).get(0)
-		cacheDePerfiles.cache(p)
-		p
 	}
 
 	override void updatePerfil(Perfil perfil) {

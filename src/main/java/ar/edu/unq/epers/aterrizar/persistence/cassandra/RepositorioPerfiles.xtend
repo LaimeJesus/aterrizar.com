@@ -23,7 +23,7 @@ class RepositorioPerfiles extends RepositorioCassandra<PerfilDTO> {
 	val final pub = Visibility.PUBLIC
 	val final priv = Visibility.PRIVATE
 	val final jf = Visibility.JUSTFRIENDS
-	
+
 	new() {
 		creator = new ArmadorDeDeclaraciones
 
@@ -33,16 +33,13 @@ class RepositorioPerfiles extends RepositorioCassandra<PerfilDTO> {
 
 		actualSession = connector.session
 		var enumCodec = new EnumNameCodec<Visibility>(Visibility)
-//		connector.cluster.configuration.codecRegistry.register(enumCodec)
+
+		//		connector.cluster.configuration.codecRegistry.register(enumCodec)
 		CodecRegistry.DEFAULT_INSTANCE.register(enumCodec)
 
 		createScheme()
 		var mapManager = new MappingManager(actualSession)
 
-		//		mapManager.udtCodec(Like)
-		//		mapManager.udtCodec(LikeAdmin)
-		//		mapManager.udtCodec(Comment)
-		//		mapManager.udtCodec(DestinoPost)
 		mapper = mapManager.mapper(PerfilDTO)
 	}
 
@@ -74,14 +71,20 @@ class RepositorioPerfiles extends RepositorioCassandra<PerfilDTO> {
 
 	def void persist(Perfil p) {
 		var dto = toDTO(p)
+
+		//persisto la parte de perfil publico
 		var publics = p.getPublicPosts()
 		dto.visibility = Visibility.PUBLIC
 		dto.posts = publics
 		mapper.save(dto)
+
+		//persisto la parte de perfil privado
 		var privates = p.getPrivatePosts()
 		dto.visibility = Visibility.PRIVATE
 		dto.posts = privates
 		mapper.save(dto)
+
+		//persisto la parte de perfil solo amigos
 		var jfs = p.getJustFriendsPosts()
 		dto.visibility = Visibility.JUSTFRIENDS
 		dto.posts = jfs
@@ -89,6 +92,8 @@ class RepositorioPerfiles extends RepositorioCassandra<PerfilDTO> {
 	}
 
 	def void delete(String nick) {
+
+		//borro los 3 perfiles
 		mapper.delete(nick, Visibility.PUBLIC)
 		mapper.delete(nick, Visibility.PRIVATE)
 		mapper.delete(nick, Visibility.JUSTFRIENDS)
@@ -99,22 +104,25 @@ class RepositorioPerfiles extends RepositorioCassandra<PerfilDTO> {
 		persist(p)
 	}
 
-	def PerfilDTO toDTO(Perfil perfil) {
-		new PerfilDTO() => [
-			nickname = perfil.nickname
-			idPerfil = perfil.idPerfil
-			posts = perfil.posts
-		]
+	def contains(String nick) {
+		var pub = mapper.get(nick, Visibility.PUBLIC)
+		var priv = mapper.get(nick, Visibility.PRIVATE)
+		var jsf = mapper.get(nick, Visibility.JUSTFRIENDS)
+		var b = pub != null || priv != null || jsf != null
+		b
 	}
 
 	def Perfil get(String nick, boolean isAmigo, boolean isPrivado) {
+		//traigo el perfil publico
 		val public = mapper.get(nick, Visibility.PUBLIC)
 		val r = public.posts
 		if(isPrivado) {
+			//traigo la parte de perfil privado
 			val private = mapper.get(nick, Visibility.PRIVATE)
 			r.addAll(private.posts)
 		}
 		if(isAmigo) {
+			//traigo la parte de perfil solo amigos
 			val amigos = mapper.get(nick, Visibility.JUSTFRIENDS)
 			r.addAll(amigos.posts)
 		}
@@ -134,12 +142,12 @@ class RepositorioPerfiles extends RepositorioCassandra<PerfilDTO> {
 		]
 	}
 
-	def contains(String nick) {
-		var pub = mapper.get(nick, Visibility.PUBLIC)
-		var priv = mapper.get(nick, Visibility.PRIVATE)
-		var jsf = mapper.get(nick, Visibility.JUSTFRIENDS)
-		var b = pub != null || priv != null || jsf != null
-		b
+	def PerfilDTO toDTO(Perfil perfil) {
+		new PerfilDTO() => [
+			nickname = perfil.nickname
+			idPerfil = perfil.idPerfil
+			posts = perfil.posts
+		]
 	}
 
 }

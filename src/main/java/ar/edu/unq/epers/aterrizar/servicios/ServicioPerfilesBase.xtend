@@ -11,4 +11,8 @@ interface ServicioPerfilesBase {
 	def void comentarPost(Usuario u, DestinoPost p, Comment c)
 	
 	def void meGusta(Usuario usuarioALikear, Usuario usuarioLikeando, DestinoPost p)
+	
+	def void noMeGusta(Usuario aLikear, Usuario likeando, DestinoPost p)
+	
+	
 }
