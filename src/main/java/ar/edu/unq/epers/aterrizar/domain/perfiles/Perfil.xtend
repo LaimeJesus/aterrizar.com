@@ -1,10 +1,9 @@
-package ar.edu.unq.epers.aterrizar.domain.redsocial
-
+package ar.edu.unq.epers.aterrizar.domain.perfiles
 import java.util.List
 import org.mongojack.ObjectId
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.ArrayList
-import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility;
+import ar.edu.unq.epers.aterrizar.domain.perfiles.visibility.Visibility;
 import ar.edu.unq.epers.aterrizar.exceptions.NoExistePostException
 import org.eclipse.xtend.lib.annotations.Accessors
 
@@ -30,17 +29,17 @@ class Perfil {
 	///////////////////////////////////////
 	//POSTS
 	///////////////////////////////////////
-	def void configVisibilityIntoPublic(DestinoPost p) {
+	def void toPublic(DestinoPost p) {
 
 		Visibility.PUBLIC.changeTo(getPost(p))
 	}
 
-	def void configVisibilityIntoPrivate(DestinoPost p) {
+	def void toPrivate(DestinoPost p) {
 		Visibility.PRIVATE.changeTo(getPost(p))
 	}
 
-	def void configVisibilityIntoJustFriends(DestinoPost p) {
-		Visibility.JUSTFRIENDS.changeTo(getPost(p))
+	def void toOnlyFriends(DestinoPost p) {
+		Visibility.ONLYFRIENDS.changeTo(getPost(p))
 	}
 
 	def addPost(DestinoPost p) {
@@ -63,15 +62,15 @@ class Perfil {
 	///////////////////////////////////////
 	//COMMENTS
 	///////////////////////////////////////
-	def void configVisibilityIntoPrivate(DestinoPost p, Comment c) {
+	def void toPrivate(DestinoPost p, Comment c) {
 		getPost(p).cambiarAPrivado(c)
 	}
 
-	def void configVisibilityIntoPublic(DestinoPost p, Comment c) {
+	def void toPublic(DestinoPost p, Comment c) {
 		getPost(p).cambiarAPublico(c)
 	}
 
-	def void configVisibilityIntoJustFriends(DestinoPost p, Comment c) {
+	def void toOnlyFriends(DestinoPost p, Comment c) {
 		getPost(p).cambiarASoloAmigos(c)
 	}
 
@@ -98,7 +97,26 @@ class Perfil {
 	def void agregarNoMeGusta(Perfil per, DestinoPost p, Comment c) {
 		getPost(p).getComment(c).noMeGusta(per)
 	}
+	
+	def void quitarMeGusta(Perfil q, DestinoPost p){
+		getPost(p).quitarMeGusta(q)
+	}
+	
+	def void quitarNoMeGusta(Perfil q, DestinoPost p){
+		getPost(p).quitarNoMeGusta(q)
+	}
 
+	def void quitarMeGusta(Perfil q, DestinoPost p, Comment c){
+		getPost(p).getComment(c).quitarMeGusta(q)
+	}
+	
+	def void quitarNoMeGusta(Perfil q, DestinoPost p, Comment c){
+		getPost(p).getComment(c).quitarNoMeGusta(q)
+	}
+	
+	////////////////////////////////////////
+	//
+	////////////////////////////////////////
 	def getComments(DestinoPost post) {
 		getPost(post).comments
 	}
@@ -120,14 +138,14 @@ class Perfil {
 	}
 
 	def List<DestinoPost> getPublicPosts() {
-		posts.filter[it.visibility == Visibility.PUBLIC].toList
+		getPosts.filter[it.visibility == Visibility.PUBLIC].toList
 	}
 
 	def List<DestinoPost> getPrivatePosts() {
-		posts.filter[it.visibility == Visibility.PRIVATE].toList
+		getPosts.filter[it.visibility == Visibility.PRIVATE].toList
 	}
 
 	def List<DestinoPost> getJustFriendsPosts() {
-		posts.filter[it.visibility == Visibility.JUSTFRIENDS].toList
+		getPosts.filter[it.visibility == Visibility.ONLYFRIENDS].toList
 	}
 }

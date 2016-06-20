@@ -1,5 +1,4 @@
-package ar.edu.unq.epers.aterrizar.domain.redsocial
-
+package ar.edu.unq.epers.aterrizar.domain.perfiles
 import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.List
 import java.util.ArrayList
@@ -53,7 +52,18 @@ class LikeAdmin {
 	def void agregarLike(Perfil perfil, List<Like> likes) {
 		likes.add(new Like(perfil))
 	}
-
+	
+	def void quitarMeGusta(Perfil p){
+		quitarLike(p, meGusta)
+	}
+	def void quitarNoMeGusta(Perfil p){
+		quitarLike(p, noMeGusta)
+	}
+	
+	def quitarLike(Perfil perfil, List<Like> likes) {
+		likes.remove(new Like(perfil))
+	}
+	
 	def cantidadDeMeGusta() {
 		meGusta.length
 	}

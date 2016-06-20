@@ -1,5 +1,4 @@
-package ar.edu.unq.epers.aterrizar.domain.redsocial
-
+package ar.edu.unq.epers.aterrizar.domain.perfiles
 import org.eclipse.xtend.lib.annotations.Accessors
 import com.datastax.driver.mapping.annotations.Field
 import com.datastax.driver.mapping.annotations.UDT

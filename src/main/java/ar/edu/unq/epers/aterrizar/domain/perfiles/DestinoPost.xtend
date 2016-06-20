@@ -1,14 +1,12 @@
-package ar.edu.unq.epers.aterrizar.domain.redsocial
-
+package ar.edu.unq.epers.aterrizar.domain.perfiles
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.ArrayList
-import ar.edu.unq.epers.aterrizar.domain.redsocial.LikeAdmin
-import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
 import ar.edu.unq.epers.aterrizar.exceptions.NoExisteEseComentarioException
 import com.datastax.driver.mapping.annotations.UDT
 import com.datastax.driver.mapping.annotations.Field
 import com.datastax.driver.mapping.annotations.Frozen
+import ar.edu.unq.epers.aterrizar.domain.perfiles.visibility.Visibility
 
 @Accessors
 @UDT(keyspace="aterrizar", name="destinoPost")
@@ -62,6 +60,14 @@ class DestinoPost {
 	def void noMeGusta(Perfil p) {
 		likesAdmin.agregarNoMeGusta(p)
 	}
+	
+	def void quitarMeGusta(Perfil p){
+		getLikesAdmin.quitarMeGusta(p)
+	}
+
+	def void quitarNoMeGusta(Perfil p){
+		getLikesAdmin.quitarNoMeGusta(p)
+	}
 
 	def cantidadMeGusta() {
 		likesAdmin.cantidadDeMeGusta()
@@ -80,7 +86,7 @@ class DestinoPost {
 	}
 
 	def cambiarASoloAmigos(Comment comment) {
-		Visibility.JUSTFRIENDS.changeTo(this.getComment(comment))
+		Visibility.ONLYFRIENDS.changeTo(this.getComment(comment))
 	}
 
 }

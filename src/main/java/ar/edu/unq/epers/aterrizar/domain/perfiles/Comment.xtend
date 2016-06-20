@@ -1,8 +1,8 @@
-package ar.edu.unq.epers.aterrizar.domain.redsocial
+package ar.edu.unq.epers.aterrizar.domain.perfiles
 
 import org.eclipse.xtend.lib.annotations.Accessors
-import ar.edu.unq.epers.aterrizar.domain.redsocial.LikeAdmin
-import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
+import ar.edu.unq.epers.aterrizar.domain.perfiles.LikeAdmin
+import ar.edu.unq.epers.aterrizar.domain.perfiles.visibility.Visibility
 import com.datastax.driver.mapping.annotations.UDT
 import com.datastax.driver.mapping.annotations.Field
 import com.datastax.driver.mapping.annotations.Frozen
@@ -39,11 +39,19 @@ class Comment {
 		likesAdmin.agregarNoMeGusta(p)
 	}
 
-	def cantidadMeGusta() {
+	def void quitarMeGusta(Perfil p) {
+		likesAdmin.quitarMeGusta(p)
+	}
+
+	def void quitarNoMeGusta(Perfil p) {
+		likesAdmin.quitarNoMeGusta(p)
+	}
+
+	def int cantidadMeGusta() {
 		likesAdmin.cantidadDeMeGusta()
 	}
 
-	def cantidadNoMeGusta() {
+	def int cantidadNoMeGusta() {
 		likesAdmin.cantidadDeNoMeGusta()
 	}
 }
