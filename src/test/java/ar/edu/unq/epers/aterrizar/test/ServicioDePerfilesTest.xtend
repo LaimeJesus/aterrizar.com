@@ -1,7 +1,7 @@
 package ar.edu.unq.epers.aterrizar.test
 
 import ar.edu.unq.epers.aterrizar.domain.Usuario
-import ar.edu.unq.epers.aterrizar.domain.redsocial.DestinoPost
+import ar.edu.unq.epers.aterrizar.domain.perfiles.DestinoPost
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDePerfiles
 import ar.edu.unq.epers.aterrizar.servicios.ServicioRegistroUsuarioConHibernate
 import org.junit.Assert
@@ -14,10 +14,10 @@ import ar.edu.unq.epers.aterrizar.domain.vuelos.Tramo
 import ar.edu.unq.epers.aterrizar.domain.vuelos.Vuelo
 import ar.edu.unq.epers.aterrizar.domain.vuelos.Aerolinea
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDeReservaDeVuelos
-import ar.edu.unq.epers.aterrizar.domain.redsocial.Comment
+import ar.edu.unq.epers.aterrizar.domain.perfiles.Comment
 import ar.edu.unq.epers.aterrizar.exceptions.NoExistePostException
 import ar.edu.unq.epers.aterrizar.exceptions.NoPuedesVotarException
-import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
+import ar.edu.unq.epers.aterrizar.domain.perfiles.visibility.Visibility
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDeAmigos
 import ar.edu.unq.epers.aterrizar.exceptions.NoPuedeAgregarPostException
 
@@ -255,7 +255,7 @@ class ServicioDePerfilesTest {
 	def void testCambiarPostAJustFriendDejaQueSoloMisAmigosVeanEsePost() {
 		sut.cambiarASoloAmigos(pepe, postBrazil)
 		var perfilPepe = sut.verPerfil(pepe, jose)
-		Assert.assertEquals(Visibility.JUSTFRIENDS, perfilPepe.getPost(postBrazil).visibility)
+		Assert.assertEquals(Visibility.ONLYFRIENDS, perfilPepe.getPost(postBrazil).visibility)
 	}
 
 	@Test(expected=NoExistePostException)
@@ -264,7 +264,7 @@ class ServicioDePerfilesTest {
 		sut.cambiarASoloAmigos(pepe, postBrazil)
 
 		var perfilPepe = sut.verPerfil(pepe, juan)
-		Assert.assertEquals(Visibility.JUSTFRIENDS, perfilPepe.getPost(postBrazil).visibility)
+		Assert.assertEquals(Visibility.ONLYFRIENDS, perfilPepe.getPost(postBrazil).visibility)
 
 	}
 

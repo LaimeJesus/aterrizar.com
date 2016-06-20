@@ -3,7 +3,7 @@ package ar.edu.unq.epers.aterrizar.test
 import org.junit.Before
 import org.junit.Test
 import org.junit.After
-import ar.edu.unq.epers.aterrizar.domain.redsocial.DestinoPost
+import ar.edu.unq.epers.aterrizar.domain.perfiles.DestinoPost
 import ar.edu.unq.epers.aterrizar.servicios.ServicioRegistroUsuarioConHibernate
 import ar.edu.unq.epers.aterrizar.domain.Usuario
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDePerfilesConCache
@@ -12,7 +12,6 @@ import ar.edu.unq.epers.aterrizar.servicios.ServicioDeReservaDeVuelos
 import ar.edu.unq.epers.aterrizar.domain.vuelos.Aerolinea
 import ar.edu.unq.epers.aterrizar.domain.vuelos.Asiento
 import ar.edu.unq.epers.aterrizar.servicios.ServicioDeAmigos
-import ar.edu.unq.epers.aterrizar.domain.redsocial.Perfil
 import org.junit.Assert
 import ar.edu.unq.epers.aterrizar.domain.vuelos.Vuelo
 import ar.edu.unq.epers.aterrizar.domain.vuelos.Tramo
@@ -26,9 +25,7 @@ class ServicioDePerfilesUsandoCacheTest {
 
 	ServicioDeReservaDeVuelos flightService
 
-	ServicioDeCacheDePerfiles sut
-
-	ServicioDePerfilesConCache servicioDePerfiles
+	ServicioDePerfilesConCache sut
 
 	Aerolinea aa
 
@@ -40,7 +37,7 @@ class ServicioDePerfilesUsandoCacheTest {
 
 	Usuario jose
 
-	ServicioDeCacheDePerfiles s
+	ServicioDeCacheDePerfiles servicioDeCache
 
 	@Before
 	def void setUp() {
@@ -92,7 +89,7 @@ class ServicioDePerfilesUsandoCacheTest {
 		//////////////////////////////////////////////////////////
 		//agregando post a perfil de pepe y comentario
 		//////////////////////////////////////////////////////////
-		servicioDePerfiles.agregarPost(pepe, postBrazil)
+		sut.agregarPost(pepe, postBrazil)
 
 	}
 
@@ -102,22 +99,21 @@ class ServicioDePerfilesUsandoCacheTest {
 
 		friendsService = userService.servicioDeAmigos
 
-		servicioDePerfiles = new ServicioDePerfilesConCache()
-		servicioDePerfiles.servicioDeAmigos = friendsService
-		servicioDePerfiles.servicioDeUsuarios = userService
+		sut = new ServicioDePerfilesConCache(userService, friendsService)
 
-		userService.servicioDePerfiles = servicioDePerfiles
-		servicioDePerfiles.servicioDeUsuarios = userService
-		servicioDePerfiles.servicioDeBusqueda.repositorioAerolineas = flightService.repositorioDeAerolineas
-		sut = servicioDePerfiles.cacheDePerfiles
+		userService.setServicioDePerfiles(sut)
+		sut.servicioDeBusqueda.repositorioAerolineas = flightService.repositorioDeAerolineas
+		servicioDeCache = sut.cacheDePerfiles
 	}
 
 	@Test
 	def void testTraerUnPerfilLoAgregaALServicioDeCache() {
-		var perfilpepe = servicioDePerfiles.verPerfil(pepe, pepe)
-		var isCachedPerfilPepe = sut.cached(perfilpepe.nickname)
+		//perfil traido desde mongo
+		var perfilpepe = sut.verPerfil(pepe, pepe)
+		var isCachedPerfilPepe = servicioDeCache.cached(perfilpepe.nickname)
 		Assert.assertTrue(isCachedPerfilPepe)
-		var cachedPerfil = servicioDePerfiles.verPerfil(pepe, pepe)
+		//perfil traido desde cassandra
+		var cachedPerfil = sut.verPerfil(pepe, pepe)
 		Assert.assertTrue(perfilpepe.nickname.equals(cachedPerfil.nickname))
 	}
 
@@ -127,9 +123,9 @@ class ServicioDePerfilesUsandoCacheTest {
 		userService.borrarDeAmigos(pepe)
 		userService.borrarDePerfiles(pepe)
 		userService.eliminarUsuario(jose)
-		servicioDePerfiles.servicioDeBusqueda.eliminarBusquedas
-
-	//		sut.disconect()
+		sut.servicioDeBusqueda.eliminarBusquedas
+		servicioDeCache.disconect()
+		
 	}
 
 }
