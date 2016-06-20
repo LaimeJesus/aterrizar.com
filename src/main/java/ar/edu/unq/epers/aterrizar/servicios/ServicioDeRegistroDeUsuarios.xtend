@@ -19,9 +19,9 @@ class ServicioDeRegistroDeUsuarios {
 	ServicioDePerfiles servicioDePerfiles
 
 	new() {
-		repositorio = new RepositorioUsuario()
-		servicioDeAmigos = new ServicioDeAmigos(this)
-		servicioDePerfiles = new ServicioDePerfiles(this)
+		setRepositorio(new RepositorioUsuario())
+		setServicioDeAmigos(new ServicioDeAmigos(this))
+		setServicioDePerfiles(new ServicioDePerfiles(this))
 	}
 
 	/*
@@ -73,7 +73,7 @@ class ServicioDeRegistroDeUsuarios {
 		val usuarioACambiarPassword = this.traerUsuarioPorNickname(usr.nickname)
 		usuarioACambiarPassword.validarCambioPassword(newpassword)
 		usuarioACambiarPassword.password = newpassword
-		repositorio.actualizar(usuarioACambiarPassword, 'nickname', usuarioACambiarPassword.nickname)
+		getRepositorio.actualizar(usuarioACambiarPassword, 'nickname', usuarioACambiarPassword.nickname)
 	}
 
 	////////////////////////////////////////////
@@ -82,15 +82,15 @@ class ServicioDeRegistroDeUsuarios {
 	}
 
 	def traerUsuarioDelRepositorio(String field, String value) throws Exception{
-		if(repositorio.contiene(field, value)) {
-			return repositorio.traer(field, value)
+		if(getRepositorio.contiene(field, value)) {
+			return getRepositorio.traer(field, value)
 		} else {
-			repositorio.objectNotFoundError()
+			getRepositorio.objectNotFoundError()
 		}
 	}
 
 	def contieneUsuarioPorNickname(String nickname) {
-		return repositorio.contiene('nickname', nickname)
+		return getRepositorio.contiene('nickname', nickname)
 	}
 
 	def traerUsuarioPorNickname(String nickname) throws Exception{
@@ -98,33 +98,34 @@ class ServicioDeRegistroDeUsuarios {
 	}
 
 	def nuevoUsuarioEnElSistema(Usuario usuario) {
-		repositorio.persistir(usuario)
+		getRepositorio.persistir(usuario)
 
-		servicioDeAmigos.crearUsuarioDeAmigos(usuario)
-		servicioDePerfiles.crearPerfil(usuario)
+		getServicioDeAmigos.crearUsuarioDeAmigos(usuario)
+		getServicioDePerfiles.crearPerfil(usuario)
 		this.avisarNuevoUsuarioRegistrado(usuario)
 	}
 
 	def avisarNuevoUsuarioRegistrado(Usuario usuario) {
 
-		val codigo = creadorDeCodigos.crearCodigo()
-		val mailAEnviar = creadorDeMails.crearMailParaUsuario('registrador', usuario, codigo)
-		enviadorDeMails.enviarMail(mailAEnviar)
+		val codigo = getCreadorDeCodigos.crearCodigo()
+		val mailAEnviar = getCreadorDeMails.crearMailParaUsuario('registrador', usuario, codigo)
+		getEnviadorDeMails.enviarMail(mailAEnviar)
 	}
 
 	def actualizarUsuarioPorNickname(Usuario usuario) {
-		repositorio.actualizar(usuario, 'nickname', usuario.nickname)
+		getRepositorio.actualizar(usuario, 'nickname', usuario.nickname)
 	}
 
 	def void eliminarUsuario(Usuario u) {
-		repositorio.borrar("nickname", u.nickname)
-		servicioDePerfiles.eliminarPerfil(u)
-		servicioDeAmigos.eliminarMailsDeUsuario(u)
+		getRepositorio.borrar("nickname", u.nickname)
+		getServicioDePerfiles.eliminarPerfil(u)
+		getServicioDeAmigos.eliminarUsuarioDeAmigos(u)
+//		getServicioDeAmigos.eliminarMailsDeUsuario(u)
 	}
 
 	def isRegistrado(Usuario usuario) {
 		if(!contieneUsuarioPorNickname(usuario.nickname)) {
-			repositorio.objectNotFoundError()
+			getRepositorio.objectNotFoundError()
 		}
 	}
 

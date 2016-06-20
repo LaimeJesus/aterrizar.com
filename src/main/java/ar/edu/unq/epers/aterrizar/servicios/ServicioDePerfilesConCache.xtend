@@ -4,7 +4,7 @@ import ar.edu.unq.epers.aterrizar.domain.Usuario
 import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.persistence.mongodb.Home
 import org.mongojack.DBQuery
-import ar.edu.unq.epers.aterrizar.domain.redsocial.Perfil
+import ar.edu.unq.epers.aterrizar.domain.perfiles.Perfil
 import ar.edu.unq.epers.aterrizar.persistence.mongodb.SistemDB
 
 @Accessors
@@ -17,38 +17,43 @@ class ServicioDePerfilesConCache extends ServicioDePerfiles {
 	ServicioDeCacheDePerfiles cacheDePerfiles = new ServicioDeCacheDePerfiles()
 
 	//    Como usuario quiero poder agregar destinos a los que fui.
-	new(ServicioRegistroUsuarioConHibernate hibernate) {
-		servicioDeUsuarios = hibernate
+	new(ServicioRegistroUsuarioConHibernate hibernate, ServicioDeAmigos friendSrv) {
+		setServicioDeUsuarios(hibernate)
+		setServicioDeAmigos(friendSrv)
 	}
 
-	new() {
+	new(ServicioRegistroUsuarioConHibernate hibernate) {
+		setServicioDeUsuarios(hibernate)
 	}
 
 	////////////////////////////////////////////////////////////////
 	//no pude hacer el filtrado de comentarios basicamente porque no me deja hacer un project
-	//dentro de otro o al menos eso entendi
+	//dentro de otro o al menos eso no me dejaba
 	//Como usuario quiero poder ver el perfil público de otro usuario, viendo lo que me 
 	//corresponde según si soy amigo o no.
 	////////////////////////////////////////////////////////////////
 	override Perfil verPerfil(Usuario aVer, Usuario viendo) {
-		servicioDeUsuarios.isRegistrado(aVer)
-		servicioDeUsuarios.isRegistrado(viendo)
+		getServicioDeUsuarios.isRegistrado(aVer)
+		getServicioDeUsuarios.isRegistrado(viendo)
 
-		val amigos = servicioDeAmigos.sonAmigos(aVer, viendo)
+		val amigos = getServicioDeAmigos.sonAmigos(aVer, viendo)
 		val esElMismo = aVer.nickname.equals(viendo.nickname)
 
-		var isCached = cacheDePerfiles.cached(aVer.nickname)
-		print("VIENDO SI ESTA CACHEADO LPM: ")
-		println(isCached)
+		var isCached = getCacheDePerfiles.cached(aVer.nickname)
 		if(isCached) {
-			println("ESTA CACHEADOOOOOOO")
-			return cacheDePerfiles.get(aVer.nickname, amigos, esElMismo)
+			return getCacheDePerfiles.get(aVer.nickname, amigos, esElMismo)
 		}
 		var visibilities = getVisibilities(amigos, esElMismo)
 
-		var perfil = repositorioDePerfiles.getContents(aVer.nickname, visibilities)
-
-		cacheDePerfiles.cache(perfil)
+		var perfil = getRepositorioDePerfiles.getContents(aVer.nickname, visibilities)
+		var privateps = perfil.privatePosts
+		var jsps = perfil.justFriendsPosts
+		var pubps = perfil.publicPosts
+		perfil.posts.addAll(pubps)
+		perfil.posts.addAll(privateps)
+		perfil.posts.addAll(jsps)
+		
+		getCacheDePerfiles.cache(perfil)
 
 		perfil
 	}
@@ -58,33 +63,33 @@ class ServicioDePerfilesConCache extends ServicioDePerfiles {
 	////////////////////////////////////////////////////////////////////////////////
 	override getPerfil(Usuario usuario) throws Exception{
 
-		if(cacheDePerfiles.cached(usuario.nickname)) {
-			return cacheDePerfiles.get(usuario.nickname)
-		} else {
-			var p = repositorioDePerfiles.find(DBQuery.is("nickname", usuario.nickname)).get(0)
-			cacheDePerfiles.cache(p)
+//		if(cacheDePerfiles.cached(usuario.nickname)) {
+//			return cacheDePerfiles.get(usuario.nickname)
+//		} else {
+			var p = getRepositorioDePerfiles.find(DBQuery.is("nickname", usuario.nickname)).get(0)
+			getCacheDePerfiles.cache(p)
 			return p
-		}
+//		}
 	}
 
 	override void updatePerfil(Perfil perfil) {
 
-		repositorioDePerfiles.update(perfil.idPerfil, perfil)
+		getRepositorioDePerfiles.update(perfil.idPerfil, perfil)
 
 		//deberia actualizarlo de la bd? o solamente lo borro?
 		//		cacheDePerfiles.delete(perfil.nickname)
-		if(cacheDePerfiles.cached(perfil.nickname)) {
-			cacheDePerfiles.update(perfil)
+		if(getCacheDePerfiles.cached(perfil.nickname)) {
+			getCacheDePerfiles.update(perfil)
 		}
 
 	}
 
 	override void eliminarPerfil(Usuario usuario) {
-		repositorioDePerfiles.delete("nickname", usuario.nickname)
+		getRepositorioDePerfiles.delete("nickname", usuario.nickname)
 
 		//no hace falta el if
-		if(cacheDePerfiles.cached(usuario.nickname)) {
-			cacheDePerfiles.delete(usuario.nickname)
+		if(getCacheDePerfiles.cached(usuario.nickname)) {
+			getCacheDePerfiles.delete(usuario.nickname)
 		}
 	}
 }

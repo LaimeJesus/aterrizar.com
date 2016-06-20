@@ -19,12 +19,12 @@ class ServicioDeReservaDeVuelos {
 	ServicioDeRegistroDeUsuarios servicioDeRegistroDeUsuarios
 
 	new() {
-		repositorioDeAerolineas = new RepositorioAerolinea
+		setRepositorioDeAerolineas(new RepositorioAerolinea())
 	}
 
 	new(ServicioDeRegistroDeUsuarios sru) {
-		servicioDeRegistroDeUsuarios = sru
-		repositorioDeAerolineas = new RepositorioAerolinea()
+		setServicioDeRegistroDeUsuarios(sru)
+		setRepositorioDeAerolineas(new RepositorioAerolinea())
 	}
 
 	//caso de uso un usuario quiere reservar un asiento de un tramo de un vuelo de una Aerolinea
@@ -33,7 +33,7 @@ class ServicioDeReservaDeVuelos {
 //ahora el problema es que estoy teniendo problemas en hacer que reservar sea atomico en realidad lo unico que tiene que
 //ser atomico es updatear luego reservar el asiento 
 				
-				servicioDeRegistroDeUsuarios.isRegistrado(usuario)
+				getServicioDeRegistroDeUsuarios.isRegistrado(usuario)
 				isRegistrado(aero)
 				aero.validarReserva(unVuelo, unTramo, unAsiento)
 				reservarAsiento(aero, unAsiento, usuario)
@@ -77,7 +77,7 @@ class ServicioDeReservaDeVuelos {
 	def void actualizarAerolinea(Aerolinea unaAerolinea) {
 		SessionManager.runInSession(
 			[
-				repositorioDeAerolineas.actualizar(unaAerolinea)
+				getRepositorioDeAerolineas.actualizar(unaAerolinea)
 				null
 			])
 	}
@@ -86,28 +86,28 @@ class ServicioDeReservaDeVuelos {
 
 		var resultado = SessionManager.runInSession(
 			[
-				repositorioDeAerolineas.traer("nombreAerolinea", unaAerolinea.nombreAerolinea)
+				getRepositorioDeAerolineas.traer("nombreAerolinea", unaAerolinea.nombreAerolinea)
 			])
 		return resultado
 	}
 
 	def void eliminarAerolinea(Aerolinea unaAerolinea) {
 		SessionManager.runInSession [|
-			repositorioDeAerolineas.borrar(unaAerolinea)
+			getRepositorioDeAerolineas.borrar(unaAerolinea)
 			null
 		]
 	}
 
 	def void agregarAerolinea(Aerolinea aerolinea) {
 		SessionManager.runInSession [|
-			repositorioDeAerolineas.persistir(aerolinea)
+			getRepositorioDeAerolineas.persistir(aerolinea)
 			null
 		]
 	}
 
 	def boolean existeAerolinea(Aerolinea aerolinea) {
 		return SessionManager.runInSession [|
-			repositorioDeAerolineas.contiene("nombreAerolinea", aerolinea.nombreAerolinea)
+			getRepositorioDeAerolineas.contiene("nombreAerolinea", aerolinea.nombreAerolinea)
 		]
 
 	}

@@ -11,7 +11,6 @@ import ar.edu.unq.epers.aterrizar.persistence.hibernate.RepositorioAerolinea
 import ar.edu.unq.epers.aterrizar.persistence.hibernate.SessionManager
 import ar.edu.unq.epers.aterrizar.domain.Usuario
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorVueloReservado
-import java.util.ArrayList
 import ar.edu.unq.epers.aterrizar.domain.vuelos.Vuelo
 import ar.edu.unq.epers.aterrizar.domain.buscador.criterios.CriterioPorDestino
 
@@ -22,12 +21,12 @@ class ServicioDeBusquedaDeVuelos {
 	RepositorioAerolinea repositorioAerolineas
 
 	new() {
-		repositorioDeBusquedas = new RepositorioBusquedas
+		setRepositorioDeBusquedas(new RepositorioBusquedas)
 	}
 
 	new(RepositorioAerolinea repoAerolinea) {
-		repositorioDeBusquedas = new RepositorioBusquedas
-		repositorioAerolineas = repoAerolinea
+		setRepositorioDeBusquedas(new RepositorioBusquedas)
+		setRepositorioAerolineas(repoAerolinea)
 	}
 
 	def buscarNormal(Busqueda b) {
@@ -42,7 +41,7 @@ class ServicioDeBusquedaDeVuelos {
 
 	def buscarVuelos(Busqueda b) {
 		var res = SessionManager.runInSession [|
-			var sesion = repositorioAerolineas.getSession()
+			var sesion = getRepositorioAerolineas.getSession()
 			var query = b.getQuery()
 			var queryResultado = sesion.createQuery(query)
 			queryResultado.list() as List<Vuelo>
@@ -81,7 +80,7 @@ class ServicioDeBusquedaDeVuelos {
 	def Busqueda getUltimaBusqueda() {
 		var resultado = SessionManager.runInSession(
 			[
-				repositorioDeBusquedas.traerUltimaBusqueda
+				getRepositorioDeBusquedas.traerUltimaBusqueda
 			])
 		return resultado
 	}
@@ -90,13 +89,13 @@ class ServicioDeBusquedaDeVuelos {
 	def void guardar(Busqueda b) {
 		SessionManager.runInSession(
 			[
-				repositorioDeBusquedas.persistir(b)
+				getRepositorioDeBusquedas.persistir(b)
 				null
 			])
 	}
 
 	def getBusquedas() {
-		SessionManager.runInSession[|repositorioDeBusquedas.traerBusquedas]
+		SessionManager.runInSession[|getRepositorioDeBusquedas.traerBusquedas]
 	}
 
 	def eliminarBusquedas() {
@@ -105,7 +104,7 @@ class ServicioDeBusquedaDeVuelos {
 		if(!busquedas.isEmpty) {
 			SessionManager.runInSession [|
 				for (Busqueda busqueda : busquedas) {
-					repositorioDeBusquedas.borrar(busqueda)
+					getRepositorioDeBusquedas.borrar(busqueda)
 				}
 				null
 			]

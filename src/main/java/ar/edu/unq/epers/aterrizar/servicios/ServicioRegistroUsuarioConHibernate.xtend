@@ -13,23 +13,23 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios {
 	ServicioDePerfiles servicioDePerfiles
 
 	new() {
-		this.servicioDeAmigos = new ServicioDeAmigos(this)
-		this.servicioDePerfiles = new ServicioDePerfiles(this)
-		this.repoHibernate = new RepositorioUsuarioHibernate
+		setServicioDeAmigos(new ServicioDeAmigos(this))
+		setServicioDePerfiles(new ServicioDePerfiles(this))
+		setRepoHibernate(new RepositorioUsuarioHibernate)
 	}
 	
 	def sinCachePerfiles(){
-		servicioDePerfiles = new ServicioDePerfiles(this)
+		setServicioDePerfiles(new ServicioDePerfiles(this))
 	}
 	def conCachePerfiles(){
-		servicioDePerfiles = new ServicioDePerfilesConCache(this)
+		setServicioDePerfiles(new ServicioDePerfilesConCache(this))
 	}
 	
 	override registrarUsuario(Usuario usuario) throws Exception{
 
 		persist(usuario)
-		this.servicioDeAmigos.crearUsuarioDeAmigos(usuario)
-		this.servicioDePerfiles.crearPerfil(usuario)
+		getServicioDeAmigos.crearUsuarioDeAmigos(usuario)
+		getServicioDePerfiles.crearPerfil(usuario)
 	}
 
 	override validar(Usuario usr, String codigo) throws Exception{
@@ -62,15 +62,15 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios {
 	override traerUsuarioDelRepositorio(String field, String value) throws Exception{
 		val usuarioATraer = getUsuario(value)
 		if(usuarioATraer == null) {
-			this.repoHibernate.objectDoesnotExist
+			getRepoHibernate.objectDoesnotExist
 		}
 		usuarioATraer
 	}
 
 	override nuevoUsuarioEnElSistema(Usuario usuario) {
 		persist(usuario)
-		this.servicioDeAmigos.crearUsuarioDeAmigos(usuario)
-		this.servicioDePerfiles.crearPerfil(usuario)
+		getServicioDeAmigos.crearUsuarioDeAmigos(usuario)
+		getServicioDePerfiles.crearPerfil(usuario)
 	}
 
 	override actualizarUsuarioPorNickname(Usuario usuario) {
@@ -92,20 +92,18 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios {
 		delete(u)
 	}
 	
-	
-	
 	def void borrarDePerfiles(Usuario usuario) {
-		servicioDePerfiles.eliminarPerfil(usuario)
+		getServicioDePerfiles.eliminarPerfil(usuario)
 	}
 
 	def void borrarDeAmigos(Usuario usuario) {
-		servicioDeAmigos.eliminarUsuarioDeAmigos(usuario)
+		getServicioDeAmigos.eliminarUsuarioDeAmigos(usuario)
 	}
 	
 	def contain(String nick) {
 		SessionManager.runInSession(
 			[
-				repoHibernate.contiene("nickname", nick)
+				getRepoHibernate.contiene("nickname", nick)
 			]
 		)
 	}
@@ -113,7 +111,7 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios {
 	def update(Usuario u) {
 		SessionManager.runInSession(
 			[
-				repoHibernate.actualizar(u)
+				getRepoHibernate.actualizar(u)
 				null
 			]
 		)
@@ -122,7 +120,7 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios {
 	def delete(Usuario u) {
 		SessionManager.runInSession(
 			[
-				repoHibernate.borrar(u)
+				getRepoHibernate.borrar(u)
 				null
 			]
 		)
@@ -131,7 +129,7 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios {
 	def getUsuario(String nick) {
 		SessionManager.runInSession(
 			[
-				repoHibernate.traer("nickname", nick)
+				getRepoHibernate.traer("nickname", nick)
 			]
 		)
 	}
@@ -139,17 +137,17 @@ class ServicioRegistroUsuarioConHibernate extends ServicioDeRegistroDeUsuarios {
 	def persist(Usuario u) {
 		SessionManager.runInSession(
 			[
-				repoHibernate.persistir(u)
+				getRepoHibernate.persistir(u)
 				null
 			]
 		)
 	}
 
 	def deleteAll() {
-		servicioDePerfiles.eliminarTodosLosPerfiles
+		getServicioDePerfiles.eliminarTodosLosPerfiles
 		SessionManager.runInSession(
 			[
-				repoHibernate.deleteAll()
+				getRepoHibernate.deleteAll()
 				null
 			]
 		)

@@ -1,15 +1,15 @@
 package ar.edu.unq.epers.aterrizar.servicios
 
 import ar.edu.unq.epers.aterrizar.domain.Usuario
-import ar.edu.unq.epers.aterrizar.domain.redsocial.Comment
-import ar.edu.unq.epers.aterrizar.domain.redsocial.DestinoPost
+import ar.edu.unq.epers.aterrizar.domain.perfiles.Comment
+import ar.edu.unq.epers.aterrizar.domain.perfiles.DestinoPost
 import ar.edu.unq.epers.aterrizar.exceptions.NoPuedeAgregarPostException
 import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.unq.epers.aterrizar.persistence.mongodb.Home
 import ar.edu.unq.epers.aterrizar.persistence.mongodb.SistemDB
 import org.mongojack.DBQuery
-import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
-import ar.edu.unq.epers.aterrizar.domain.redsocial.Perfil
+import ar.edu.unq.epers.aterrizar.domain.perfiles.visibility.Visibility
+import ar.edu.unq.epers.aterrizar.domain.perfiles.Perfil
 
 @Accessors
 class ServicioDePerfiles {
@@ -23,28 +23,33 @@ class ServicioDePerfiles {
 	}
 
 	new(ServicioDeRegistroDeUsuarios s) {
-		servicioDeUsuarios = s
-		servicioDeBusqueda = new ServicioDeBusquedaDeVuelos()
+		setServicioDeUsuarios(s)
+		setServicioDeBusqueda(new ServicioDeBusquedaDeVuelos())
 	}
 
 	new(ServicioDeRegistroDeUsuarios s, ServicioDeBusquedaDeVuelos serviciobusqueda, ServicioDeAmigos svA) {
-		servicioDeUsuarios = s
-		servicioDeBusqueda = serviciobusqueda
-		servicioDeAmigos = svA
+		setServicioDeUsuarios(s)
+		setServicioDeBusqueda(serviciobusqueda)
+		setServicioDeAmigos(svA)
 	}
 
 	////////////////////////////////////////////////////////////////
 	//Como usuario quiero agregar los destinos a los que fui
 	////////////////////////////////////////////////////////////////
 	def agregarPost(Usuario u, DestinoPost p) throws NoPuedeAgregarPostException{
-		getServicioDeUsuarios().isRegistrado(u)
+		validarUsuario(u)
+		validarViaje(u, p)
 
-		if(!getServicioDeBusqueda().viajeA(u, p.destino)) {
-			throw new NoPuedeAgregarPostException("Nunca me visitaste")
-		}
 		val perfil = getPerfil(u)
 		perfil.addPost(p)
 		updatePerfil(perfil)
+
+	}
+
+	def validarViaje(Usuario u, DestinoPost p) {
+		if(!getServicioDeBusqueda().viajeA(u, p.destino)) {
+			throw new NoPuedeAgregarPostException("Nunca me visitaste")
+		}
 
 	}
 
@@ -53,54 +58,99 @@ class ServicioDePerfiles {
 	//establecer “Me Gusta” o “No me gusta”
 	////////////////////////////////////////////////////////////////
 	def comentarPost(Usuario u, DestinoPost p, Comment c) {
-		getServicioDeUsuarios().isRegistrado(u)
+		validarUsuario(u)
 		val perfil = getPerfil(u)
 		perfil.commentToPost(p, c)
 		updatePerfil(perfil)
 	}
 
 	def meGusta(Usuario usuarioALikear, Usuario usuarioLikeando, DestinoPost p) {
-		getServicioDeUsuarios().isRegistrado(usuarioALikear)
-		getServicioDeUsuarios().isRegistrado(usuarioLikeando)
-		val perfilLikeado = getPerfil(usuarioALikear)
+		validarUsuarios(usuarioALikear, usuarioLikeando)
 
-		//aca solamente deberia darle el id del usuario que esta likeando
+		val perfilLikeado = getPerfil(usuarioALikear)
 		val perfilLikeando = getPerfil(usuarioLikeando)
+
 		perfilLikeado.agregarMeGusta(perfilLikeando, p)
 		updatePerfil(perfilLikeado)
 	}
 
 	def noMeGusta(Usuario aLikear, Usuario likeando, DestinoPost p) {
-		getServicioDeUsuarios().isRegistrado(aLikear)
-		getServicioDeUsuarios().isRegistrado(likeando)
-		val perfilALikear = getPerfil(aLikear)
+		validarUsuarios(aLikear, likeando)
 
-		//aca solamente deberia darle el id del usuario que esta likeando
+		val perfilALikear = getPerfil(aLikear)
 		val perfilLikeando = getPerfil(likeando)
+
 		perfilALikear.agregarNoMeGusta(perfilLikeando, p)
 		updatePerfil(perfilALikear)
 	}
 
 	def meGusta(Usuario aLikear, Usuario likeando, DestinoPost p, Comment c) {
-		getServicioDeUsuarios().isRegistrado(aLikear)
-		getServicioDeUsuarios().isRegistrado(likeando)
-		val perfilALikear = getPerfil(aLikear)
+		validarUsuarios(aLikear, likeando)
 
-		//aca solamente deberia darle el id del usuario que esta likeando
+		val perfilALikear = getPerfil(aLikear)
 		val perfilLikeando = getPerfil(likeando)
+
 		perfilALikear.agregarMeGusta(perfilLikeando, p, c)
 		updatePerfil(perfilALikear)
 	}
 
 	def noMeGusta(Usuario aLikear, Usuario likeando, DestinoPost p, Comment c) {
-		getServicioDeUsuarios().isRegistrado(aLikear)
-		getServicioDeUsuarios().isRegistrado(likeando)
-		val perfilALikear = getPerfil(aLikear)
 
-		//aca solamente deberia darle el id del usuario que esta likeando
+		validarUsuarios(aLikear, likeando)
+
+		val perfilALikear = getPerfil(aLikear)
 		val perfilLikeando = getPerfil(likeando)
+
 		perfilALikear.agregarNoMeGusta(perfilLikeando, p, c)
 		updatePerfil(perfilALikear)
+	}
+
+	def validarUsuario(Usuario usuario) {
+		getServicioDeUsuarios().isRegistrado(usuario)
+	}
+
+	def validarUsuarios(Usuario usuario, Usuario usuario2) {
+		getServicioDeUsuarios().isRegistrado(usuario)
+		getServicioDeUsuarios().isRegistrado(usuario2)
+
+	}
+
+	def quitarMeGusta(Usuario u, Usuario q, DestinoPost p){
+		validarUsuarios(u, q)
+		
+		val perfilAQuitar = getPerfil(u)
+		val perfilQuitando = getPerfil(q)
+		
+		perfilAQuitar.quitarMeGusta(perfilQuitando, p)
+		updatePerfil(perfilAQuitar)
+	}
+	def quitarNoMeGusta(Usuario u, Usuario q, DestinoPost p){
+		validarUsuarios(u, q)
+		
+		val perfilAQuitar = getPerfil(u)
+		val perfilQuitando = getPerfil(q)
+		
+		perfilAQuitar.quitarNoMeGusta(perfilQuitando, p)
+		updatePerfil(perfilAQuitar)
+	}
+
+	def quitarMeGusta(Usuario u, Usuario q, DestinoPost p, Comment c){
+		validarUsuarios(u, q)
+		
+		val perfilAQuitar = getPerfil(u)
+		val perfilQuitando = getPerfil(q)
+		
+		perfilAQuitar.quitarMeGusta(perfilQuitando, p, c)
+		updatePerfil(perfilAQuitar)
+	}
+	def quitarNoMeGusta(Usuario u, Usuario q, DestinoPost p, Comment c){
+		validarUsuarios(u, q)
+		
+		val perfilAQuitar = getPerfil(u)
+		val perfilQuitando = getPerfil(q)
+		
+		perfilAQuitar.quitarNoMeGusta(perfilQuitando, p, c)
+		updatePerfil(perfilAQuitar)
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -108,48 +158,47 @@ class ServicioDePerfiles {
 	// privado, público y solo amigos.
 	////////////////////////////////////////////////////////////////
 	def cambiarAPublico(Usuario u, DestinoPost p) {
-		getServicioDeUsuarios().isRegistrado(u)
+		validarUsuario(u)
+
 		val perfil = getPerfil(u)
-
-		perfil.configVisibilityIntoPublic(p)
-
+		perfil.toPublic(p)
 		updatePerfil(perfil)
 	}
 
 	def cambiarAPublico(Usuario u, DestinoPost p, Comment c) {
-		getServicioDeUsuarios().isRegistrado(u)
+		validarUsuario(u)
 		val perfil = getPerfil(u)
-		perfil.configVisibilityIntoPublic(p, c)
+		perfil.toPublic(p, c)
 		updatePerfil(perfil)
 	}
 
 	def cambiarAPrivado(Usuario u, DestinoPost p) {
-		getServicioDeUsuarios().isRegistrado(u)
+		validarUsuario(u)
 		val perfil = getPerfil(u)
-		perfil.configVisibilityIntoPrivate(p)
+		perfil.toPrivate(p)
 		updatePerfil(perfil)
 
 	}
 
 	def cambiarAPrivado(Usuario u, DestinoPost p, Comment c) {
-		getServicioDeUsuarios().isRegistrado(u)
+		validarUsuario(u)
 		val perfil = getPerfil(u)
-		perfil.configVisibilityIntoPrivate(p, c)
+		perfil.toPrivate(p, c)
 		updatePerfil(perfil)
 	}
 
 	def cambiarASoloAmigos(Usuario u, DestinoPost p) {
-		getServicioDeUsuarios().isRegistrado(u)
+		validarUsuario(u)
 		val perfil = getPerfil(u)
-		perfil.configVisibilityIntoJustFriends(p)
+		perfil.toOnlyFriends(p)
 		updatePerfil(perfil)
 
 	}
 
 	def cambiarASoloAmigos(Usuario u, DestinoPost p, Comment c) {
-		getServicioDeUsuarios().isRegistrado(u)
+		validarUsuario(u)
 		val perfil = getPerfil(u)
-		perfil.configVisibilityIntoJustFriends(p, c)
+		perfil.toOnlyFriends(p, c)
 		updatePerfil(perfil)
 	}
 
@@ -160,11 +209,11 @@ class ServicioDePerfiles {
 	//corresponde según si soy amigo o no.
 	////////////////////////////////////////////////////////////////
 	def Perfil verPerfil(Usuario aVer, Usuario viendo) {
-		getServicioDeUsuarios().isRegistrado(aVer)
-		getServicioDeUsuarios().isRegistrado(viendo)
+		validarUsuarios(aVer, viendo)
 
 		val amigos = getServicioDeAmigos().sonAmigos(aVer, viendo)
 		val esElMismo = aVer.nickname.equals(viendo.nickname)
+
 		var visibilities = getVisibilities(amigos, esElMismo)
 
 		var perfil = getRepositorioDePerfiles().getContents(aVer.nickname, visibilities)
@@ -173,10 +222,10 @@ class ServicioDePerfiles {
 
 	def getVisibilities(Boolean amigos, Boolean esElMismo) {
 		if(esElMismo) {
-			return #[Visibility.PUBLIC, Visibility.PRIVATE, Visibility.JUSTFRIENDS]
+			return #[Visibility.PUBLIC, Visibility.PRIVATE, Visibility.ONLYFRIENDS]
 		}
 		if(amigos) {
-			return #[Visibility.PUBLIC, Visibility.JUSTFRIENDS]
+			return #[Visibility.PUBLIC, Visibility.ONLYFRIENDS]
 		}
 		return #[Visibility.PUBLIC]
 	}
@@ -184,7 +233,9 @@ class ServicioDePerfiles {
 	////////////////////////////////////////////////////////////////////////////////
 	//utilities
 	////////////////////////////////////////////////////////////////////////////////
-	def getPerfil(Usuario usuario) throws Exception{
+	def Perfil getPerfil(Usuario usuario) throws Exception{
+
+		//		getRepositorioDePerfiles().find("nickname", usuario.nickname)
 		getRepositorioDePerfiles().find(DBQuery.is("nickname", usuario.nickname)).get(0)
 	}
 
