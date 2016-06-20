@@ -4,11 +4,11 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import com.google.common.base.Objects
 import com.datastax.driver.mapping.annotations.Table
 import com.datastax.driver.mapping.annotations.PartitionKey
-import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
+import ar.edu.unq.epers.aterrizar.domain.perfiles.visibility.Visibility
 import java.util.List
 import com.datastax.driver.mapping.annotations.Frozen
 import com.datastax.driver.mapping.annotations.Column
-import ar.edu.unq.epers.aterrizar.domain.redsocial.DestinoPost
+import ar.edu.unq.epers.aterrizar.domain.perfiles.DestinoPost
 import java.util.ArrayList
 import javax.persistence.Enumerated
 import javax.persistence.EnumType

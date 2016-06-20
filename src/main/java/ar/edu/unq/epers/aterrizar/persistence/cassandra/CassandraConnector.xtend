@@ -1,7 +1,6 @@
 package ar.edu.unq.epers.aterrizar.persistence.cassandra
 
 import com.datastax.driver.core.Cluster
-import scala.Function0
 import org.eclipse.xtend.lib.annotations.Accessors
 import com.datastax.driver.core.Session
 
@@ -43,14 +42,4 @@ class CassandraConnector {
 		}
 	}
 
-	def <T> execute(Function0<T> cmd) {
-		var Session s = null
-		try {
-			s = session()
-			cmd.apply()
-		} finally {
-			s.close()
-			close()
-		}
-	}
 }
