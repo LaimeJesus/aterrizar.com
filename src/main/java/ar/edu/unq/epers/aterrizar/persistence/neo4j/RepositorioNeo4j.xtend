@@ -50,7 +50,7 @@ abstract class RepositorioNeo4j<T> {
 		node.getRelationships(relacion, direction).map[it.getOtherNode(node)]
 	}
 
-	def isRelacionados(Node unNode, Node otroNode, RelationshipType relacion){
+	def boolean isRelacionados(Node unNode, Node otroNode, RelationshipType relacion){
 		val n = unNode.getRelationships(relacion).findFirst[it.getOtherNode(unNode).equals(otroNode)]
 		return n != null
 	}

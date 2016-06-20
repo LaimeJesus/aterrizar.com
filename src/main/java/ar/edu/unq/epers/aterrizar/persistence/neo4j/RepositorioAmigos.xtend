@@ -13,7 +13,7 @@ class RepositorioAmigos extends RepositorioNeo4j<Usuario> {
 
 	// relacionar usuarios por la relacion amigo
 	
-	def sonAmigos(Usuario u1, Usuario u2){
+	def boolean sonAmigos(Usuario u1, Usuario u2){
 		val nodo1 = getNodo(u1)
 		val nodo2 = getNodo(u2)
 		isRelacionados(nodo1, nodo2, TipoDeRelacion.AMIGO)
@@ -41,7 +41,6 @@ class RepositorioAmigos extends RepositorioNeo4j<Usuario> {
 		val nodoUsuario = getNodo(u)
 		val nodos = todosLosRelacionados(nodoUsuario, TipoDeRelacion.AMIGO, Direction.BOTH)
 		
-		//no funciona el to set para este caso
 		val amigos = nodos.map[toObject(it)]
 		return amigos
 	}

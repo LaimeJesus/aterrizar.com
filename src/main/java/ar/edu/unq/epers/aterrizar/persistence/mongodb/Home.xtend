@@ -6,10 +6,10 @@ import org.mongojack.JacksonDBCollection
 import org.mongojack.MapReduce
 import org.mongojack.DBQuery
 import com.mongodb.BasicDBObject
-import ar.edu.unq.epers.aterrizar.domain.redsocial.visibility.Visibility
-import ar.edu.unq.epers.aterrizar.domain.redsocial.Perfil
 import org.mongojack.AggregationResult
 import org.eclipse.xtend.lib.annotations.Accessors
+import ar.edu.unq.epers.aterrizar.domain.perfiles.visibility.Visibility
+import ar.edu.unq.epers.aterrizar.domain.perfiles.Perfil
 
 @Accessors
 class Home<T> {
@@ -79,10 +79,6 @@ class Home<T> {
 
 	def deleteAll() {
 		mongoCollection.drop()
-	}
-
-	def find(String id) {
-		mongoCollection.findOneById(id)
 	}
 
 	def find(String property, String value) {
