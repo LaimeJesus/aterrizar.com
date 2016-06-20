@@ -83,5 +83,6 @@ class ServicioCacheDePerfilesTest {
 	@After
 	def void after() {
 		cache.delete('pepe')
+		cache.disconect
 	}
 }
